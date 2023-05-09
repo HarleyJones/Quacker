@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:fritter/catcher/errors.dart';
+import 'package:Quacker/catcher/errors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
-import 'package:fritter/catcher/exceptions.dart';
-import 'package:fritter/constants.dart';
-import 'package:fritter/generated/l10n.dart';
-import 'package:fritter/ui/errors.dart';
-import 'package:fritter/utils/legacy.dart';
+import 'package:Quacker/catcher/exceptions.dart';
+import 'package:Quacker/constants.dart';
+import 'package:Quacker/generated/l10n.dart';
+import 'package:Quacker/ui/errors.dart';
+import 'package:Quacker/utils/legacy.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:permission_handler/permission_handler.dart';
@@ -109,6 +109,6 @@ Future downloadFile(BuildContext context, Uri uri) async {
       L10n.of(context).unable_to_save_the_media_twitter_returned_a_status_of_response_statusCode(response.statusCode),
     ),
   ));
-  
+
   return null;
 }

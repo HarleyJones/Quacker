@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_cache/flutter_cache.dart' as cache;
-import 'package:fritter/utils/iterables.dart';
-import 'package:fritter/utils/misc.dart';
+import 'package:Quacker/utils/iterables.dart';
+import 'package:Quacker/utils/misc.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 
@@ -51,9 +51,8 @@ class TranslationAPI {
     var key = 'translation.$sourceLanguage.$id';
 
     var res = await cacheRequest(key, () async {
-      var response = await http.post(Uri.https('libretranslate.de', '/translate'), body: jsonEncode(formData), headers: {
-        'Content-Type': 'application/json'
-      });
+      var response = await http.post(Uri.https('libretranslate.de', '/translate'),
+          body: jsonEncode(formData), headers: {'Content-Type': 'application/json'});
 
       return await parseResponse(response, 'Unable to send translation request');
     });
@@ -63,13 +62,10 @@ class TranslationAPI {
       var translatedTexts = List.from(res.body['translatedText']);
 
       var translatedIndex = 0;
-      var result = hasTextOrNot
-          .mapWithIndex((hasText, i) => hasText ? translatedTexts[translatedIndex++] : text[i])
-          .toList();
+      var result =
+          hasTextOrNot.mapWithIndex((hasText, i) => hasText ? translatedTexts[translatedIndex++] : text[i]).toList();
 
-      return TranslationAPIResult(success: res.success, body: {
-        'translatedText': result
-      });
+      return TranslationAPIResult(success: res.success, body: {'translatedText': result});
     }
 
     return res;

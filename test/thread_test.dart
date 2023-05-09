@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fritter/client.dart';
+import 'package:Quacker/client.dart';
 
 void main() {
   testWidgets('Converting a list of tweets and replies to a list of threads', (WidgetTester tester) async {
@@ -69,19 +69,22 @@ void main() {
     expect(tweets.chains[8].isPinned, equals(false));
     expect(tweets.chains[8].id, equals('1403555349190352897'));
     expect(tweets.chains[8].tweets.length, equals(1));
-    expect(tweets.chains[8].tweets[0].fullText, contains('@SeargeDP @FeerQuinte @martens_samuel That will give t-junction'));
+    expect(tweets.chains[8].tweets[0].fullText,
+        contains('@SeargeDP @FeerQuinte @martens_samuel That will give t-junction'));
     expect(tweets.chains[8].tweets[0].idStr, contains('1403555349190352897'));
 
     expect(tweets.chains[9].isPinned, equals(false));
     expect(tweets.chains[9].id, equals('1403554973300973569'));
     expect(tweets.chains[9].tweets.length, equals(1));
-    expect(tweets.chains[9].tweets[0].fullText, contains('@SeargeDP @_tomcc @FeerQuinte @martens_samuel You need invariant'));
+    expect(tweets.chains[9].tweets[0].fullText,
+        contains('@SeargeDP @_tomcc @FeerQuinte @martens_samuel You need invariant'));
     expect(tweets.chains[9].tweets[0].idStr, contains('1403554973300973569'));
 
     expect(tweets.chains[10].isPinned, equals(false));
     expect(tweets.chains[10].id, equals('1403527704473972744'));
     expect(tweets.chains[10].tweets.length, equals(1));
-    expect(tweets.chains[10].tweets[0].fullText, contains('@SeargeDP @FeerQuinte @martens_samuel The “invariant” qualifier'));
+    expect(tweets.chains[10].tweets[0].fullText,
+        contains('@SeargeDP @FeerQuinte @martens_samuel The “invariant” qualifier'));
     expect(tweets.chains[10].tweets[0].idStr, contains('1403527704473972744'));
 
     expect(tweets.chains[11].isPinned, equals(false));

@@ -1,8 +1,8 @@
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:fritter/constants.dart';
-import 'package:fritter/generated/l10n.dart';
-import 'package:fritter/utils/urls.dart';
+import 'package:Quacker/constants.dart';
+import 'package:Quacker/generated/l10n.dart';
+import 'package:Quacker/utils/urls.dart';
 import 'package:pref/pref.dart';
 
 class WizardPage {
@@ -146,7 +146,8 @@ class Step2 extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Whenever something goes wrong with Fritter, an error report will be generated. The report can be sent to the Fritter developers to help fix the problem.'),
+            Text(
+                'Whenever something goes wrong with Fritter, an error report will be generated. The report can be sent to the Fritter developers to help fix the problem.'),
             const SizedBox(height: 16),
             Text(
               L10n.of(context).would_you_like_to_enable_automatic_error_reporting,
@@ -161,9 +162,8 @@ class Step2 extends StatelessWidget {
               onTap: () async => await openUri('https://fritter.cc/privacy'),
             ),
             const SizedBox(height: 16),
-            const Text('Please note that this can also be enabled or disabled later, in the Settings screen.', style: TextStyle(
-              fontStyle: FontStyle.italic
-            )),
+            const Text('Please note that this can also be enabled or disabled later, in the Settings screen.',
+                style: TextStyle(fontStyle: FontStyle.italic)),
           ],
         ),
         const SizedBox(height: 32),

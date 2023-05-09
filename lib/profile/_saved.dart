@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fritter/database/entities.dart';
-import 'package:fritter/generated/l10n.dart';
-import 'package:fritter/home/_saved.dart';
-import 'package:fritter/profile/profile.dart';
-import 'package:fritter/saved/saved_tweet_model.dart';
-import 'package:fritter/ui/errors.dart';
-import 'package:fritter/user.dart';
+import 'package:Quacker/database/entities.dart';
+import 'package:Quacker/generated/l10n.dart';
+import 'package:Quacker/home/_saved.dart';
+import 'package:Quacker/profile/profile.dart';
+import 'package:Quacker/saved/saved_tweet_model.dart';
+import 'package:Quacker/ui/errors.dart';
+import 'package:Quacker/user.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fritter/trends/_list.dart';
-import 'package:fritter/trends/_settings.dart';
-import 'package:fritter/trends/_tabs.dart';
+import 'package:Quacker/trends/_list.dart';
+import 'package:Quacker/trends/_settings.dart';
+import 'package:Quacker/trends/_tabs.dart';
 
 class TrendsScreen extends StatefulWidget {
   final ScrollController scrollController;
@@ -23,12 +23,11 @@ class _TrendsScreenState extends State<TrendsScreen> with AutomaticKeepAliveClie
     return Scaffold(
       appBar: const TrendsTabBar(),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () async => showDialog(
-          context: context,
-          builder: (context) => const TrendsSettings(),
-        )
-      ),
+          child: const Icon(Icons.add),
+          onPressed: () async => showDialog(
+                context: context,
+                builder: (context) => const TrendsSettings(),
+              )),
       body: TrendsList(scrollController: widget.scrollController),
     );
   }

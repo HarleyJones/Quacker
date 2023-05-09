@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:fritter/catcher/exceptions.dart';
+import 'package:Quacker/catcher/exceptions.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class Catcher {

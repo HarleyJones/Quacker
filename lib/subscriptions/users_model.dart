@@ -1,10 +1,10 @@
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:fritter/client.dart';
-import 'package:fritter/constants.dart';
-import 'package:fritter/database/entities.dart';
-import 'package:fritter/database/repository.dart';
-import 'package:fritter/group/group_model.dart';
-import 'package:fritter/utils/iterables.dart';
+import 'package:Quacker/client.dart';
+import 'package:Quacker/constants.dart';
+import 'package:Quacker/database/entities.dart';
+import 'package:Quacker/database/repository.dart';
+import 'package:Quacker/group/group_model.dart';
+import 'package:Quacker/utils/iterables.dart';
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
 
@@ -25,37 +25,31 @@ class SubscriptionsModel extends StreamStore<Object, List<Subscription>> {
       var orderByAscending = prefs.get(optionSubscriptionOrderByAscending);
       var orderByField = prefs.get(optionSubscriptionOrderByField);
 
-      var users = (await database.query(tableSubscription))
-          .map((e) => UserSubscription.fromMap(e))
-          .toList();
+      var users = (await database.query(tableSubscription)).map((e) => UserSubscription.fromMap(e)).toList();
 
-      var searches = (await database.query(tableSearchSubscription))
-          .map((e) => SearchSubscription.fromMap(e))
-          .toList();
+      var searches = (await database.query(tableSearchSubscription)).map((e) => SearchSubscription.fromMap(e)).toList();
 
-      return [...users, ...searches]
-        .sorted((a, b) {
-          var one = orderByAscending ? a : b;
-          var two = orderByAscending ? b : a;
+      return [...users, ...searches].sorted((a, b) {
+        var one = orderByAscending ? a : b;
+        var two = orderByAscending ? b : a;
 
-          switch (orderByField) {
-            case 'name':
-              return one.name.toLowerCase().compareTo(two.name.toLowerCase());
-            case 'screen_name':
-              return one.screenName.toLowerCase().compareTo(two.screenName.toLowerCase());
-            case 'created_at':
-              return one.createdAt.compareTo(two.createdAt);
-            default:
-              return one.name.toLowerCase().compareTo(two.name.toLowerCase());
-          }
-        })
-        .toList();
+        switch (orderByField) {
+          case 'name':
+            return one.name.toLowerCase().compareTo(two.name.toLowerCase());
+          case 'screen_name':
+            return one.screenName.toLowerCase().compareTo(two.screenName.toLowerCase());
+          case 'created_at':
+            return one.createdAt.compareTo(two.createdAt);
+          default:
+            return one.name.toLowerCase().compareTo(two.name.toLowerCase());
+        }
+      }).toList();
     });
   }
 
   Future<void> refreshSubscriptionData() async {
     log.info('Refreshing subscription data');
-    
+
     await execute(() async {
       var database = await Repository.writable();
 
@@ -79,7 +73,7 @@ class SubscriptionsModel extends StreamStore<Object, List<Subscription>> {
 
       await batch.commit();
       await reloadSubscriptions();
-      
+
       return state;
     });
   }

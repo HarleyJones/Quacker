@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:async_button_builder/async_button_builder.dart';
-import 'package:fritter/catcher/errors.dart';
+import 'package:Quacker/catcher/errors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fritter/catcher/exceptions.dart';
-import 'package:fritter/client.dart';
-import 'package:fritter/constants.dart';
-import 'package:fritter/generated/l10n.dart';
+import 'package:Quacker/catcher/exceptions.dart';
+import 'package:Quacker/client.dart';
+import 'package:Quacker/constants.dart';
+import 'package:Quacker/generated/l10n.dart';
 
 void showSnackBar(BuildContext context, {required String icon, required String message, bool clearBefore = true}) {
   if (clearBefore) {
@@ -92,9 +92,15 @@ class EmojiErrorWidget extends FritterErrorWidget {
   final bool showBackButton;
 
   EmojiErrorWidget(
-      {Key? key, required this.emoji, required this.message, required this.errorMessage, this.onRetry, String? retryText, this.showBackButton = true})
+      {Key? key,
+      required this.emoji,
+      required this.message,
+      required this.errorMessage,
+      this.onRetry,
+      String? retryText,
+      this.showBackButton = true})
       : super(key: key) {
-      this.retryText = retryText ?? L10n.current.retry;
+    this.retryText = retryText ?? L10n.current.retry;
   }
 
   @override
@@ -138,8 +144,7 @@ class EmojiErrorWidget extends FritterErrorWidget {
                   },
                 ),
               ),
-            if (onRetry != null)
-              const SizedBox(width: 16),
+            if (onRetry != null) const SizedBox(width: 16),
             if (onRetry != null)
               Container(
                 margin: const EdgeInsets.only(top: 12),
@@ -209,14 +214,16 @@ class ScaffoldErrorWidget extends FritterErrorWidget {
   final Function? onRetry;
   final String? retryText;
 
-  const ScaffoldErrorWidget({Key? key, required this.error, required this.stackTrace, required this.prefix, this.onRetry, this.retryText})
+  const ScaffoldErrorWidget(
+      {Key? key, required this.error, required this.stackTrace, required this.prefix, this.onRetry, this.retryText})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: FullPageErrorWidget(error: error, prefix: prefix, stackTrace: stackTrace, onRetry: onRetry, retryText: retryText),
+      body: FullPageErrorWidget(
+          error: error, prefix: prefix, stackTrace: stackTrace, onRetry: onRetry, retryText: retryText),
     );
   }
 }
@@ -269,7 +276,8 @@ class FullPageErrorWidget extends FritterErrorWidget {
       if (hasErrors && content['errors'] != null) {
         var errors = List.from(content['errors']);
         if (errors.isNotEmpty) {
-          return createEmojiError(TwitterError(code: errors.first['code'], message: errors.first['message'], uri: message.uri));
+          return createEmojiError(
+              TwitterError(code: errors.first['code'], message: errors.first['message'], uri: message.uri));
         }
       }
 

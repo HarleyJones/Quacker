@@ -1,8 +1,8 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:fritter/constants.dart';
-import 'package:fritter/generated/l10n.dart';
-import 'package:fritter/utils/iterables.dart';
+import 'package:Quacker/constants.dart';
+import 'package:Quacker/generated/l10n.dart';
+import 'package:Quacker/utils/iterables.dart';
 import 'package:pref/pref.dart';
 
 class SettingsThemeFragment extends StatelessWidget {
@@ -11,9 +11,7 @@ class SettingsThemeFragment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.current.theme)
-      ),
+      appBar: AppBar(title: Text(L10n.current.theme)),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: ListView(children: [

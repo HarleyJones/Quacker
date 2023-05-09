@@ -1,4 +1,4 @@
-package com.jonjomckay.fritter;
+package com.TheHCJ.Quacker;
 
 import android.content.Context;
 import androidx.multidex.MultiDex;

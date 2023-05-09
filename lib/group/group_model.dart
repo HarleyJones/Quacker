@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:fritter/catcher/errors.dart';
+import 'package:Quacker/catcher/errors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:fritter/constants.dart';
-import 'package:fritter/database/entities.dart';
-import 'package:fritter/database/repository.dart';
+import 'package:Quacker/constants.dart';
+import 'package:Quacker/database/entities.dart';
+import 'package:Quacker/database/repository.dart';
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
 import 'package:uuid/uuid.dart';
@@ -41,20 +41,21 @@ class GroupModel extends StreamStore<Object, SubscriptionGroupGet> {
       var group = (await database.query(tableSubscriptionGroup, where: 'id = ?', whereArgs: [id])).first;
 
       if (id == '-1') {
-        var subscriptions = (await database.query(tableSubscription))
-            .map((e) => UserSubscription.fromMap(e))
-            .toList(growable: false);
+        var subscriptions =
+            (await database.query(tableSubscription)).map((e) => UserSubscription.fromMap(e)).toList(growable: false);
 
         return SubscriptionGroupGet(id: '-1', name: 'All', icon: group['icon'] as String, subscriptions: subscriptions);
       }
 
       var searchSubscriptions = (await database.rawQuery(
-          'SELECT s.* FROM $tableSearchSubscription s LEFT JOIN $tableSubscriptionGroupMember sgm ON sgm.profile_id = s.id WHERE sgm.group_id = ?', [id]))
+              'SELECT s.* FROM $tableSearchSubscription s LEFT JOIN $tableSubscriptionGroupMember sgm ON sgm.profile_id = s.id WHERE sgm.group_id = ?',
+              [id]))
           .map((e) => SearchSubscription.fromMap(e))
           .toList(growable: false);
 
       var userSubscriptions = (await database.rawQuery(
-          'SELECT s.* FROM $tableSubscription s LEFT JOIN $tableSubscriptionGroupMember sgm ON sgm.profile_id = s.id WHERE sgm.group_id = ?', [id]))
+              'SELECT s.* FROM $tableSubscription s LEFT JOIN $tableSubscriptionGroupMember sgm ON sgm.profile_id = s.id WHERE sgm.group_id = ?',
+              [id]))
           .map((e) => UserSubscription.fromMap(e))
           .toList(growable: false);
 
@@ -70,7 +71,7 @@ class GroupModel extends StreamStore<Object, SubscriptionGroupGet> {
 
 class GroupsModel extends StreamStore<Object, List<SubscriptionGroup>> {
   static final log = Logger('GroupModel');
-  
+
   final BasePrefService prefs;
 
   GroupsModel(this.prefs) : super([]);
@@ -86,7 +87,7 @@ class GroupsModel extends StreamStore<Object, List<SubscriptionGroup>> {
 
       await database.delete(tableSubscriptionGroupMember, where: 'group_id = ?', whereArgs: [id]);
       await database.delete(tableSubscriptionGroup, where: 'id = ?', whereArgs: [id]);
-      
+
       return state.where((e) => e.id != id).toList();
     });
   }
@@ -102,9 +103,7 @@ class GroupsModel extends StreamStore<Object, List<SubscriptionGroup>> {
       var query =
           "SELECT g.id, g.name, g.icon, g.color, g.created_at, COUNT(gm.profile_id) AS number_of_members FROM $tableSubscriptionGroup g LEFT JOIN $tableSubscriptionGroupMember gm ON gm.group_id = g.id WHERE g.id != '-1' GROUP BY g.id ORDER BY $orderGroupsBy $orderByDirection";
 
-      return (await database.rawQuery(query))
-          .map((e) => SubscriptionGroup.fromMap(e))
-          .toList(growable: false);
+      return (await database.rawQuery(query)).map((e) => SubscriptionGroup.fromMap(e)).toList(growable: false);
     });
   }
 

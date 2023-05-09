@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fritter/generated/l10n.dart';
-import 'package:fritter/settings/_general.dart';
-import 'package:fritter/utils/urls.dart';
+import 'package:Quacker/generated/l10n.dart';
+import 'package:Quacker/settings/_general.dart';
+import 'package:Quacker/utils/urls.dart';
 import 'package:pref/pref.dart';
 import 'package:simple_icons/simple_icons.dart';
 
@@ -14,9 +14,7 @@ class SettingsAboutFragment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.current.about)
-      ),
+      appBar: AppBar(title: Text(L10n.current.about)),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: ListView(children: [
@@ -156,4 +154,3 @@ class DonateDialog extends StatelessWidget {
     );
   }
 }
-
