@@ -924,6 +924,7 @@ class TwitterError {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 class UnknownTimelineItemType with SyntheticException implements Exception {
   final String type;
   final String entryId;
@@ -934,6 +935,8 @@ class UnknownTimelineItemType with SyntheticException implements Exception {
   String toString() {
     return 'Unknown timeline item type: {type: $type, entryId: $entryId}';
 =======
+=======
+>>>>>>> parent of e732eac (Removed tweet search functionality)
 class SearchHasNoTimelineException implements SyntheticException {
   final String? query;
 
@@ -942,6 +945,9 @@ class SearchHasNoTimelineException implements SyntheticException {
   @override
   String toString() {
     return 'The search has no timeline {query: $query}';
+<<<<<<< HEAD
+>>>>>>> parent of e732eac (Removed tweet search functionality)
+=======
 >>>>>>> parent of e732eac (Removed tweet search functionality)
   }
 }

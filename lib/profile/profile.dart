@@ -11,7 +11,10 @@ import 'package:fritter/profile/_saved.dart';
 import 'package:fritter/profile/_tweets.dart';
 import 'package:fritter/profile/profile_model.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of e732eac (Removed tweet search functionality)
 import 'package:fritter/search/search.dart';
 import 'package:fritter/tweet/_video.dart';
 >>>>>>> parent of e732eac (Removed tweet search functionality)

@@ -13,6 +13,9 @@ import 'package:fritter/subscriptions/users_model.dart';
 =======
 import 'package:fritter/tweet/_video.dart';
 import 'package:fritter/tweet/tweet.dart';
+<<<<<<< HEAD
+>>>>>>> parent of e732eac (Removed tweet search functionality)
+=======
 >>>>>>> parent of e732eac (Removed tweet search functionality)
 import 'package:fritter/ui/errors.dart';
 import 'package:fritter/user.dart';
@@ -142,8 +145,13 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
             MultiProvider(
               providers: [
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ChangeNotifierProvider<TweetContextState>(
                     create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
+=======
+                ChangeNotifierProvider<TweetContextState>(create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
+                ChangeNotifierProvider<VideoContextState>(create: (_) => VideoContextState(prefs.get(optionMediaDefaultMute))),
+>>>>>>> parent of e732eac (Removed tweet search functionality)
 =======
                 ChangeNotifierProvider<TweetContextState>(create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
                 ChangeNotifierProvider<VideoContextState>(create: (_) => VideoContextState(prefs.get(optionMediaDefaultMute))),
