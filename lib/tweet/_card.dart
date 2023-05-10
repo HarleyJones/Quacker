@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:Quacker/catcher/errors.dart';
+import 'package:fritter/catcher/errors.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:Quacker/catcher/exceptions.dart';
-import 'package:Quacker/client.dart';
-import 'package:Quacker/constants.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/tweet/_media.dart';
-import 'package:Quacker/tweet/_video.dart';
-import 'package:Quacker/utils/urls.dart';
+import 'package:fritter/catcher/exceptions.dart';
+import 'package:fritter/client.dart';
+import 'package:fritter/constants.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/tweet/_media.dart';
+import 'package:fritter/tweet/_video.dart';
+import 'package:fritter/utils/urls.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
@@ -337,19 +337,22 @@ class TweetCard extends StatelessWidget {
         var title = card['binding_values']['title']['string_value'];
         var vanityUrl = card['binding_values']['vanity_url']['string_value'];
 
-        return _createCard(
-            url,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _createImage(imageSize, image, BoxFit.contain),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                  child: _createListTile(context, title, null, vanityUrl),
-                ),
-              ],
-            ));
+        return _createCard(url, Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _createImage(imageSize, image, BoxFit.contain),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+              child: _createListTile(
+                  context,
+                  title,
+                  null,
+                  vanityUrl
+              ),
+            ),
+          ],
+        ));
       case 'unified_card':
         try {
           return _createUnifiedCard(context, card, imageKey, imageSize);
@@ -367,20 +370,22 @@ class TweetCard extends StatelessWidget {
         var user = card['users'][author]['screen_name'];
 
         // TODO: This opens the URL externally. Create a screen for it in Fritter
-        return _createCard(
-            url,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _createImage(imageSize, image, BoxFit.contain),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                  child: _createListTile(context, card['binding_values']['event_title']['string_value'],
-                      card['binding_values']['event_subtitle']?['string_value'], '@$user'),
-                ),
-              ],
-            ));
+        return _createCard(url, Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _createImage(imageSize, image, BoxFit.contain),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+              child: _createListTile(
+                  context,
+                  card['binding_values']['event_title']['string_value'],
+                  card['binding_values']['event_subtitle']?['string_value'],
+                  '@$user'
+              ),
+            ),
+          ],
+        ));
       case '745291183405076480:broadcast':
         // https://twitter.com/KwasiKwarteng/status/1573229010779516929
         var uri = card['binding_values']['card_url']['string_value'];
@@ -392,14 +397,11 @@ class TweetCard extends StatelessWidget {
 
         var aspectRatio = width / height;
 
-        var child = TweetVideo(
-            username: 'username',
-            loop: false,
-            metadata: TweetVideoMetadata(aspectRatio, image, () async {
-              var broadcast = await Twitter.getBroadcastDetails(key);
+        var child = TweetVideo(username: 'username', loop: false, metadata: TweetVideoMetadata(aspectRatio, image, () async {
+          var broadcast = await Twitter.getBroadcastDetails(key);
 
-              return TweetVideoUrls(broadcast['source']['noRedirectPlaybackUrl'], null);
-            }));
+          return TweetVideoUrls(broadcast['source']['noRedirectPlaybackUrl'], null);
+        }));
 
         var username = card['binding_values']['broadcaster_username']['string_value'];
         var title = card['binding_values']['broadcast_title']['string_value'];

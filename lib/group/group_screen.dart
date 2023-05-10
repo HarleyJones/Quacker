@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:Quacker/database/entities.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/group/group_model.dart';
-import 'package:Quacker/subscriptions/_groups.dart';
-import 'package:Quacker/subscriptions/_list.dart';
-import 'package:Quacker/ui/errors.dart';
+import 'package:fritter/database/entities.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/group/group_model.dart';
+import 'package:fritter/subscriptions/_groups.dart';
+import 'package:fritter/subscriptions/_list.dart';
+import 'package:fritter/ui/errors.dart';
 import 'package:provider/provider.dart';
 
 class GroupScreenArguments {

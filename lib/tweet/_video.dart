@@ -2,10 +2,10 @@ import 'package:chewie/chewie.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/tweet/_video_controls.dart';
-import 'package:Quacker/utils/downloads.dart';
-import 'package:Quacker/utils/iterables.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/tweet/_video_controls.dart';
+import 'package:fritter/utils/downloads.dart';
+import 'package:fritter/utils/iterables.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -77,7 +77,7 @@ class _TweetVideoState extends State<TweetVideo> {
     _videoController!.setVolume(volume);
 
     _videoController!.addListener(() {
-      model.setIsMuted(_videoController!.value.volume);
+        model.setIsMuted(_videoController!.value.volume);
     });
 
     _chewieController = ChewieController(
@@ -165,25 +165,26 @@ class _TweetVideoState extends State<TweetVideo> {
     return AspectRatio(
       aspectRatio: widget.metadata.aspectRatio,
       child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 150),
-          child: _showVideo
-              ? _Video(controller: _chewieController!)
-              : GestureDetector(
-                  onTap: onTapPlay,
-                  child: Stack(alignment: Alignment.center, children: [
-                    ExtendedImage.network(widget.metadata.imageUrl, width: double.infinity, fit: BoxFit.fitWidth),
-                    Center(
-                      child: FritterCenterPlayButton(
-                        backgroundColor: Colors.black54,
-                        iconColor: Colors.white,
-                        isFinished: false,
-                        isPlaying: false,
-                        show: true,
-                        onPressed: onTapPlay,
-                      ),
-                    )
-                  ]),
-                )),
+        duration: const Duration(milliseconds: 150),
+        child: _showVideo
+          ? _Video(controller: _chewieController!)
+          : GestureDetector(
+              onTap: onTapPlay,
+              child: Stack(alignment: Alignment.center, children: [
+                ExtendedImage.network(widget.metadata.imageUrl, width: double.infinity, fit: BoxFit.fitWidth),
+                Center(
+                  child: FritterCenterPlayButton(
+                    backgroundColor: Colors.black54,
+                    iconColor: Colors.white,
+                    isFinished: false,
+                    isPlaying: false,
+                    show: true,
+                    onPressed: onTapPlay,
+                  ),
+                )
+              ]),
+            )
+          ),
     );
   }
 

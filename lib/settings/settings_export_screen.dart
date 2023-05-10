@@ -4,17 +4,17 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
-import 'package:Quacker/database/entities.dart';
-import 'package:Quacker/group/group_model.dart';
-import 'package:Quacker/saved/saved_tweet_model.dart';
-import 'package:Quacker/settings/_data.dart';
-import 'package:Quacker/subscriptions/users_model.dart';
-import 'package:Quacker/utils/legacy.dart';
+import 'package:fritter/database/entities.dart';
+import 'package:fritter/group/group_model.dart';
+import 'package:fritter/saved/saved_tweet_model.dart';
+import 'package:fritter/settings/_data.dart';
+import 'package:fritter/subscriptions/users_model.dart';
+import 'package:fritter/utils/legacy.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
-import 'package:Quacker/generated/l10n.dart';
+import 'package:fritter/generated/l10n.dart';
 
 class SettingsExportScreen extends StatefulWidget {
   const SettingsExportScreen({Key? key}) : super(key: key);
@@ -184,31 +184,31 @@ class _SettingsExportScreenState extends State<SettingsExportScreen> {
           Expanded(
               child: SingleChildScrollView(
                   child: Column(
-            children: [
-              CheckboxListTile(
-                  value: _exportSettings,
-                  title: Text(L10n.of(context).export_settings),
-                  onChanged: (v) => toggleExportSettings()),
-              CheckboxListTile(
-                  value: _exportSubscriptions,
-                  title: Text(L10n.of(context).export_subscriptions),
-                  onChanged: (v) => toggleExportSubscriptions()),
-              CheckboxListTile(
-                  value: _exportSubscriptionGroups,
-                  title: Text(L10n.of(context).export_subscription_groups),
-                  onChanged: (v) => toggleExportSubscriptionGroups()),
-              CheckboxListTile(
-                  value: _exportSubscriptionGroupMembers,
-                  title: Text(L10n.of(context).export_subscription_group_members),
-                  onChanged: _exportSubscriptions && _exportSubscriptionGroups
-                      ? (v) => toggleExportSubscriptionGroupMembers()
-                      : null),
-              CheckboxListTile(
-                  value: _exportTweets,
-                  title: Text(L10n.of(context).export_tweets),
-                  onChanged: (v) => toggleExportTweets()),
-            ],
-          ))),
+                    children: [
+                      CheckboxListTile(
+                          value: _exportSettings,
+                          title: Text(L10n.of(context).export_settings),
+                          onChanged: (v) => toggleExportSettings()),
+                      CheckboxListTile(
+                          value: _exportSubscriptions,
+                          title: Text(L10n.of(context).export_subscriptions),
+                          onChanged: (v) => toggleExportSubscriptions()),
+                      CheckboxListTile(
+                          value: _exportSubscriptionGroups,
+                          title: Text(L10n.of(context).export_subscription_groups),
+                          onChanged: (v) => toggleExportSubscriptionGroups()),
+                      CheckboxListTile(
+                          value: _exportSubscriptionGroupMembers,
+                          title: Text(L10n.of(context).export_subscription_group_members),
+                          onChanged: _exportSubscriptions && _exportSubscriptionGroups
+                              ? (v) => toggleExportSubscriptionGroupMembers()
+                              : null),
+                      CheckboxListTile(
+                          value: _exportTweets,
+                          title: Text(L10n.of(context).export_tweets),
+                          onChanged: (v) => toggleExportTweets()),
+                    ],
+                  ))),
           if (_isLegacyAndroid)
             Container(
               margin: const EdgeInsets.all(8),

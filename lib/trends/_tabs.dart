@@ -1,8 +1,8 @@
 import 'package:dart_twitter_api/api/trends/data/trend_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/trends/trends_model.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/trends/trends_model.dart';
 import 'package:provider/provider.dart';
 
 class TrendsTabBar extends StatefulWidget implements PreferredSizeWidget {

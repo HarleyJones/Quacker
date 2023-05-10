@@ -1,19 +1,19 @@
 import 'dart:async';
 
-import 'package:Quacker/catcher/errors.dart';
+import 'package:fritter/catcher/errors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:Quacker/catcher/exceptions.dart';
-import 'package:Quacker/client.dart';
-import 'package:Quacker/database/entities.dart';
-import 'package:Quacker/database/repository.dart';
-import 'package:Quacker/group/group_model.dart';
-import 'package:Quacker/import_data_model.dart';
-import 'package:Quacker/subscriptions/users_model.dart';
-import 'package:Quacker/ui/errors.dart';
-import 'package:Quacker/utils/urls.dart';
+import 'package:fritter/catcher/exceptions.dart';
+import 'package:fritter/client.dart';
+import 'package:fritter/database/entities.dart';
+import 'package:fritter/database/repository.dart';
+import 'package:fritter/group/group_model.dart';
+import 'package:fritter/import_data_model.dart';
+import 'package:fritter/subscriptions/users_model.dart';
+import 'package:fritter/ui/errors.dart';
+import 'package:fritter/utils/urls.dart';
 import 'package:provider/provider.dart';
-import 'package:Quacker/generated/l10n.dart';
+import 'package:fritter/generated/l10n.dart';
 
 class SubscriptionImportScreen extends StatefulWidget {
   const SubscriptionImportScreen({Key? key}) : super(key: key);
@@ -61,12 +61,13 @@ class _SubscriptionImportScreenState extends State<SubscriptionImportScreen> {
         await importModel.importData({
           tableSubscription: [
             ...response.users.map((e) => UserSubscription(
-                id: e.idStr!,
-                name: e.name!,
-                profileImageUrlHttps: e.profileImageUrlHttps,
-                screenName: e.screenName!,
-                verified: e.verified ?? false,
-                createdAt: createdAt))
+              id: e.idStr!,
+              name: e.name!,
+              profileImageUrlHttps: e.profileImageUrlHttps,
+              screenName: e.screenName!,
+              verified: e.verified ?? false,
+              createdAt: createdAt
+            ))
           ]
         });
 
@@ -155,8 +156,7 @@ class _SubscriptionImportScreenState extends State<SubscriptionImportScreen> {
                     var error = snapshot.error;
                     if (error != null) {
                       if (error is HttpException && error.statusCode == 401) {
-                        return createEmojiError(TwitterError(
-                            uri: error.uri, code: 22, message: L10n.current.only_public_subscriptions_can_be_imported));
+                        return createEmojiError(TwitterError(uri: error.uri, code: 22, message: L10n.current.only_public_subscriptions_can_be_imported));
                       }
 
                       Catcher.reportException(error, snapshot.stackTrace);

@@ -1,9 +1,9 @@
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:Quacker/constants.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/group/group_model.dart';
-import 'package:Quacker/home/home_screen.dart';
-import 'package:Quacker/utils/iterables.dart';
+import 'package:fritter/constants.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/group/group_model.dart';
+import 'package:fritter/home/home_screen.dart';
+import 'package:fritter/utils/iterables.dart';
 import 'package:pref/pref.dart';
 
 class HomePage {
@@ -38,8 +38,7 @@ class HomeModel extends StreamStore<Object, List<HomePage>> {
 
       var available = [
         ...defaultHomePages,
-        ...groupsModel.state
-            .map((e) => NavigationPage('group-${e.id}', (c) => L10n.of(c).group_name(e.name), e.iconData)),
+        ...groupsModel.state.map((e) => NavigationPage('group-${e.id}', (c) => L10n.of(c).group_name(e.name), e.iconData)),
       ];
 
       var pages = <HomePage>[];
@@ -66,7 +65,7 @@ class HomeModel extends StreamStore<Object, List<HomePage>> {
       return pages;
     });
   }
-
+  
   Future<void> movePage(int oldIndex, int newIndex) async {
     if (newIndex > oldIndex) {
       newIndex = newIndex - 1;
@@ -78,7 +77,10 @@ class HomeModel extends StreamStore<Object, List<HomePage>> {
   }
 
   Future<void> save() async {
-    var pages = state.where((e) => e.selected).map((e) => e.id).toList();
+    var pages = state
+        .where((e) => e.selected)
+        .map((e) => e.id)
+        .toList();
 
     await prefs.set(optionHomePages, pages);
   }

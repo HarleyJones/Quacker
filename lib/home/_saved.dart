@@ -1,25 +1,25 @@
 import 'dart:convert';
 
 import 'package:async_button_builder/async_button_builder.dart';
-import 'package:Quacker/catcher/errors.dart';
+import 'package:fritter/catcher/errors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:Quacker/catcher/exceptions.dart';
-import 'package:Quacker/client.dart';
-import 'package:Quacker/constants.dart';
-import 'package:Quacker/database/entities.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/home/home_screen.dart';
-import 'package:Quacker/profile/profile.dart';
-import 'package:Quacker/saved/saved_tweet_model.dart';
-import 'package:Quacker/tweet/tweet.dart';
-import 'package:Quacker/ui/errors.dart';
+import 'package:fritter/catcher/exceptions.dart';
+import 'package:fritter/client.dart';
+import 'package:fritter/constants.dart';
+import 'package:fritter/database/entities.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/home/home_screen.dart';
+import 'package:fritter/profile/profile.dart';
+import 'package:fritter/saved/saved_tweet_model.dart';
+import 'package:fritter/tweet/tweet.dart';
+import 'package:fritter/ui/errors.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
 class SavedScreen extends StatefulWidget {
   final ScrollController scrollController;
-
+  
   const SavedScreen({Key? key, required this.scrollController}) : super(key: key);
 
   @override
@@ -59,8 +59,7 @@ class _SavedScreenState extends State<SavedScreen> with AutomaticKeepAliveClient
       },
       body: MultiProvider(
         providers: [
-          ChangeNotifierProvider<TweetContextState>(
-              create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
+          ChangeNotifierProvider<TweetContextState>(create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
         ],
         child: ScopedBuilder<SavedTweetModel, Object, List<SavedTweet>>.transition(
           store: model,
@@ -147,6 +146,7 @@ class SavedTweetTooLarge extends StatelessWidget {
     );
   }
 }
+
 
 class SavedTweetTooLargeException with SyntheticException implements Exception {
   final String id;

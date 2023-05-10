@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:Quacker/constants.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/home/home_screen.dart';
-import 'package:Quacker/subscriptions/_list.dart';
-import 'package:Quacker/subscriptions/users_model.dart';
+import 'package:fritter/constants.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/home/home_screen.dart';
+import 'package:fritter/subscriptions/_list.dart';
+import 'package:fritter/subscriptions/users_model.dart';
 import 'package:provider/provider.dart';
 
 class SubscriptionsScreen extends StatelessWidget {

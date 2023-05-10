@@ -1,12 +1,12 @@
-import 'package:Quacker/catcher/errors.dart';
+import 'package:fritter/catcher/errors.dart';
 import 'package:flutter/material.dart';
-import 'package:Quacker/catcher/errors.dart';
-import 'package:Quacker/client.dart';
-import 'package:Quacker/database/entities.dart';
-import 'package:Quacker/ui/errors.dart';
-import 'package:Quacker/user.dart';
+import 'package:fritter/catcher/errors.dart';
+import 'package:fritter/client.dart';
+import 'package:fritter/database/entities.dart';
+import 'package:fritter/ui/errors.dart';
+import 'package:fritter/user.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:Quacker/generated/l10n.dart';
+import 'package:fritter/generated/l10n.dart';
 
 class ProfileFollows extends StatefulWidget {
   final UserWithExtra user;

@@ -3,12 +3,12 @@ import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:Quacker/constants.dart';
-import 'package:Quacker/database/entities.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/group/group_model.dart';
-import 'package:Quacker/profile/profile.dart';
-import 'package:Quacker/subscriptions/users_model.dart';
+import 'package:fritter/constants.dart';
+import 'package:fritter/database/entities.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/group/group_model.dart';
+import 'package:fritter/profile/profile.dart';
+import 'package:fritter/subscriptions/users_model.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -194,13 +194,19 @@ class UserWithExtra extends User {
       ..name = json['name'] as String?
       ..screenName = json['screen_name'] as String?
       ..location = json['location'] as String?
-      ..derived = json['derived'] == null ? null : Derived.fromJson(json['derived'] as Map<String, dynamic>)
+      ..derived = json['derived'] == null
+          ? null
+          : Derived.fromJson(json['derived'] as Map<String, dynamic>)
       ..url = json['url'] as String?
-      ..entities = json['entities'] == null ? null : UserEntities.fromJson(json['entities'] as Map<String, dynamic>)
+      ..entities = json['entities'] == null
+          ? null
+          : UserEntities.fromJson(json['entities'] as Map<String, dynamic>)
       ..description = json['description'] as String?
       ..protected = json['protected'] as bool?
       ..verified = json['ext_is_blue_verified'] ?? json['verified'] as bool?
-      ..status = json['status'] == null ? null : Tweet.fromJson(json['status'] as Map<String, dynamic>)
+      ..status = json['status'] == null
+          ? null
+          : Tweet.fromJson(json['status'] as Map<String, dynamic>)
       ..followersCount = json['followers_count'] as int?
       ..friendsCount = json['friends_count'] as int?
       ..listedCount = json['listed_count'] as int?
@@ -211,7 +217,9 @@ class UserWithExtra extends User {
       ..profileImageUrlHttps = json['profile_image_url_https'] as String?
       ..defaultProfile = json['default_profile'] as bool?
       ..defaultProfileImage = json['default_profile_image'] as bool?
-      ..withheldInCountries = (json['withheld_in_countries'] as List<dynamic>?)?.map((e) => e as String).toList()
+      ..withheldInCountries = (json['withheld_in_countries'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList()
       ..withheldScope = json['withheld_scope'] as String?;
 
     userWithExtra.possiblySensitive = json['possibly_sensitive'] as bool?;

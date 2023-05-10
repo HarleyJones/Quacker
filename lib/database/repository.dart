@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:Quacker/group/group_model.dart';
+import 'package:fritter/group/group_model.dart';
 import 'package:logging/logging.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_migration_plan/migration/sql.dart';
@@ -176,12 +176,8 @@ class Repository {
       ],
       18: [
         // Add support for saving searches
-        SqlMigration(
-            'CREATE TABLE IF NOT EXISTS $tableSearchSubscription (id VARCHAR PRIMARY KEY, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
-            reverseSql: 'DROP TABLE $tableSearchSubscription'),
-        SqlMigration(
-            'CREATE TABLE IF NOT EXISTS $tableSearchSubscriptionGroupMember (group_id VARCHAR, search_id VARCHAR, CONSTRAINT pk_$tableSearchSubscription PRIMARY KEY (group_id, search_id))',
-            reverseSql: 'DROP TABLE $tableSearchSubscriptionGroupMember'),
+        SqlMigration('CREATE TABLE IF NOT EXISTS $tableSearchSubscription (id VARCHAR PRIMARY KEY, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)', reverseSql: 'DROP TABLE $tableSearchSubscription'),
+        SqlMigration('CREATE TABLE IF NOT EXISTS $tableSearchSubscriptionGroupMember (group_id VARCHAR, search_id VARCHAR, CONSTRAINT pk_$tableSearchSubscription PRIMARY KEY (group_id, search_id))', reverseSql: 'DROP TABLE $tableSearchSubscriptionGroupMember'),
       ],
       19: [
         // Add a new column for saved tweet user IDs, and extract them from all existing records
@@ -204,7 +200,7 @@ class Repository {
 
             var userId = decodedTweet['user']?['id_str'] as String?;
             if (userId != null) {
-              batch.update(tableSavedTweet, {'user_id': userId}, where: 'id = ?', whereArgs: [tweet['id']]);
+              batch.update(tableSavedTweet, { 'user_id': userId }, where: 'id = ?', whereArgs: [tweet['id']]);
             }
           }
 

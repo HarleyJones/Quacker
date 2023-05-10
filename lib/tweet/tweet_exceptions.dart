@@ -1,4 +1,4 @@
-import 'package:Quacker/catcher/exceptions.dart';
+import 'package:fritter/catcher/exceptions.dart';
 
 class TweetMissingDataException with SyntheticException implements Exception {
   final String? id;

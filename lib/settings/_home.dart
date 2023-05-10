@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/home/home_model.dart';
-import 'package:Quacker/ui/errors.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/home/home_model.dart';
+import 'package:fritter/ui/errors.dart';
 import 'package:provider/provider.dart';
 
 class SettingsHomeFragment extends StatelessWidget {
@@ -17,9 +17,10 @@ class SettingsHomeFragment extends StatelessWidget {
         title: Text(L10n.current.home),
         actions: [
           IconButton(
-              icon: const Icon(Icons.restart_alt),
-              tooltip: L10n.current.reset_home_pages,
-              onPressed: () async => await model.resetPages())
+            icon: const Icon(Icons.restart_alt),
+            tooltip: L10n.current.reset_home_pages,
+            onPressed: () async => await model.resetPages()
+          )
         ],
       ),
       body: Padding(
@@ -48,8 +49,7 @@ class SettingsHomeFragment extends StatelessWidget {
                   onChanged: (value) async {
                     var selected = value ?? false;
                     if (selected == false && data.where((e) => e.selected).length == 2) {
-                      showSnackBar(context,
-                          icon: '🙊', message: L10n.current.you_must_have_at_least_2_home_screen_pages);
+                      showSnackBar(context, icon: '🙊', message: L10n.current.you_must_have_at_least_2_home_screen_pages);
                       return;
                     }
 

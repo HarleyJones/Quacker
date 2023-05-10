@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:Quacker/catcher/errors.dart';
+import 'package:fritter/catcher/errors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
-import 'package:Quacker/constants.dart';
-import 'package:Quacker/database/entities.dart';
-import 'package:Quacker/database/repository.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/group/group_model.dart';
-import 'package:Quacker/import_data_model.dart';
-import 'package:Quacker/subscriptions/users_model.dart';
-import 'package:Quacker/utils/legacy.dart';
+import 'package:fritter/constants.dart';
+import 'package:fritter/database/entities.dart';
+import 'package:fritter/database/repository.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/group/group_model.dart';
+import 'package:fritter/import_data_model.dart';
+import 'package:fritter/subscriptions/users_model.dart';
+import 'package:fritter/utils/legacy.dart';
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
@@ -28,11 +28,11 @@ class SettingsData {
 
   SettingsData(
       {required this.settings,
-      required this.searchSubscriptions,
-      required this.userSubscriptions,
-      required this.subscriptionGroups,
-      required this.subscriptionGroupMembers,
-      required this.tweets});
+        required this.searchSubscriptions,
+        required this.userSubscriptions,
+        required this.subscriptionGroups,
+        required this.subscriptionGroupMembers,
+        required this.tweets});
 
   factory SettingsData.fromJson(Map<String, dynamic> json) {
     return SettingsData(
@@ -63,6 +63,7 @@ class SettingsData {
     };
   }
 }
+
 
 class SettingsDataFragment extends StatelessWidget {
   static final log = Logger('SettingsDataFragment');
@@ -125,7 +126,9 @@ class SettingsDataFragment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(L10n.current.data)),
+      appBar: AppBar(
+        title: Text(L10n.current.data)
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: ListView(children: [
@@ -166,7 +169,8 @@ class SettingsDataFragment extends StatelessWidget {
                                   SnackBar(
                                     content: Text(
                                       L10n.of(context)
-                                          .the_file_does_not_exist_please_ensure_it_is_located_at_file_path(file.path),
+                                          .the_file_does_not_exist_please_ensure_it_is_located_at_file_path(
+                                          file.path),
                                     ),
                                   ),
                                 );

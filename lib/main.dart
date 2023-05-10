@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:Quacker/catcher/errors.dart';
+import 'package:fritter/catcher/errors.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
@@ -13,29 +13,29 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-import 'package:Quacker/catcher/exceptions.dart';
-import 'package:Quacker/constants.dart';
-import 'package:Quacker/database/repository.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/group/group_model.dart';
-import 'package:Quacker/group/group_screen.dart';
-import 'package:Quacker/home/home_model.dart';
-import 'package:Quacker/home/home_screen.dart';
-import 'package:Quacker/import_data_model.dart';
-import 'package:Quacker/profile/profile.dart';
-import 'package:Quacker/saved/saved_tweet_model.dart';
-import 'package:Quacker/search/search.dart';
-import 'package:Quacker/search/search_model.dart';
-import 'package:Quacker/settings/_general.dart';
-import 'package:Quacker/settings/settings.dart';
-import 'package:Quacker/settings/settings_export_screen.dart';
-import 'package:Quacker/status.dart';
-import 'package:Quacker/subscriptions/_import.dart';
-import 'package:Quacker/subscriptions/users_model.dart';
-import 'package:Quacker/trends/trends_model.dart';
-import 'package:Quacker/tweet/_video.dart';
-import 'package:Quacker/ui/errors.dart';
-import 'package:Quacker/utils/urls.dart';
+import 'package:fritter/catcher/exceptions.dart';
+import 'package:fritter/constants.dart';
+import 'package:fritter/database/repository.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/group/group_model.dart';
+import 'package:fritter/group/group_screen.dart';
+import 'package:fritter/home/home_model.dart';
+import 'package:fritter/home/home_screen.dart';
+import 'package:fritter/import_data_model.dart';
+import 'package:fritter/profile/profile.dart';
+import 'package:fritter/saved/saved_tweet_model.dart';
+import 'package:fritter/search/search.dart';
+import 'package:fritter/search/search_model.dart';
+import 'package:fritter/settings/_general.dart';
+import 'package:fritter/settings/settings.dart';
+import 'package:fritter/settings/settings_export_screen.dart';
+import 'package:fritter/status.dart';
+import 'package:fritter/subscriptions/_import.dart';
+import 'package:fritter/subscriptions/users_model.dart';
+import 'package:fritter/trends/trends_model.dart';
+import 'package:fritter/tweet/_video.dart';
+import 'package:fritter/ui/errors.dart';
+import 'package:fritter/utils/urls.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:package_info/package_info.dart';
@@ -90,7 +90,7 @@ Future checkForUpdates() async {
         } else {
           await FlutterLocalNotificationsPlugin().show(0, 'An update for Fritter is available! 🚀',
               'Update to ${release['version']} through your F-Droid client', details,
-              payload: 'https://f-droid.org/packages/com.TheHCJ.Quacker/');
+              payload: 'https://f-droid.org/packages/com.jonjomckay.fritter/');
         }
       }
     } else {
@@ -248,15 +248,16 @@ Future<void> main() async {
         FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();
 
         const InitializationSettings settings =
-            InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_notification'));
+        InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_notification'));
 
-        await notifications.initialize(settings, onDidReceiveBackgroundNotificationResponse: handleNotificationCallback,
+        await notifications
+            .initialize(settings, onDidReceiveBackgroundNotificationResponse: handleNotificationCallback,
             onDidReceiveNotificationResponse: (response) async {
-          var payload = response.payload;
-          if (payload != null && payload.startsWith('https://')) {
-            await openUri(payload);
-          }
-        });
+              var payload = response.payload;
+              if (payload != null && payload.startsWith('https://')) {
+                await openUri(payload);
+              }
+            });
 
         var flavor = getFlavor();
         var shouldCheckForUpdates = prefService.get(optionShouldCheckForUpdates);
@@ -516,10 +517,10 @@ class _FritterAppState extends State<FritterApp> {
       builder: (context, child) {
         // Replace the default red screen of death with a slightly friendlier one
         ErrorWidget.builder = (FlutterErrorDetails details) => FullPageErrorWidget(
-              error: details.exception,
-              stackTrace: details.stack,
-              prefix: L10n.of(context).something_broke_in_fritter,
-            );
+          error: details.exception,
+          stackTrace: details.stack,
+          prefix: L10n.of(context).something_broke_in_fritter,
+        );
 
         return DevicePreview.appBuilder(context, child ?? Container());
       },

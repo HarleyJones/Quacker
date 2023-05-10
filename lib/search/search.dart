@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:Quacker/constants.dart';
-import 'package:Quacker/database/entities.dart';
-import 'package:Quacker/generated/l10n.dart';
-import 'package:Quacker/profile/profile.dart';
-import 'package:Quacker/search/search_model.dart';
-import 'package:Quacker/subscriptions/users_model.dart';
-import 'package:Quacker/ui/errors.dart';
-import 'package:Quacker/user.dart';
+import 'package:fritter/constants.dart';
+import 'package:fritter/database/entities.dart';
+import 'package:fritter/generated/l10n.dart';
+import 'package:fritter/profile/profile.dart';
+import 'package:fritter/search/search_model.dart';
+import 'package:fritter/subscriptions/users_model.dart';
+import 'package:fritter/ui/errors.dart';
+import 'package:fritter/user.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +30,7 @@ class SearchScreen extends StatelessWidget {
     return _SearchScreen(query: arguments.query, focusInputOnOpen: arguments.focusInputOnOpen);
   }
 }
+
 
 class _SearchScreen extends StatefulWidget {
   final String? query;
@@ -99,12 +100,9 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
 
                     var currentlyFollowed = state.any((element) => element.id == id);
                     if (!currentlyFollowed) {
-                      return IconButton(
-                          icon: const Icon(Icons.save),
-                          onPressed: () async {
-                            await subscriptionsModel.toggleSubscribe(
-                                SearchSubscription(id: id, createdAt: DateTime.now()), currentlyFollowed);
-                          });
+                      return IconButton(icon: const Icon(Icons.save), onPressed: () async {
+                        await subscriptionsModel.toggleSubscribe(SearchSubscription(id: id, createdAt: DateTime.now()), currentlyFollowed);
+                      });
                     }
 
                     return const IconButton(icon: Icon(Icons.save), onPressed: null);
@@ -143,12 +141,7 @@ class TweetSearchResultList<S extends Store<Object, List<T>>, T> extends Statefu
   final Future<void> Function(String query) searchFunction;
   final ItemWidgetBuilder<T> itemBuilder;
 
-  const TweetSearchResultList(
-      {Key? key,
-      required this.queryController,
-      required this.store,
-      required this.searchFunction,
-      required this.itemBuilder})
+  const TweetSearchResultList({Key? key, required this.queryController, required this.store, required this.searchFunction, required this.itemBuilder})
       : super(key: key);
 
   @override
