@@ -215,7 +215,7 @@ class Repository {
     });
     await openDatabase(
       databaseName,
-      version: 20,
+      version: 19,
       onUpgrade: myMigrationPlan,
       onCreate: myMigrationPlan,
       onDowngrade: myMigrationPlan,
