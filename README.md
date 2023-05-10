@@ -38,7 +38,3 @@
 
 ## Acknowledgments
 Icon made with [OpenMoji](https://openmoji.org/)
-
-## Translation
-
-Help translate this project on [Hosted Weblate](https://hosted.weblate.org/projects/fritter/).
