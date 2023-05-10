@@ -10,6 +10,11 @@ import 'package:fritter/profile/_follows.dart';
 import 'package:fritter/profile/_saved.dart';
 import 'package:fritter/profile/_tweets.dart';
 import 'package:fritter/profile/profile_model.dart';
+<<<<<<< HEAD
+=======
+import 'package:fritter/search/search.dart';
+import 'package:fritter/tweet/_video.dart';
+>>>>>>> parent of e732eac (Removed tweet search functionality)
 import 'package:fritter/ui/errors.dart';
 import 'package:fritter/ui/physics.dart';
 import 'package:fritter/user.dart';
@@ -172,8 +177,8 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
   List<InlineSpan> _addLinksToText(BuildContext context, String content) {
     List<InlineSpan> contentWidgets = [];
 
-    // Split the string by any mentions, and turn those into links
-    content.splitMapJoin(RegExp(r'(@)\w+'), onMatch: (match) {
+    // Split the string by any mentions or hashtags, and turn those into links
+    content.splitMapJoin(RegExp(r'(#|(?<=\W|^)@)\w+'), onMatch: (match) {
       var full = match.group(0);
       var type = match.group(1);
       if (type == null || full == null) {
@@ -181,6 +186,13 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
       }
 
       var onTap = () async {};
+      if (type == '#') {
+        onTap = () async {
+          Navigator.pushNamed(context, routeSearch,
+            arguments: SearchArguments(1, focusInputOnOpen: false, query: full));
+        };
+      }
+
       if (type == '@') {
         onTap = () async {
           Navigator.pushNamed(context, routeProfile,
