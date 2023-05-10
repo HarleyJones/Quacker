@@ -53,7 +53,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.jonjomckay.fritter"
+        applicationId "com.thehcj.quacker"
         minSdkVersion 16
         targetSdkVersion 33
         multiDexEnabled true
@@ -82,9 +82,9 @@ android {
                 variant.outputs.all { output ->
                     def abiName = output.getFilter(OutputFile.ABI)
                     if (abiName == null) {
-                        outputFileName = "fritter-v${defaultConfig.versionName}.apk"
+                        outputFileName = "quacker-v${defaultConfig.versionName}.apk"
                     } else {
-                        outputFileName = "fritter-v${defaultConfig.versionName}_${abiName}.apk"
+                        outputFileName = "quacker-v${defaultConfig.versionName}_${abiName}.apk"
                     }
                 }
             }

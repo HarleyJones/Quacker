@@ -124,7 +124,7 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
 
       for (var chunk in widget.chunks) {
         var hash = chunk.hash;
-        
+
         futures.add(Future(() async {
           var tweets = <TweetChain>[];
 
@@ -132,14 +132,15 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
 
           if (cursorKey == null) {
             // We're loading the initial content for the feed screen, so load all the chunks we already have
-            var storedChunks = await repository.query(tableFeedGroupChunk, where: 'hash = ?', whereArgs: [hash], orderBy: 'created_at DESC');
+            var storedChunks = await repository.query(tableFeedGroupChunk,
+                where: 'hash = ?', whereArgs: [hash], orderBy: 'created_at DESC');
 
             // Make sure we load any existing stored tweets from the chunk
             var storedChunksTweets = storedChunks
-              .map((e) => jsonDecode(e['response'] as String))
-              .map((e) => List.from(e))
-              .expand((e) => e.map((c) => TweetChain.fromJson(c)))
-              .toList();
+                .map((e) => jsonDecode(e['response'] as String))
+                .map((e) => List.from(e))
+                .expand((e) => e.map((c) => TweetChain.fromJson(c)))
+                .toList();
 
             tweets.addAll(storedChunksTweets);
 
@@ -153,7 +154,8 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
             }
           } else {
             // We're currently at the end of our current feed, so load the oldest chunk and use its cursor to load more
-            var storedChunks = await repository.query(tableFeedGroupChunk, where: 'cursor_id = ? AND hash = ?', whereArgs: [int.parse(cursorKey), hash]);
+            var storedChunks = await repository.query(tableFeedGroupChunk,
+                where: 'cursor_id = ? AND hash = ?', whereArgs: [int.parse(cursorKey), hash]);
             if (storedChunks.isNotEmpty) {
               searchCursor = storedChunks.first['cursor_bottom'] as String;
             } else {
@@ -165,16 +167,18 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
           var query = _buildSearchQuery(chunk.users);
           var result = await Twitter.searchTweets(query, widget.includeReplies, limit: 100, cursor: searchCursor);
 
-          tweets.addAll(result.chains);
+          if (result.chains.isNotEmpty) {
+            tweets.addAll(result.chains);
 
-          // Make sure we insert the set of cursors for this latest chunk, ready for the next time we paginate
-          await repository.insert(tableFeedGroupChunk, {
-            'cursor_id': int.parse(nextCursor),
-            'hash': hash,
-            'cursor_top': result.cursorTop,
-            'cursor_bottom': result.cursorBottom,
-            'response': jsonEncode(result.chains.map((e) => e.toJson()).toList())
-          });
+            // Make sure we insert the set of cursors for this latest chunk, ready for the next time we paginate
+            await repository.insert(tableFeedGroupChunk, {
+              'cursor_id': int.parse(nextCursor),
+              'hash': hash,
+              'cursor_top': result.cursorTop,
+              'cursor_bottom': result.cursorBottom,
+              'response': jsonEncode(result.chains.map((e) => e.toJson()).toList())
+            });
+          }
 
           return tweets;
         }));
@@ -182,19 +186,16 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
 
       // Wait for all our searches to complete, then build our list of tweet conversations
       var result = (await Future.wait(futures));
-      var threads = result
-          .expand((element) => element)
-          .sorted((a, b) {
-            var aCreatedAt = a.tweets[0].createdAt;
-            var bCreatedAt = b.tweets[0].createdAt;
+      var threads = result.expand((element) => element).sorted((a, b) {
+        var aCreatedAt = a.tweets[0].createdAt;
+        var bCreatedAt = b.tweets[0].createdAt;
 
-            if (aCreatedAt == null || bCreatedAt == null) {
-              return 0;
-            }
+        if (aCreatedAt == null || bCreatedAt == null) {
+          return 0;
+        }
 
-            return bCreatedAt.compareTo(aCreatedAt);
-          })
-          .toList();
+        return bCreatedAt.compareTo(aCreatedAt);
+      }).toList();
 
       if (!mounted) {
         return;
@@ -237,8 +238,10 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
         },
         child: MultiProvider(
           providers: [
-            ChangeNotifierProvider<TweetContextState>(create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
-            ChangeNotifierProvider<VideoContextState>(create: (_) => VideoContextState(prefs.get(optionMediaDefaultMute))),
+            ChangeNotifierProvider<TweetContextState>(
+                create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
+            ChangeNotifierProvider<VideoContextState>(
+                create: (_) => VideoContextState(prefs.get(optionMediaDefaultMute))),
           ],
           child: PagedListView<String?, TweetChain>(
             padding: const EdgeInsets.only(top: 4),

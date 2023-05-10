@@ -1,3 +1,5 @@
+const optionWizardCompleted = 'option.wizard_completed';
+
 const optionDisableScreenshots = 'disable_screenshots';
 
 const optionErrorsSentryEnabled = 'errors.sentry_enabled';
@@ -19,7 +21,6 @@ const optionDownloadTypeAsk = 'ask';
 const optionLocale = 'locale';
 const optionLocaleDefault = 'system';
 
-const optionShouldCheckForUpdates = 'should_check_for_updates';
 const optionShareBaseUrl = 'share_base_url';
 
 const optionSubscriptionGroupsOrderByAscending = 'subscription_groups.order_by.ascending';

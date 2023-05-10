@@ -74,140 +74,6 @@ class SettingsGeneralFragment extends StatelessWidget {
         ]);
   }
 
-  Future<void> _sendPing(BuildContext context) async {
-    var deviceInfo = DeviceInfoPlugin();
-    var packageInfo = await PackageInfo.fromPlatform();
-    var prefService = PrefService.of(context);
-
-    // If we've already reported using this build number, do nothing
-    var helloBuild = prefService.get(optionHelloLastBuild);
-    if (helloBuild != null && helloBuild == packageInfo.buildNumber) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(L10n.of(context).it_looks_like_you_have_already_said_hello_from_this_version_of_fritter),
-      ));
-
-      return;
-    }
-
-    Map<String, Object> metadata;
-
-    if (Platform.isAndroid) {
-      var info = await deviceInfo.androidInfo;
-
-      metadata = {
-        'abis': info.supportedAbis,
-        'device': info.device,
-        'flavor': getFlavor(),
-        'locale': Localizations.localeOf(context).languageCode,
-        'os': 'android',
-        'system': info.version.sdkInt.toString(),
-        'version': packageInfo.buildNumber,
-      };
-    } else {
-      var info = await deviceInfo.iosInfo;
-
-      metadata = {
-        'abis': [],
-        'device': info.utsname.machine ?? 'unknown',
-        'flavor': getFlavor(),
-        'locale': Localizations.localeOf(context).languageCode,
-        'os': 'ios',
-        'system': info.systemVersion ?? 'unknown',
-        'version': packageInfo.buildNumber,
-      };
-    }
-
-    showDialog(
-        context: context,
-        builder: (context) {
-          var content = JsonEncoder.withIndent(' ' * 2).convert(metadata);
-
-          return AlertDialog(
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(L10n.of(context).cancel)),
-                TextButton(
-                    onPressed: () async {
-                      var pingUri = 'https://fritter.cc/ping';
-
-                      try {
-                        var response = await http
-                            .post(Uri.parse(pingUri), headers: {'Content-Type': 'application/json'}, body: content)
-                            .timeout(const Duration(seconds: 30));
-
-                        SnackBar snackBar;
-
-                        if (response.statusCode == 200) {
-                          snackBar = SnackBar(
-                            content: Text(
-                              L10n.of(context).thanks_for_helping_fritter,
-                            ),
-                          );
-
-                          // Mark that we've said hello from this build version
-                          await prefService.set(optionHelloLastBuild, packageInfo.buildNumber);
-                        } else if (response.statusCode == 403) {
-                          snackBar = SnackBar(
-                            content: Text(
-                              L10n.of(context).it_looks_like_you_have_already_sent_a_ping_recently,
-                            ),
-                          );
-                        } else {
-                          Catcher.reportException(
-                              'Unable to send the ping because the status code was ${response.statusCode}');
-
-                          snackBar = SnackBar(
-                            content: Text(
-                              L10n.of(context)
-                                  .unable_to_send_the_ping_the_status_code_was_response_statusCode(response.statusCode),
-                            ),
-                          );
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } on TimeoutException catch (e, stackTrace) {
-                        log.severe('Timed out trying to send the ping');
-                        Catcher.reportException(e, stackTrace);
-
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            L10n.of(context).timed_out_trying_to_send_the_ping,
-                          ),
-                        ));
-                      } catch (e, stackTrace) {
-                        log.severe('Unable to send the ping');
-                        Catcher.reportException(e, stackTrace);
-
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            L10n.of(context).unable_to_send_the_ping_e_to_string(e),
-                          ),
-                        ));
-                      }
-
-                      Navigator.pop(context);
-                    },
-                    child: Text(L10n.of(context).send))
-              ],
-              title: Text(L10n.of(context).say_hello),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    L10n.of(context)
-                        .here_is_the_data_that_will_be_sent_it_will_only_be_used_to_determine_which_devices_and_languages_to_support_in_fritter_in_the_future,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(content, style: const TextStyle(fontFamily: 'monospace'))
-                ],
-              ));
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -215,15 +81,6 @@ class SettingsGeneralFragment extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: ListView(children: [
-          PrefButton(
-            title: Text(L10n.of(context).say_hello),
-            subtitle: Text(
-              L10n.of(context)
-                  .send_a_non_identifying_ping_to_let_me_know_you_are_using_fritter_and_to_help_future_development,
-            ),
-            onTap: () => _sendPing(context),
-            child: Text(L10n.of(context).say_hello_emoji),
-          ),
           PrefDropdown(
               fullWidth: false,
               title: Text(L10n.current.language),
@@ -236,12 +93,6 @@ class SettingsGeneralFragment extends StatelessWidget {
                     .sorted((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()))
                     .map((e) => DropdownMenuItem(value: e.code, child: Text(e.name)))
               ]),
-          if (getFlavor() != 'play')
-            PrefSwitch(
-              title: Text(L10n.of(context).should_check_for_updates_label),
-              pref: optionShouldCheckForUpdates,
-              subtitle: Text(L10n.of(context).should_check_for_updates_description),
-            ),
           PrefDropdown(
               fullWidth: false,
               title: Text(L10n.of(context).default_tab),
@@ -306,13 +157,6 @@ class SettingsGeneralFragment extends StatelessWidget {
             title: Text(L10n.of(context).activate_non_confirmation_bias_mode_label),
             pref: optionNonConfirmationBiasMode,
             subtitle: Text(L10n.of(context).activate_non_confirmation_bias_mode_description),
-          ),
-          PrefCheckbox(
-            title: Text(L10n.of(context).enable_sentry),
-            subtitle: Text(
-              L10n.of(context).whether_errors_should_be_reported_to_sentry,
-            ),
-            pref: optionErrorsSentryEnabled,
           ),
         ]),
       ),

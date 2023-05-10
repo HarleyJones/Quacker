@@ -45,7 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     var pages = [
       NavigationPage('general', (c) => L10n.of(c).general, Icons.settings),
-      NavigationPage('home', (c) => L10n.of(c).home, Icons.home),
+      NavigationPage('tabs', (c) => "Tabs", Icons.tab),
       NavigationPage('theme', (c) => L10n.of(c).theme, Icons.format_paint),
       NavigationPage('data', (c) => L10n.of(c).data, Icons.storage),
       NavigationPage('about', (c) => L10n.of(c).about, Icons.help),
