@@ -9,9 +9,8 @@ import 'package:uuid/uuid.dart';
 
 const String databaseName = 'fritter.db';
 
-const String doNotUseTableFeedGroupChunk = 'feed_group_chunk';
-const String doNotUseTableFeedGroupCursor = 'feed_group_cursor';
-
+const String tableFeedGroupChunk = 'feed_group_chunk';
+const String tableFeedGroupCursor = 'feed_group_cursor';
 const String tableSavedTweet = 'saved_tweet';
 const String tableSearchSubscription = 'search_subscription';
 const String tableSearchSubscriptionGroupMember = 'search_subscription_group_member';
@@ -168,11 +167,11 @@ class Repository {
       17: [
         // Add some tables to temporarily store feed chunks, used for caching and pagination
         SqlMigration(
-            'CREATE TABLE IF NOT EXISTS $doNotUseTableFeedGroupCursor (id INTEGER PRIMARY KEY, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
-            reverseSql: 'DROP TABLE $doNotUseTableFeedGroupCursor'),
+            'CREATE TABLE IF NOT EXISTS $tableFeedGroupCursor (id INTEGER PRIMARY KEY, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
+            reverseSql: 'DROP TABLE $tableFeedGroupCursor'),
         SqlMigration(
-            'CREATE TABLE IF NOT EXISTS $doNotUseTableFeedGroupChunk (cursor_id INTEGER NOT NULL, hash VARCHAR NOT NULL, cursor_top VARCHAR, cursor_bottom VARCHAR, response VARCHAR, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
-            reverseSql: 'DROP TABLE $doNotUseTableFeedGroupChunk'),
+            'CREATE TABLE IF NOT EXISTS $tableFeedGroupChunk (cursor_id INTEGER NOT NULL, hash VARCHAR NOT NULL, cursor_top VARCHAR, cursor_bottom VARCHAR, response VARCHAR, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
+            reverseSql: 'DROP TABLE $tableFeedGroupChunk'),
       ],
       18: [
         // Add support for saving searches
@@ -207,11 +206,6 @@ class Repository {
           await batch.commit();
         })),
       ],
-      20: [
-        // Remove feed-related stuff
-        SqlMigration('DROP TABLE IF EXISTS $doNotUseTableFeedGroupChunk'),
-        SqlMigration('DROP TABLE IF EXISTS $doNotUseTableFeedGroupCursor'),
-      ],
     });
     await openDatabase(
       databaseName,
@@ -222,6 +216,11 @@ class Repository {
     );
 
     log.info('Finished migrating database');
+
+    // Clean up any old feed chunks and cursors
+    var repository = await writable();
+    await repository.delete(tableFeedGroupChunk, where: "created_at <= date('now', '-30 day')");
+    await repository.delete(tableFeedGroupCursor, where: "created_at <= date('now', '-30 day')");
 
     return true;
   }

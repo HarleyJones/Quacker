@@ -10,14 +10,8 @@ import 'package:fritter/profile/_follows.dart';
 import 'package:fritter/profile/_saved.dart';
 import 'package:fritter/profile/_tweets.dart';
 import 'package:fritter/profile/profile_model.dart';
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> parent of e732eac (Removed tweet search functionality)
 import 'package:fritter/search/search.dart';
 import 'package:fritter/tweet/_video.dart';
->>>>>>> parent of e732eac (Removed tweet search functionality)
 import 'package:fritter/ui/errors.dart';
 import 'package:fritter/ui/physics.dart';
 import 'package:fritter/user.dart';
@@ -498,7 +492,8 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
           },
           body: MultiProvider(
             providers: [
-              ChangeNotifierProvider<TweetContextState>(create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive)))
+              ChangeNotifierProvider<TweetContextState>(create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
+              ChangeNotifierProvider<VideoContextState>(create: (_) => VideoContextState(prefs.get(optionMediaDefaultMute))),
             ],
             child: TabBarView(
               controller: _tabController,

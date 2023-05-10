@@ -490,9 +490,5 @@
   "finish": "Zakończ",
   "@finish": {},
   "next": "Dalej",
-  "@next": {},
-  "add_subscriptions": "Dodaj subskrypcje",
-  "@add_subscriptions": {},
-  "functionality_unsupported": "Ta funkcja nie jest już obsługiwana przez Twittera!",
-  "@functionality_unsupported": {}
+  "@next": {}
 }
