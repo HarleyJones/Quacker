@@ -14,7 +14,7 @@ class SettingsHomeFragment extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tabs"),
+        title: Text(L10n.of(context).home),
         actions: [
           IconButton(
               icon: const Icon(Icons.restart_alt),

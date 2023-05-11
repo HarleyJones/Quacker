@@ -240,8 +240,6 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
           providers: [
             ChangeNotifierProvider<TweetContextState>(
                 create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
-            ChangeNotifierProvider<VideoContextState>(
-                create: (_) => VideoContextState(prefs.get(optionMediaDefaultMute))),
           ],
           child: PagedListView<String?, TweetChain>(
             padding: const EdgeInsets.only(top: 4),

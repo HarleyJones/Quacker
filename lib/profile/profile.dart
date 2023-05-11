@@ -174,8 +174,6 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
 
     // Split the string by any mentions or hashtags, and turn those into links
     content.splitMapJoin(RegExp(r'(#|(?<=\W|^)@)\w+'), onMatch: (match) {
-    // Split the string by any mentions or hashtags, and turn those into links
-    content.splitMapJoin(RegExp(r'(#|(?<=\W|^)@)\w+'), onMatch: (match) {
       var full = match.group(0);
       var type = match.group(1);
       if (type == null || full == null) {
@@ -196,16 +194,13 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
               arguments: ProfileScreenArguments.fromScreenName(full.substring(1)));
         };
       }
-
       contentWidgets.add(TextSpan(
           text: full,
           style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           recognizer: TapGestureRecognizer()..onTap = onTap));
-
       return type;
     }, onNonMatch: (text) {
       contentWidgets.add(TextSpan(text: text));
-
       return text;
     });
 

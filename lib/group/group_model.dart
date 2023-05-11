@@ -94,29 +94,6 @@ class GroupModel extends StreamStore<Object, SubscriptionGroupGet> {
 
       state.includeRetweets = value;
       return state;
-          subscriptions: [...userSubscriptions, ...searchSubscriptions],
-          includeReplies: group['include_replies'] == 1,
-          includeRetweets: group['include_retweets'] == 1);
-    });
-  }
-
-  Future<void> toggleSubscriptionGroupIncludeReplies(bool value) async {
-    await execute(() async {
-      (await Repository.writable())
-          .rawUpdate('UPDATE $tableSubscriptionGroup SET include_replies = ? WHERE id = ?', [value, state.id]);
-
-      state.includeReplies = value;
-      return state;
-    });
-  }
-
-  Future<void> toggleSubscriptionGroupIncludeRetweets(bool value) async {
-    await execute(() async {
-      (await Repository.writable())
-          .rawUpdate('UPDATE $tableSubscriptionGroup SET include_retweets = ? WHERE id = ?', [value, state.id]);
-
-      state.includeRetweets = value;
-      return state;
     });
   }
 }

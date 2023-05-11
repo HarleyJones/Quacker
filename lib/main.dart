@@ -125,7 +125,7 @@ Future<void> main() async {
     optionSubscriptionOrderByField: 'name',
     optionThemeMode: 'system',
     optionThemeTrueBlack: true,
-    optionThemeColorScheme: 'blue',
+    optionThemeColorScheme: 'mango',
     optionTweetsHideSensitive: false,
     optionUserTrendsLocations: jsonEncode({
       'active': {'name': 'Worldwide', 'woeid': 1},
@@ -144,24 +144,17 @@ Future<void> main() async {
   if (Platform.isAndroid) {
     FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();
 
-        const InitializationSettings settings =
-            InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_notification'));
+    const InitializationSettings settings =
+        InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_notification'));
 
-        await notifications.initialize(settings, onDidReceiveBackgroundNotificationResponse: handleNotificationCallback,
-            onDidReceiveNotificationResponse: (response) async {
-          var payload = response.payload;
-          if (payload != null && payload.startsWith('https://')) {
-            await openUri(payload);
-          }
-        });
-
-        var flavor = getFlavor();
-        var shouldCheckForUpdates = prefService.get(optionShouldCheckForUpdates);
-        if (flavor != 'play' && shouldCheckForUpdates) {
-          // Don't check for updates for the Play Store build or if user disabled it.
-          checkForUpdates();
-        }
+    await notifications.initialize(settings, onDidReceiveBackgroundNotificationResponse: handleNotificationCallback,
+        onDidReceiveNotificationResponse: (response) async {
+      var payload = response.payload;
+      if (payload != null && payload.startsWith('https://')) {
+        await openUri(payload);
       }
+    });
+  }
 
   // Run the migrations early, so models work. We also do this later on so we can display errors to the user
   try {
@@ -183,32 +176,26 @@ Future<void> main() async {
 
   var trendLocationModel = UserTrendLocationModel(prefService);
 
-      runApp(PrefService(
-          service: prefService,
-          child: MultiProvider(
-            providers: [
-              Provider(create: (context) => groupsModel),
-              Provider(create: (context) => homeModel),
-              ChangeNotifierProvider(create: (context) => importDataModel),
-              Provider(create: (context) => subscriptionsModel),
-              Provider(create: (context) => SavedTweetModel()),
-              Provider(create: (context) => SearchTweetsModel()),
-              Provider(create: (context) => SearchUsersModel()),
-              Provider(create: (context) => trendLocationModel),
-              Provider(create: (context) => TrendLocationsModel()),
-              Provider(create: (context) => TrendsModel(trendLocationModel)),
-              ChangeNotifierProvider(create: (_) => VideoContextState(prefService.get(optionMediaDefaultMute))),
-            ],
-            child: DevicePreview(
-              enabled: !kReleaseMode,
-              builder: (context) => const FritterApp(),
-            ),
-          )));
-    });
-  } catch (e, stackTrace) {
-    Catcher.reportException(e, stackTrace);
-    log('Unable to start Fritter', error: e, stackTrace: stackTrace);
-  }
+  runApp(PrefService(
+      service: prefService,
+      child: MultiProvider(
+        providers: [
+          Provider(create: (context) => groupsModel),
+          Provider(create: (context) => homeModel),
+          ChangeNotifierProvider(create: (context) => importDataModel),
+          Provider(create: (context) => subscriptionsModel),
+          Provider(create: (context) => SavedTweetModel()),
+          Provider(create: (context) => SearchTweetsModel()),
+          Provider(create: (context) => SearchUsersModel()),
+          Provider(create: (context) => trendLocationModel),
+          Provider(create: (context) => TrendLocationsModel()),
+          Provider(create: (context) => TrendsModel(trendLocationModel)),
+        ],
+        child: DevicePreview(
+          enabled: !kReleaseMode,
+          builder: (context) => const FritterApp(),
+        ),
+      )));
 }
 
 class FritterApp extends StatefulWidget {
@@ -349,7 +336,6 @@ class _FritterAppState extends State<FritterApp> {
       ],
       supportedLocales: L10n.delegate.supportedLocales,
       locale: _locale ?? DevicePreview.locale(context),
-      navigatorObservers: [SentryNavigatorObserver()],
       title: 'Quacker',
       theme: FlexThemeData.light(
         scheme: _colorScheme,
@@ -362,7 +348,6 @@ class _FritterAppState extends State<FritterApp> {
           blendOnColors: true,
         ),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: true,
         useMaterial3: true,
         appBarStyle: FlexAppBarStyle.primary,
       ),
@@ -396,10 +381,6 @@ class _FritterAppState extends State<FritterApp> {
       builder: (context, child) {
         // Replace the default red screen of death with a slightly friendlier one
         ErrorWidget.builder = (FlutterErrorDetails details) => FullPageErrorWidget(
-              error: details.exception,
-              stackTrace: details.stack,
-              prefix: L10n.of(context).something_broke_in_fritter,
-            );
               error: details.exception,
               stackTrace: details.stack,
               prefix: L10n.of(context).something_broke_in_fritter,

@@ -170,11 +170,7 @@ class Repository {
         SqlMigration(
             'CREATE TABLE IF NOT EXISTS $tableFeedGroupCursor (id INTEGER PRIMARY KEY, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
             reverseSql: 'DROP TABLE $tableFeedGroupCursor'),
-            'CREATE TABLE IF NOT EXISTS $tableFeedGroupCursor (id INTEGER PRIMARY KEY, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
-            reverseSql: 'DROP TABLE $tableFeedGroupCursor'),
         SqlMigration(
-            'CREATE TABLE IF NOT EXISTS $tableFeedGroupChunk (cursor_id INTEGER NOT NULL, hash VARCHAR NOT NULL, cursor_top VARCHAR, cursor_bottom VARCHAR, response VARCHAR, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
-            reverseSql: 'DROP TABLE $tableFeedGroupChunk'),
             'CREATE TABLE IF NOT EXISTS $tableFeedGroupChunk (cursor_id INTEGER NOT NULL, hash VARCHAR NOT NULL, cursor_top VARCHAR, cursor_bottom VARCHAR, response VARCHAR, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
             reverseSql: 'DROP TABLE $tableFeedGroupChunk'),
       ],
@@ -219,18 +215,12 @@ class Repository {
     await openDatabase(
       databaseName,
       version: 19,
-      version: 19,
       onUpgrade: myMigrationPlan,
       onCreate: myMigrationPlan,
       onDowngrade: myMigrationPlan,
     );
 
     log.info('Finished migrating database');
-
-    // Clean up any old feed chunks and cursors
-    var repository = await writable();
-    await repository.delete(tableFeedGroupChunk, where: "created_at <= date('now', '-30 day')");
-    await repository.delete(tableFeedGroupCursor, where: "created_at <= date('now', '-30 day')");
 
     // Clean up any old feed chunks and cursors
     var repository = await writable();

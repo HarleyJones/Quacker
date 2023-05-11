@@ -94,7 +94,6 @@ class SubscriptionGroupScreen extends StatelessWidget {
   final ScrollController scrollController;
   final String id;
   final String name;
-  final String name;
   final List<Widget> actions;
 
   const SubscriptionGroupScreen(
@@ -111,7 +110,6 @@ class SubscriptionGroupScreen extends StatelessWidget {
         return model;
       },
       builder: (context, child) {
-        var model = context.read<GroupModel>();
         var model = context.read<GroupModel>();
 
         return NestedScrollView(
@@ -142,7 +140,6 @@ class SubscriptionGroupScreen extends StatelessWidget {
               )
             ];
           },
-          body: SubscriptionGroupScreenContent(id: id),
           body: SubscriptionGroupScreenContent(id: id),
         );
       },
