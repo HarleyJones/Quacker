@@ -32,8 +32,7 @@ class FritterMaterialControls extends StatefulWidget {
   }
 }
 
-class _MaterialControlsState extends State<FritterMaterialControls>
-    with SingleTickerProviderStateMixin {
+class _MaterialControlsState extends State<FritterMaterialControls> with SingleTickerProviderStateMixin {
   late PlayerNotifier notifier;
   late VideoPlayerValue _latestValue;
   double? _latestVolume;
@@ -66,9 +65,9 @@ class _MaterialControlsState extends State<FritterMaterialControls>
   Widget build(BuildContext context) {
     if (_latestValue.hasError) {
       return chewieController.errorBuilder?.call(
-        context,
-        chewieController.videoPlayerController.value.errorDescription!,
-      ) ??
+            context,
+            chewieController.videoPlayerController.value.errorDescription!,
+          ) ??
           const Center(
             child: Icon(
               Icons.error,
@@ -104,8 +103,7 @@ class _MaterialControlsState extends State<FritterMaterialControls>
                         0.0,
                         notifier.hideStuff ? barHeight * 0.8 : 0.0,
                       ),
-                      child:
-                      _buildSubtitles(context, chewieController.subtitle!),
+                      child: _buildSubtitles(context, chewieController.subtitle!),
                     ),
                   _buildBottomBar(context),
                 ],
@@ -174,8 +172,7 @@ class _MaterialControlsState extends State<FritterMaterialControls>
       )
     ];
 
-    if (chewieController.additionalOptions != null &&
-        chewieController.additionalOptions!(context).isNotEmpty) {
+    if (chewieController.additionalOptions != null && chewieController.additionalOptions!(context).isNotEmpty) {
       options.addAll(chewieController.additionalOptions!(context));
     }
 
@@ -248,8 +245,8 @@ class _MaterialControlsState extends State<FritterMaterialControls>
   }
 
   AnimatedOpacity _buildBottomBar(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     final iconColor = Theme.of(context).textTheme.button!.color;
 
     return AnimatedOpacity(
@@ -274,8 +271,7 @@ class _MaterialControlsState extends State<FritterMaterialControls>
                     Expanded(child: Text(L10n.of(context).live))
                   else
                     _buildPosition(iconColor),
-                  if (chewieController.allowMuting)
-                    _buildMuteButton(controller),
+                  if (chewieController.allowMuting) _buildMuteButton(controller),
                   const Spacer(),
                   if (chewieController.allowFullScreen) _buildExpandButton(),
                 ],
@@ -302,8 +298,8 @@ class _MaterialControlsState extends State<FritterMaterialControls>
   }
 
   GestureDetector _buildMuteButton(
-      VideoPlayerController controller,
-      ) {
+    VideoPlayerController controller,
+  ) {
     return GestureDetector(
       onTap: () {
         _cancelAndRestartTimer();
@@ -349,9 +345,7 @@ class _MaterialControlsState extends State<FritterMaterialControls>
           ),
           child: Center(
             child: Icon(
-              chewieController.isFullScreen
-                  ? Icons.fullscreen_exit
-                  : Icons.fullscreen,
+              chewieController.isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
               color: Colors.white,
             ),
           ),
@@ -362,8 +356,7 @@ class _MaterialControlsState extends State<FritterMaterialControls>
 
   Widget _buildHitArea() {
     final bool isFinished = _latestValue.position >= _latestValue.duration;
-    final bool showPlayButton =
-        widget.showPlayButton && !_dragging && !notifier.hideStuff;
+    final bool showPlayButton = widget.showPlayButton && !_dragging && !notifier.hideStuff;
 
     return GestureDetector(
       onTap: () {
@@ -456,9 +449,7 @@ class _MaterialControlsState extends State<FritterMaterialControls>
           right: 12.0,
         ),
         child: Icon(
-          _subtitleOn
-              ? Icons.closed_caption
-              : Icons.closed_caption_off_outlined,
+          _subtitleOn ? Icons.closed_caption : Icons.closed_caption_off_outlined,
           color: _subtitleOn ? Colors.white : Colors.grey[700],
         ),
       ),
@@ -505,12 +496,11 @@ class _MaterialControlsState extends State<FritterMaterialControls>
       notifier.hideStuff = true;
 
       chewieController.toggleFullScreen();
-      _showAfterExpandCollapseTimer =
-          Timer(const Duration(milliseconds: 300), () {
-            setState(() {
-              _cancelAndRestartTimer();
-            });
-          });
+      _showAfterExpandCollapseTimer = Timer(const Duration(milliseconds: 300), () {
+        setState(() {
+          _cancelAndRestartTimer();
+        });
+      });
     });
   }
 
@@ -604,7 +594,7 @@ class _MaterialControlsState extends State<FritterMaterialControls>
             ChewieProgressColors(
               playedColor: Theme.of(context).colorScheme.secondary,
               handleColor: Theme.of(context).colorScheme.secondary,
-              bufferedColor: Theme.of(context).backgroundColor.withOpacity(0.5),
+              bufferedColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
               backgroundColor: Theme.of(context).disabledColor.withOpacity(.5),
             ),
       ),
@@ -654,9 +644,9 @@ class FritterCenterPlayButton extends StatelessWidget {
                 icon: isFinished
                     ? Icon(Icons.replay, color: iconColor)
                     : AnimatedPlayPause(
-                  color: iconColor,
-                  playing: isPlaying,
-                ),
+                        color: iconColor,
+                        playing: isPlaying,
+                      ),
                 onPressed: onPressed,
               ),
             ),
@@ -666,4 +656,3 @@ class FritterCenterPlayButton extends StatelessWidget {
     );
   }
 }
-

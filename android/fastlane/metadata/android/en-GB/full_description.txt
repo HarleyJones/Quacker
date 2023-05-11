@@ -1,6 +1,6 @@
-A privacy-friendly Twitter frontend for mobile devices.
+A fritter fork that does so much more...
 
-Fritter is an open source frontend for Twitter, focusing on giving you the best experience and keeping your data private, local and in your hands.
+Quacker is an open source frontend for Twitter, focusing on giving you the best experience and keeping your data private, local and in your hands.
 
 Features:
 
@@ -13,11 +13,11 @@ Features:
 
 Privacy:
 
-Fritter will never track your actions in the app, or send your personal data to a third-party. All your data (subscriptions, groups, tweets and settings) are stored locally, on your device, and no Twitter account is required to use any feature.
+Quacker will never track your actions in the app, or send your personal data to a third-party. All your data (subscriptions, groups, tweets and settings) are stored locally, on your device, and no Twitter account is required to use any feature.
 
 - 🔒 No account required
 - 🔒 No special permissions
 - 🔒 No tracking
 - 🔒 All your data is stored locally
 
-Fritter is <a href="https://github.com/jonjomckay/fritter">openly developed on GitHub</a>, and any contributions, bug reports or feature requests are welcomed: https://github.com/jonjomckay/fritter
+Quacker is a fork of Fritter that is <a href="https://github.com/jonjomckay/fritter">openly developed on GitHub</a>, and any contributions, bug reports or feature requests are welcomed: https://github.com/jonjomckay/fritter

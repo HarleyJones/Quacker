@@ -6,5 +6,3 @@
 * Searching for tweets and users
 * Supports opening twitter.com links directly
 * Supports RTL content
-
-Fritter uses Sentry for opt-in error reporting, which is not enabled by default.

@@ -248,16 +248,15 @@ Future<void> main() async {
         FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();
 
         const InitializationSettings settings =
-        InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_notification'));
+            InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_notification'));
 
-        await notifications
-            .initialize(settings, onDidReceiveBackgroundNotificationResponse: handleNotificationCallback,
+        await notifications.initialize(settings, onDidReceiveBackgroundNotificationResponse: handleNotificationCallback,
             onDidReceiveNotificationResponse: (response) async {
-              var payload = response.payload;
-              if (payload != null && payload.startsWith('https://')) {
-                await openUri(payload);
-              }
-            });
+          var payload = response.payload;
+          if (payload != null && payload.startsWith('https://')) {
+            await openUri(payload);
+          }
+        });
 
         var flavor = getFlavor();
         var shouldCheckForUpdates = prefService.get(optionShouldCheckForUpdates);
@@ -296,6 +295,7 @@ Future<void> main() async {
               ChangeNotifierProvider(create: (context) => importDataModel),
               Provider(create: (context) => subscriptionsModel),
               Provider(create: (context) => SavedTweetModel()),
+              Provider(create: (context) => SearchTweetsModel()),
               Provider(create: (context) => SearchUsersModel()),
               Provider(create: (context) => trendLocationModel),
               Provider(create: (context) => TrendLocationsModel()),
@@ -325,8 +325,8 @@ class _FritterAppState extends State<FritterApp> {
   static final log = Logger('_MyAppState');
 
   String _themeMode = 'system';
-  bool _trueBlack = false;
-  FlexScheme _colorScheme = FlexScheme.aquaBlue;
+  bool _trueBlack = true;
+  FlexScheme _colorScheme = FlexScheme.mango;
   Locale? _locale;
 
   @override
@@ -365,26 +365,8 @@ class _FritterAppState extends State<FritterApp> {
     setState(() {
       setLocale(prefService.get<String>(optionLocale));
       _themeMode = prefService.get(optionThemeMode);
-      _trueBlack = prefService.get(optionThemeTrueBlack);
       setColorScheme(prefService.get(optionThemeColorScheme));
       setDisableScreenshots(prefService.get(optionDisableScreenshots));
-    });
-
-    prefService.addKeyListener(optionShouldCheckForUpdates, () {
-      setState(() {});
-    });
-
-    prefService.addKeyListener(optionLocale, () {
-      setState(() {
-        setLocale(prefService.get<String>(optionLocale));
-      });
-    });
-
-    // Whenever the "true black" preference is toggled, apply the toggle
-    prefService.addKeyListener(optionThemeTrueBlack, () {
-      setState(() {
-        _trueBlack = prefService.get(optionThemeTrueBlack);
-      });
     });
 
     prefService.addKeyListener(optionThemeMode, () {
@@ -471,7 +453,7 @@ class _FritterAppState extends State<FritterApp> {
       supportedLocales: L10n.delegate.supportedLocales,
       locale: _locale ?? DevicePreview.locale(context),
       navigatorObservers: [SentryNavigatorObserver()],
-      title: 'Fritter',
+      title: 'Quacker',
       theme: FlexThemeData.light(
         scheme: _colorScheme,
         surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
@@ -480,26 +462,25 @@ class _FritterAppState extends State<FritterApp> {
         tabBarStyle: FlexTabBarStyle.flutterDefault,
         subThemesData: const FlexSubThemesData(
           blendOnLevel: 20,
-          blendOnColors: false,
+          blendOnColors: true,
         ),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: false,
+        useMaterial3: true,
         appBarStyle: FlexAppBarStyle.primary,
       ),
       darkTheme: FlexThemeData.dark(
         scheme: _colorScheme,
-        darkIsTrueBlack: _trueBlack,
         surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
         blendLevel: 20,
         appBarOpacity: 0.95,
         tabBarStyle: FlexTabBarStyle.flutterDefault,
         subThemesData: const FlexSubThemesData(
           blendOnLevel: 20,
-          blendOnColors: false,
+          blendOnColors: true,
         ),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: false,
-        appBarStyle: _trueBlack ? FlexAppBarStyle.surface : FlexAppBarStyle.primary,
+        useMaterial3: true,
+        appBarStyle: FlexAppBarStyle.surface,
       ),
       themeMode: themeMode,
       initialRoute: '/',
@@ -517,10 +498,10 @@ class _FritterAppState extends State<FritterApp> {
       builder: (context, child) {
         // Replace the default red screen of death with a slightly friendlier one
         ErrorWidget.builder = (FlutterErrorDetails details) => FullPageErrorWidget(
-          error: details.exception,
-          stackTrace: details.stack,
-          prefix: L10n.of(context).something_broke_in_fritter,
-        );
+              error: details.exception,
+              stackTrace: details.stack,
+              prefix: L10n.of(context).something_broke_in_fritter,
+            );
 
         return DevicePreview.appBuilder(context, child ?? Container());
       },

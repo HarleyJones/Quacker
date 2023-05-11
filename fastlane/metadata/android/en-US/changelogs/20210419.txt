@@ -2,7 +2,7 @@ This release contains a few exciting major changes! 🎉
 
 <b>Local Subscriptions</b>
 
-Fritter now has support for device-local subscriptions, meaning you can now follow all your favourite Twitter accounts without needing an account yourself!
+Quacker now has support for device-local subscriptions, meaning you can now follow all your favourite Twitter accounts without needing an account yourself!
 
 There is no limit to the number of accounts you can follow, and you are also able to place accounts into a "subscription group", allowing you to create custom categorised feeds.
 

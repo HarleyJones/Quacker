@@ -11,9 +11,7 @@ class SettingsThemeFragment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.current.theme)
-      ),
+      appBar: AppBar(title: Text(L10n.current.theme)),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: ListView(children: [
@@ -40,13 +38,6 @@ class SettingsThemeFragment extends StatelessWidget {
                   .sorted((a, b) => a.name.compareTo(b.name))
                   .map((scheme) => DropdownMenuItem(value: scheme.name, child: Text(scheme.name.capitalize)))
                   .toList()),
-          PrefSwitch(
-            title: Text(L10n.of(context).true_black),
-            pref: optionThemeTrueBlack,
-            subtitle: Text(
-              L10n.of(context).use_true_black_for_the_dark_mode_theme,
-            ),
-          ),
         ]),
       ),
     );
