@@ -490,9 +490,5 @@
   "mute_videos": "将视频静音",
   "@mute_videos": {},
   "mute_video_description": "是否应默认将视频静音",
-  "@mute_video_description": {},
-  "add_subscriptions": "添加订阅",
-  "@add_subscriptions": {},
-  "functionality_unsupported": "Twitter 不再支持此功能！",
-  "@functionality_unsupported": {}
+  "@mute_video_description": {}
 }

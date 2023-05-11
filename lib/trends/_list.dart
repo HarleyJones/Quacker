@@ -21,6 +21,13 @@ class TrendsList extends StatefulWidget {
 
 class _TrendsListState extends State<TrendsList> {
   @override
+  void initState() {
+    super.initState();
+
+    //context.read<TrendsModel>().loadTrends();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var model = context.read<TrendsModel>();
 

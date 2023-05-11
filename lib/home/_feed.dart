@@ -28,3 +28,10 @@ class _FeedScreenState extends State<FeedScreen> with AutomaticKeepAliveClientMi
         actions: createCommonAppBarActions(context));
   }
 }
+
+    return SubscriptionGroupScreen(scrollController: widget.scrollController,
+        id: widget.id,
+        name: widget.name,
+        actions: createCommonAppBarActions(context));
+  }
+}

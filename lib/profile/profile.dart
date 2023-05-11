@@ -174,6 +174,8 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
 
     // Split the string by any mentions or hashtags, and turn those into links
     content.splitMapJoin(RegExp(r'(#|(?<=\W|^)@)\w+'), onMatch: (match) {
+    // Split the string by any mentions or hashtags, and turn those into links
+    content.splitMapJoin(RegExp(r'(#|(?<=\W|^)@)\w+'), onMatch: (match) {
       var full = match.group(0);
       var type = match.group(1);
       if (type == null || full == null) {

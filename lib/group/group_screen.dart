@@ -1,14 +1,19 @@
 import 'package:crypto/crypto.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:fritter/database/entities.dart';
 import 'package:fritter/generated/l10n.dart';
 import 'package:fritter/group/_feed.dart';
 import 'package:fritter/group/_settings.dart';
+import 'package:fritter/group/_feed.dart';
+import 'package:fritter/group/_settings.dart';
 import 'package:fritter/group/group_model.dart';
 import 'package:fritter/ui/errors.dart';
 import 'package:fritter/utils/iterables.dart';
+import 'package:fritter/utils/iterables.dart';
 import 'package:provider/provider.dart';
+import 'package:quiver/iterables.dart';
 import 'package:quiver/iterables.dart';
 
 class GroupScreenArguments {
@@ -89,6 +94,7 @@ class SubscriptionGroupScreen extends StatelessWidget {
   final ScrollController scrollController;
   final String id;
   final String name;
+  final String name;
   final List<Widget> actions;
 
   const SubscriptionGroupScreen(
@@ -105,6 +111,7 @@ class SubscriptionGroupScreen extends StatelessWidget {
         return model;
       },
       builder: (context, child) {
+        var model = context.read<GroupModel>();
         var model = context.read<GroupModel>();
 
         return NestedScrollView(
@@ -135,6 +142,7 @@ class SubscriptionGroupScreen extends StatelessWidget {
               )
             ];
           },
+          body: SubscriptionGroupScreenContent(id: id),
           body: SubscriptionGroupScreenContent(id: id),
         );
       },

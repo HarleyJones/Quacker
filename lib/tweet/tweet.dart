@@ -1,7 +1,7 @@
 import 'package:auto_direction/auto_direction.dart';
+import 'package:fritter/catcher/errors.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:flutter/material.dart';
-import 'package:fritter/catcher/errors.dart';
 import 'package:fritter/catcher/exceptions.dart';
 import 'package:fritter/client.dart';
 import 'package:fritter/constants.dart';
@@ -86,6 +86,16 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
 
   static List<TweetEntity> _getEntities(BuildContext context, TweetWithCard tweet) {
     List<TweetEntity> entities = [];
+
+    entities = _populateEntities(
+        entities: entities,
+        source: tweet.entities?.hashtags,
+        getNewEntity: (Hashtag hashtag) {
+          return TweetHashtag(
+              hashtag,
+              () => Navigator.pushNamed(context, routeSearch,
+                  arguments: SearchArguments(1, focusInputOnOpen: false, query: '#${hashtag.text}')));
+        });
 
     entities = _populateEntities(
         entities: entities,
@@ -219,19 +229,11 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
     // Get the text to display from the actual tweet, i.e. the retweet if there is one, otherwise we end up with "RT @" crap in our text
     var actualTweet = tweet.retweetedStatusWithCard ?? tweet;
 
-    // This is some super long text that I think only Twitter Blue users can write
-    var noteText = tweet.noteText;
-
     // Generate all the tweet entities (mentions, hashtags, etc.) from the tweet text
-    Runes tweetText = Runes(noteText ?? actualTweet.fullText ?? actualTweet.text!);
+    Runes tweetText = Runes(actualTweet.fullText ?? actualTweet.text!);
 
     // If we're not given a text display range, we just display the entire text
-    List<int> displayTextRange;
-    if (noteText == null) {
-      displayTextRange = actualTweet.displayTextRange ?? [0, tweetText.length];
-    } else {
-      displayTextRange = [0, noteText.length];
-    }
+    List<int> displayTextRange = actualTweet.displayTextRange ?? [0, tweetText.length];
 
     Iterable<int> runes = tweetText.getRange(displayTextRange[0], displayTextRange[1]);
 

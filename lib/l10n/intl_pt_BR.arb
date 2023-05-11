@@ -490,9 +490,5 @@
   "next": "Próximo",
   "@next": {},
   "finish": "Terminar",
-  "@finish": {},
-  "add_subscriptions": "Adicionar inscrições",
-  "@add_subscriptions": {},
-  "functionality_unsupported": "Esta funcionalidade não é mais suportada pelo Twitter!",
-  "@functionality_unsupported": {}
+  "@finish": {}
 }

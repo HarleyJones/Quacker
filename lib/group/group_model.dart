@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:fritter/catcher/errors.dart';
+import 'package:fritter/catcher/errors.dart';
 import 'package:fritter/constants.dart';
 import 'package:fritter/database/entities.dart';
 import 'package:fritter/database/repository.dart';
@@ -70,6 +71,29 @@ class GroupModel extends StreamStore<Object, SubscriptionGroupGet> {
       return SubscriptionGroupGet(
           id: group['id'] as String,
           name: group['name'] as String,
+          subscriptions: [...userSubscriptions, ...searchSubscriptions],
+          includeReplies: group['include_replies'] == 1,
+          includeRetweets: group['include_retweets'] == 1);
+    });
+  }
+
+  Future<void> toggleSubscriptionGroupIncludeReplies(bool value) async {
+    await execute(() async {
+      (await Repository.writable())
+          .rawUpdate('UPDATE $tableSubscriptionGroup SET include_replies = ? WHERE id = ?', [value, state.id]);
+
+      state.includeReplies = value;
+      return state;
+    });
+  }
+
+  Future<void> toggleSubscriptionGroupIncludeRetweets(bool value) async {
+    await execute(() async {
+      (await Repository.writable())
+          .rawUpdate('UPDATE $tableSubscriptionGroup SET include_retweets = ? WHERE id = ?', [value, state.id]);
+
+      state.includeRetweets = value;
+      return state;
           subscriptions: [...userSubscriptions, ...searchSubscriptions],
           includeReplies: group['include_replies'] == 1,
           includeRetweets: group['include_retweets'] == 1);

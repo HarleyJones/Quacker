@@ -87,7 +87,7 @@ class SetupWizard extends StatelessWidget {
                 icon: const Icon(Icons.done),
                 onPressed: () async {
                   // TODO: Store the prefs and stuff
-                  await PrefService.of(context).set(optionWizardCompleted, true);
+                  // await PrefService.of(context).set(optionWizardCompleted, true);
                 });
           } else {
             nextButton = TextButton.icon(
@@ -146,7 +146,8 @@ class Step2 extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Whenever something goes wrong with Fritter, an error report will be generated. The report can be sent to the Fritter developers to help fix the problem.'),
+            Text(
+                'Whenever something goes wrong with Fritter, an error report will be generated. The report can be sent to the Fritter developers to help fix the problem.'),
             const SizedBox(height: 16),
             Text(
               L10n.of(context).would_you_like_to_enable_automatic_error_reporting,
@@ -161,9 +162,8 @@ class Step2 extends StatelessWidget {
               onTap: () async => await openUri('https://fritter.cc/privacy'),
             ),
             const SizedBox(height: 16),
-            const Text('Please note that this can also be enabled or disabled later, in the Settings screen.', style: TextStyle(
-              fontStyle: FontStyle.italic
-            )),
+            const Text('Please note that this can also be enabled or disabled later, in the Settings screen.',
+                style: TextStyle(fontStyle: FontStyle.italic)),
           ],
         ),
         const SizedBox(height: 32),

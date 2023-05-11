@@ -35,6 +35,7 @@ List<Widget> createCommonAppBarActions(BuildContext context) {
     IconButton(
       icon: const Icon(Icons.search),
       onPressed: () => Navigator.pushNamed(context, routeSearch, arguments: SearchArguments(0, focusInputOnOpen: true)),
+      onPressed: () => Navigator.pushNamed(context, routeSearch, arguments: SearchArguments(0, focusInputOnOpen: true)),
     ),
     IconButton(
       icon: const Icon(Icons.settings),
@@ -46,6 +47,7 @@ List<Widget> createCommonAppBarActions(BuildContext context) {
 }
 
 final List<NavigationPage> defaultHomePages = [
+  NavigationPage('feed', (c) => L10n.of(c).feed, Icons.rss_feed),
   NavigationPage('feed', (c) => L10n.of(c).feed, Icons.rss_feed),
   NavigationPage('subscriptions', (c) => L10n.of(c).subscriptions, Icons.subscriptions),
   NavigationPage('groups', (c) => L10n.of(c).groups, Icons.group),

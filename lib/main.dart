@@ -33,7 +33,6 @@ import 'package:fritter/status.dart';
 import 'package:fritter/subscriptions/_import.dart';
 import 'package:fritter/subscriptions/users_model.dart';
 import 'package:fritter/trends/trends_model.dart';
-import 'package:fritter/tweet/_video.dart';
 import 'package:fritter/ui/errors.dart';
 import 'package:fritter/utils/urls.dart';
 import 'package:http/http.dart' as http;
@@ -41,77 +40,11 @@ import 'package:logging/logging.dart';
 import 'package:package_info/package_info.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:uni_links2/uni_links.dart';
-
-Future checkForUpdates() async {
-  Logger.root.info('Checking for updates');
-
-  try {
-    var response = await http.get(Uri.https('fritter.cc', '/api/data.json'));
-    if (response.statusCode == 200) {
-      var package = await PackageInfo.fromPlatform();
-      var result = jsonDecode(response.body);
-      var prefs = await SharedPreferences.getInstance();
-
-      var flavor = getFlavor();
-
-      var release = result['versions'][flavor]['stable'];
-      var latest = release['versionCode'] as int;
-
-      Logger.root.info('The latest version is $latest, and we are on ${package.buildNumber}');
-
-      if (int.parse(package.buildNumber) > latest) {
-        var ignoredKey = 'updates.ignore.$latest';
-
-        // If the user wants to ignore this version, do so
-        var ignored = prefs.getBool(ignoredKey) ?? false;
-        if (ignored) {
-          log('Ignoring update to $latest');
-          return;
-        }
-
-        var details = NotificationDetails(
-            android: AndroidNotificationDetails('updates', 'Updates',
-                channelDescription: 'When a new app update is available',
-                importance: Importance.max,
-                priority: Priority.high,
-                showWhen: false,
-                actions: [AndroidNotificationAction(ignoredKey, 'Ignore this version')]));
-
-        if (flavor == 'github') {
-          await FlutterLocalNotificationsPlugin().show(
-              0, 'An update for Fritter is available! 🚀', 'Tap to download ${release['version']}', details,
-              payload: release['apk']);
-        } else {
-          await FlutterLocalNotificationsPlugin().show(0, 'An update for Fritter is available! 🚀',
-              'Update to ${release['version']} through your F-Droid client', details,
-              payload: 'https://f-droid.org/packages/com.jonjomckay.fritter/');
-        }
-      }
-    } else {
-      Catcher.reportSyntheticException(UnableToCheckForUpdatesException(response.body));
-    }
-  } catch (e, stackTrace) {
-    Logger.root.severe('Unable to check for updates');
-    Catcher.reportException(e, stackTrace);
-  }
-}
-
-class UnableToCheckForUpdatesException implements SyntheticException {
-  final String body;
-
-  UnableToCheckForUpdatesException(this.body);
-
-  @override
-  String toString() {
-    return 'Unable to check for updates: {body: $body}';
-  }
-}
 
 setTimeagoLocales() {
   timeago.setLocaleMessages('ar', timeago.ArMessages());
@@ -186,14 +119,13 @@ Future<void> main() async {
     optionMediaSize: 'medium',
     optionMediaDefaultMute: true,
     optionNonConfirmationBiasMode: false,
-    optionShouldCheckForUpdates: true,
     optionSubscriptionGroupsOrderByAscending: true,
     optionSubscriptionGroupsOrderByField: 'name',
     optionSubscriptionOrderByAscending: true,
     optionSubscriptionOrderByField: 'name',
     optionThemeMode: 'system',
-    optionThemeTrueBlack: false,
-    optionThemeColorScheme: 'aquaBlue',
+    optionThemeTrueBlack: true,
+    optionThemeColorScheme: 'blue',
     optionTweetsHideSensitive: false,
     optionUserTrendsLocations: jsonEncode({
       'active': {'name': 'Worldwide', 'woeid': 1},
@@ -209,43 +141,8 @@ Future<void> main() async {
     }
   });
 
-  try {
-    await SentryFlutter.init((options) async {
-      // The native SDK tries to contact Sentry on startup, which we can't do as Sentry is opt-in, so check first
-      options.autoInitializeNativeSdk = prefService.get(optionErrorsSentryEnabled) ?? false;
-      options.attachStacktrace = true;
-      options.dsn = 'https://d29f676b4a1d4a21bbad5896841d89bf@o856922.ingest.sentry.io/5820282';
-      options.sendDefaultPii = false;
-      options.enableAppLifecycleBreadcrumbs = true;
-      options.enableAutoNativeBreadcrumbs = true;
-
-      options.beforeSend = (event, {hint}) {
-        var enabled = prefService.get(optionErrorsSentryEnabled);
-        if (enabled == null || enabled == false) {
-          return null;
-        }
-
-        // We don't want to report SocketExceptions as there's so many of them, and they're not super useful
-        if (event.throwable is SocketException) {
-          return null;
-        }
-
-        return event;
-      };
-    }, appRunner: () async {
-      var deviceInfo = DeviceInfoPlugin();
-
-      Sentry.configureScope((scope) async {
-        scope.setTag('flavor', getFlavor());
-
-        if (Platform.isAndroid) {
-          var androidDeviceInfo = await deviceInfo.androidInfo;
-          scope.setTag('versionSdk', androidDeviceInfo.version.sdkInt.toString());
-        }
-      });
-
-      if (Platform.isAndroid) {
-        FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();
+  if (Platform.isAndroid) {
+    FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();
 
         const InitializationSettings settings =
             InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_notification'));
@@ -266,25 +163,25 @@ Future<void> main() async {
         }
       }
 
-      // Run the migrations early, so models work. We also do this later on so we can display errors to the user
-      try {
-        await Repository().migrate();
-      } catch (_) {
-        // Ignore, as we'll catch it later instead
-      }
+  // Run the migrations early, so models work. We also do this later on so we can display errors to the user
+  try {
+    await Repository().migrate();
+  } catch (_) {
+    // Ignore, as we'll catch it later instead
+  }
 
-      var importDataModel = ImportDataModel();
+  var importDataModel = ImportDataModel();
 
-      var groupsModel = GroupsModel(prefService);
-      await groupsModel.reloadGroups();
+  var groupsModel = GroupsModel(prefService);
+  await groupsModel.reloadGroups();
 
-      var homeModel = HomeModel(prefService, groupsModel);
-      await homeModel.loadPages();
+  var homeModel = HomeModel(prefService, groupsModel);
+  await homeModel.loadPages();
 
-      var subscriptionsModel = SubscriptionsModel(prefService, groupsModel);
-      await subscriptionsModel.reloadSubscriptions();
+  var subscriptionsModel = SubscriptionsModel(prefService, groupsModel);
+  await subscriptionsModel.reloadSubscriptions();
 
-      var trendLocationModel = UserTrendLocationModel(prefService);
+  var trendLocationModel = UserTrendLocationModel(prefService);
 
       runApp(PrefService(
           service: prefService,
@@ -466,6 +363,7 @@ class _FritterAppState extends State<FritterApp> {
         ),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
         useMaterial3: true,
+        useMaterial3: true,
         appBarStyle: FlexAppBarStyle.primary,
       ),
       darkTheme: FlexThemeData.dark(
@@ -498,6 +396,10 @@ class _FritterAppState extends State<FritterApp> {
       builder: (context, child) {
         // Replace the default red screen of death with a slightly friendlier one
         ErrorWidget.builder = (FlutterErrorDetails details) => FullPageErrorWidget(
+              error: details.exception,
+              stackTrace: details.stack,
+              prefix: L10n.of(context).something_broke_in_fritter,
+            );
               error: details.exception,
               stackTrace: details.stack,
               prefix: L10n.of(context).something_broke_in_fritter,

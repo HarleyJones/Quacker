@@ -2556,26 +2556,6 @@ class L10n {
       args: [],
     );
   }
-
-  /// `This functionality is no longer supported by Twitter!`
-  String get functionality_unsupported {
-    return Intl.message(
-      'This functionality is no longer supported by Twitter!',
-      name: 'functionality_unsupported',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Add subscriptions`
-  String get add_subscriptions {
-    return Intl.message(
-      'Add subscriptions',
-      name: 'add_subscriptions',
-      desc: '',
-      args: [],
-    );
-  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

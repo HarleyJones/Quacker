@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:fritter/client.dart';
+import 'package:fritter/client.dart';
 import 'package:fritter/constants.dart';
 import 'package:fritter/database/entities.dart';
 import 'package:fritter/generated/l10n.dart';
@@ -11,17 +12,22 @@ import 'package:fritter/search/search_model.dart';
 import 'package:fritter/subscriptions/users_model.dart';
 import 'package:fritter/tweet/_video.dart';
 import 'package:fritter/tweet/tweet.dart';
+import 'package:fritter/tweet/_video.dart';
+import 'package:fritter/tweet/tweet.dart';
 import 'package:fritter/ui/errors.dart';
 import 'package:fritter/user.dart';
+import 'package:fritter/utils/notifiers.dart';
 import 'package:fritter/utils/notifiers.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
 class SearchArguments {
   final int initialTab;
+  final int initialTab;
   final String? query;
   final bool focusInputOnOpen;
 
+  SearchArguments(this.initialTab, {this.query, this.focusInputOnOpen = false});
   SearchArguments(this.initialTab, {this.query, this.focusInputOnOpen = false});
 }
 
@@ -34,10 +40,13 @@ class SearchScreen extends StatelessWidget {
 
     return _SearchScreen(
         initialTab: arguments.initialTab, query: arguments.query, focusInputOnOpen: arguments.focusInputOnOpen);
+    return _SearchScreen(
+        initialTab: arguments.initialTab, query: arguments.query, focusInputOnOpen: arguments.focusInputOnOpen);
   }
 }
 
 class _SearchScreen extends StatefulWidget {
+  final int initialTab;
   final int initialTab;
   final String? query;
   final bool focusInputOnOpen;
@@ -56,9 +65,15 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
   late TabController _tabController;
   late CombinedChangeNotifier _bothControllers;
 
+  late TabController _tabController;
+  late CombinedChangeNotifier _bothControllers;
+
   @override
   void initState() {
     super.initState();
+
+    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
+    _bothControllers = CombinedChangeNotifier(_tabController, _queryController);
 
     _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
     _bothControllers = CombinedChangeNotifier(_tabController, _queryController);
@@ -98,7 +113,7 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
           title: TextField(
             controller: _queryController,
             focusNode: _focusNode,
-            style: searchTheme.textTheme.titleLarge,
+            style: searchTheme.textTheme.headline6,
             textInputAction: TextInputAction.search,
           ),
           actions: [
@@ -107,6 +122,7 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
               store: subscriptionsModel,
               onState: (_, state) {
                 return AnimatedBuilder(
+                  animation: _bothControllers,
                   animation: _bothControllers,
                   builder: (context, child) {
                     var id = _queryController.text;
@@ -132,6 +148,13 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
         ),
         body: Column(
           children: [
+            Material(
+              color: Theme.of(context).appBarTheme.backgroundColor,
+              child: TabBar(controller: _tabController, tabs: const [
+                Tab(icon: Icon(Icons.person)),
+                Tab(icon: Icon(Icons.comment)),
+              ]),
+            ),
             Material(
               color: Theme.of(context).appBarTheme.backgroundColor,
               child: TabBar(controller: _tabController, tabs: const [
