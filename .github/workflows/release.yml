@@ -1,0 +1,89 @@
+name: release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install and set up Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '14.x'
+      
+      - name:
+        run: echo $SIGNING_KEY | base64 -d > android/app/key.jks
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+
+      - name: Install and set up Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '3.10.2'
+
+      - name: Set env
+        if: github.event_name == 'push'
+        run: |
+          APP_VERSION=$(echo ${{github.ref_name}} | sed 's/v//g')
+          echo "APPLICATION_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          APP_BUILD_BASE=300000000
+          COMMIT_NUMBER=$(git rev-list HEAD --count)
+          APP_BUILD_NUMBER=$((APP_BUILD_BASE+COMMIT_NUMBER))
+          echo "APPLICATION_BUILD_NUMBER=$APP_BUILD_NUMBER" >> $GITHUB_ENV
+
+      - name: Build APKs
+        run: |
+          flutter config --no-analytics
+          flutter pub get
+          flutter pub run flutter_oss_licenses:generate.dart
+          flutter pub run intl_utils:generate
+
+          # Create a directory for our release APKs	
+          mkdir -pv build/app/outputs/release
+
+          # Build our big boy APK, and move it into the release APKs folder
+          if [[ ${{github.event_name}} == 'push' ]]; then
+            flutter build apk --dart-define=app.flavor=github --release --no-tree-shake-icons --build-name=${{env.APPLICATION_VERSION}} --build-number=${{env.APPLICATION_BUILD_NUMBER}}
+          else
+            flutter build apk --dart-define=app.flavor=github --release --no-tree-shake-icons
+          fi
+          mv build/app/outputs/apk/release/*.apk build/app/outputs/release
+
+          # Build our ABI-specific APKs and move them into the release APKs folder
+          if [[ ${{github.event_name}} == 'push' ]]; then
+            flutter build apk --dart-define=app.flavor=github --release --no-tree-shake-icons --split-per-abi --target-platform=android-x64,android-arm,android-arm64 --build-name=${{env.APPLICATION_VERSION}} --build-number=${{env.APPLICATION_BUILD_NUMBER}}
+          else
+            flutter build apk --dart-define=app.flavor=github --release --no-tree-shake-icons --split-per-abi --target-platform=android-x64,android-arm,android-arm64
+          fi
+          mv build/app/outputs/apk/release/*.apk build/app/outputs/release
+        env:
+          KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PATH: key.jks
+
+      - name: Create release
+        id: upload-release-assets
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
+          prerelease: false
+          files: |
+            build/app/outputs/release/*.apk
+
+      - name: Publish the release
+        uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.upload-release-assets.outputs.id }}
