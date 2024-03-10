@@ -1,3 +1,5 @@
+<h2 align="center">🚧 I am currently working on fixing Quacker to be up to date with new Twitter changes, feel free to make a merge request if you want to help 🚧</h2> 
+<br>
 <h1 align="center"> Quacker </h1> <br>
 <p align="center">
   <a href="https://github.com/thehcj/quacker">
