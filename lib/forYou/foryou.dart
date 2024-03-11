@@ -169,7 +169,10 @@ class _ForYouScreenBodyState extends State<ForYouScreenBody> with TickerProvider
                         pref: PrefService.of(context)),
                   );
                 }),
-            SavedScreen(scrollController: scrollController),
+            SavedScreen(
+              scrollController: scrollController,
+              showTitle: false,
+            ),
             Filters(user: user),
             // Filters(user: null),
           ],

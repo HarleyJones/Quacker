@@ -17,8 +17,9 @@ import 'package:provider/provider.dart';
 
 class SavedScreen extends StatefulWidget {
   final ScrollController scrollController;
+  final bool? showTitle;
 
-  const SavedScreen({Key? key, required this.scrollController}) : super(key: key);
+  const SavedScreen({Key? key, required this.scrollController, this.showTitle}) : super(key: key);
 
   @override
   State<SavedScreen> createState() => _SavedScreenState();
@@ -46,13 +47,14 @@ class _SavedScreenState extends State<SavedScreen> with AutomaticKeepAliveClient
       controller: widget.scrollController,
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
-          SliverAppBar(
-            pinned: false,
-            snap: true,
-            floating: true,
-            title: Text(L10n.current.saved),
-            actions: createCommonAppBarActions(context),
-          )
+          if (widget.showTitle != false)
+            SliverAppBar(
+              pinned: false,
+              snap: true,
+              floating: true,
+              title: Text(L10n.current.saved),
+              actions: createCommonAppBarActions(context),
+            )
         ];
       },
       body: MultiProvider(
