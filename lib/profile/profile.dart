@@ -6,6 +6,7 @@ import 'package:flutter_triple/flutter_triple.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/generated/l10n.dart';
+import 'package:quacker/profile/_filters.dart';
 import 'package:quacker/profile/_follows.dart';
 import 'package:quacker/profile/_saved.dart';
 import 'package:quacker/profile/_tweets.dart';
@@ -19,6 +20,8 @@ import 'package:intl/intl.dart';
 import 'package:measure_size/measure_size.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
+
+import '../settings/_account.dart';
 
 class ProfileScreenArguments {
   final String? id;
@@ -44,11 +47,7 @@ class ProfileScreen extends StatelessWidget {
 
     return Provider(
         create: (context) {
-          if (args.id != null) {
-            return ProfileModel()..loadProfileById(args.id!);
-          } else {
-            return ProfileModel()..loadProfileByScreenName(args.screenName!);
-          }
+          return ProfileModel()..loadProfileByScreenName(args.screenName!);
         },
         child: _ProfileScreen(id: args.id, screenName: args.screenName));
   }
@@ -121,7 +120,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
       nestedScrollViewState.innerController.addListener(_listen);
     });
 
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 7, vsync: this);
 
     var description = widget.profile.user.description;
     if (description == null || description.isEmpty) {
@@ -290,6 +289,12 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                       Tab(
                         child: Text(
                           L10n.of(context).saved,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          L10n.of(context).tweetFilters,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -507,13 +512,27 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
               physics: const LessSensitiveScrollPhysics(),
               children: [
                 ProfileTweets(
-                    user: user, type: 'profile', includeReplies: false, pinnedTweets: widget.profile.pinnedTweets),
+                    user: user,
+                    type: 'profile',
+                    includeReplies: false,
+                    pinnedTweets: widget.profile.pinnedTweets,
+                    pref: PrefService.of(context)),
                 ProfileTweets(
-                    user: user, type: 'profile', includeReplies: true, pinnedTweets: widget.profile.pinnedTweets),
-                ProfileTweets(user: user, type: 'media', includeReplies: false, pinnedTweets: const []),
+                    user: user,
+                    type: 'profile',
+                    includeReplies: true,
+                    pinnedTweets: widget.profile.pinnedTweets,
+                    pref: PrefService.of(context)),
+                ProfileTweets(
+                    user: user,
+                    type: 'media',
+                    includeReplies: false,
+                    pinnedTweets: const [],
+                    pref: PrefService.of(context)),
                 ProfileFollows(user: user, type: 'following'),
                 ProfileFollows(user: user, type: 'followers'),
                 ProfileSaved(user: user),
+                Filters(user: user),
               ],
             ),
           ),

@@ -412,5 +412,19 @@
   "share_base_url": "Custom share URL",
   "share_base_url_description": "Use a custom base URL when sharing",
   "functionality_unsupported": "This functionality is no longer supported by Twitter!",
-  "add_subscriptions": "Add subscriptions"
+  "add_subscriptions": "Add subscriptions",
+  "account": "Twitter account",
+  "browsingTweets": "Browsing Tweets",
+  "loginNameTwitterAcc": "Login name",
+  "passwordTwitterAcc": "Login password",
+  "emailTwitterAcc": "Email",
+  "twitterCookiesDeleted": "All cookies of the account are deleted",
+  "DeleteTwitterCookies": "Delete all cookies of the account",
+  "tweetFilters": "Filters",
+  "loadTweetCounterMaximum": "Number of Loads",
+  "loadTweetCounterMaximumSubtitle": "Maximum of tweet`s loads while showing less than 5 tweets",
+  "regex": "Regex filters",
+  "regexSubtitle": "Filtr exclude tweets containing an expression. Each filter is separated by a pipe(|): \"+\"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression\"+\", use this one :^((?!expression).)*\\$",
+  "foryou": "For-you",
+  "clickToShowMore": " \nClick to show more.."
 }

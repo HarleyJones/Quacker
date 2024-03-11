@@ -39,6 +39,7 @@ import 'package:quacker/utils/urls.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:uni_links2/uni_links.dart';
+import 'WebFlowAuth/webFlowAuth_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 Future checkForUpdates() async {
@@ -168,6 +169,9 @@ Future<void> main() async {
         {'name': 'Worldwide', 'woeid': 1}
       ]
     }),
+    optionPasswordTwitterAcc: '',
+    optionLoginNameTwitterAcc: '',
+    optionEmailTwitterAcc: '',
   });
 
   FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();
@@ -208,6 +212,8 @@ Future<void> main() async {
 
   var trendLocationModel = UserTrendLocationModel(prefService);
 
+  var webFlowAuthModel = WebFlowAuthModel(prefService);
+
   runApp(PrefService(
       service: prefService,
       child: MultiProvider(
@@ -223,6 +229,7 @@ Future<void> main() async {
           Provider(create: (context) => TrendLocationsModel()),
           Provider(create: (context) => TrendsModel(trendLocationModel)),
           ChangeNotifierProvider(create: (_) => VideoContextState(prefService.get(optionMediaDefaultMute))),
+          ChangeNotifierProvider(create: (context) => webFlowAuthModel),
         ],
         child: DevicePreview(
           enabled: !kReleaseMode,

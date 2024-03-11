@@ -69,7 +69,10 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "DeleteTwitterCookies": MessageLookupByLibrary.simpleMessage(
+            "Delete all cookies of the account"),
         "about": MessageLookupByLibrary.simpleMessage("About"),
+        "account": MessageLookupByLibrary.simpleMessage("Twitter account"),
         "account_suspended":
             MessageLookupByLibrary.simpleMessage("Account suspended"),
         "activate_non_confirmation_bias_mode_description":
@@ -98,11 +101,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "blue_theme_based_on_the_twitter_color_scheme":
             MessageLookupByLibrary.simpleMessage(
                 "Blue theme based on the Twitter color scheme"),
+        "browsingTweets":
+            MessageLookupByLibrary.simpleMessage("Browsing Tweets"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "catastrophic_failure":
             MessageLookupByLibrary.simpleMessage("Catastrophic failure"),
         "choose": MessageLookupByLibrary.simpleMessage("Choose"),
         "choose_pages": MessageLookupByLibrary.simpleMessage("Choose pages"),
+        "clickToShowMore":
+            MessageLookupByLibrary.simpleMessage(" \nClick to show more.."),
         "close": MessageLookupByLibrary.simpleMessage("Close"),
         "confirm_close_fritter": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to close Quacker?"),
@@ -151,6 +158,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "download_path": MessageLookupByLibrary.simpleMessage("Download path"),
         "downloading_media":
             MessageLookupByLibrary.simpleMessage("Downloading media..."),
+        "emailTwitterAcc": MessageLookupByLibrary.simpleMessage("Email"),
         "enable_": MessageLookupByLibrary.simpleMessage("Enable ?"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
@@ -177,6 +185,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "following": MessageLookupByLibrary.simpleMessage("Following"),
         "forbidden": MessageLookupByLibrary.simpleMessage(
             "Twitter says access to this is forbidden"),
+        "foryou": MessageLookupByLibrary.simpleMessage("For-you"),
         "fritter": MessageLookupByLibrary.simpleMessage("Quacker"),
         "fritter_blue": MessageLookupByLibrary.simpleMessage("Quacker blue"),
         "functionality_unsupported": MessageLookupByLibrary.simpleMessage(
@@ -220,7 +229,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "licenses": MessageLookupByLibrary.simpleMessage("Licenses"),
         "light": MessageLookupByLibrary.simpleMessage("Light"),
         "live": MessageLookupByLibrary.simpleMessage("LIVE"),
+        "loadTweetCounterMaximum":
+            MessageLookupByLibrary.simpleMessage("Number of Loads"),
+        "loadTweetCounterMaximumSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Maximum of tweet`s loads while showing less than 5 tweets"),
         "logging": MessageLookupByLibrary.simpleMessage("Logging"),
+        "loginNameTwitterAcc":
+            MessageLookupByLibrary.simpleMessage("Login name"),
         "media": MessageLookupByLibrary.simpleMessage("Media"),
         "media_size": MessageLookupByLibrary.simpleMessage("Media size"),
         "medium": MessageLookupByLibrary.simpleMessage("Medium"),
@@ -258,6 +273,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Open in browser"),
         "page_not_found": MessageLookupByLibrary.simpleMessage(
             "Twitter says the page does not exist, but that may not be true"),
+        "passwordTwitterAcc":
+            MessageLookupByLibrary.simpleMessage("Login password"),
         "permission_not_granted": MessageLookupByLibrary.simpleMessage(
             "Permission not granted. Please try again after granting!"),
         "pick_a_color": MessageLookupByLibrary.simpleMessage("Pick a color!"),
@@ -283,6 +300,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "prefix": MessageLookupByLibrary.simpleMessage("prefix"),
         "private_profile":
             MessageLookupByLibrary.simpleMessage("Private profile"),
+        "regex": MessageLookupByLibrary.simpleMessage("Regex filters"),
+        "regexSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Filtr exclude tweets containing an expression. Each filter is separated by a pipe(|): \"+\"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression\"+\", use this one :^((?!expression).)*\\\$"),
         "released_under_the_mit_license": MessageLookupByLibrary.simpleMessage(
             "Released under the MIT License"),
         "replying_to": MessageLookupByLibrary.simpleMessage("Replying to"),
@@ -377,10 +397,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "trending": MessageLookupByLibrary.simpleMessage("Trending"),
         "trends": MessageLookupByLibrary.simpleMessage("Trends"),
         "true_black": MessageLookupByLibrary.simpleMessage("True Black?"),
+        "tweetFilters": MessageLookupByLibrary.simpleMessage("Filters"),
         "tweets": MessageLookupByLibrary.simpleMessage("Tweets"),
         "tweets_and_replies":
             MessageLookupByLibrary.simpleMessage("Tweets & Replies"),
         "tweets_number": m15,
+        "twitterCookiesDeleted": MessageLookupByLibrary.simpleMessage(
+            "All cookies of the account are deleted"),
         "two_home_pages_required": MessageLookupByLibrary.simpleMessage(
             "You need to have at least 2 home screen pages."),
         "unable_to_find_the_available_trend_locations":

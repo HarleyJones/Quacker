@@ -13,8 +13,9 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 class StatusScreenArguments {
   final String id;
   final String? username;
+  final tweetOpened;
 
-  StatusScreenArguments({required this.id, required this.username});
+  StatusScreenArguments({required this.id, required this.username, this.tweetOpened});
 
   @override
   String toString() {
@@ -29,15 +30,17 @@ class StatusScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as StatusScreenArguments;
 
-    return _StatusScreen(username: args.username, id: args.id);
+    return _StatusScreen(username: args.username, id: args.id, tweetOpened: args.tweetOpened);
   }
 }
 
 class _StatusScreen extends StatefulWidget {
   final String? username;
   final String id;
+  final tweetOpened;
 
-  const _StatusScreen({Key? key, required this.username, required this.id}) : super(key: key);
+  const _StatusScreen({Key? key, required this.username, required this.id, required this.tweetOpened})
+      : super(key: key);
 
   @override
   _StatusScreenState createState() => _StatusScreenState();
@@ -119,7 +122,12 @@ class _StatusScreenState extends State<_StatusScreen> {
                 controller: _scrollController,
                 index: index,
                 highlightColor: Colors.white.withOpacity(1),
-                child: TweetConversation(id: chain.id, tweets: chain.tweets, username: null, isPinned: chain.isPinned),
+                child: TweetConversation(
+                    id: chain.id,
+                    tweets: chain.tweets,
+                    username: null,
+                    isPinned: chain.isPinned,
+                    tweetOpened: widget.tweetOpened),
               );
             },
             firstPageErrorIndicatorBuilder: (context) => FullPageErrorWidget(

@@ -33,13 +33,16 @@ class TweetTile extends StatefulWidget {
   final bool isPinned;
   final bool isThread;
 
+  final bool tweetOpened;
+
   const TweetTile(
       {Key? key,
       required this.clickable,
       this.currentUsername,
       required this.tweet,
       this.isPinned = false,
-      this.isThread = false})
+      this.isThread = false,
+      this.tweetOpened = false})
       : super(key: key);
 
   @override
@@ -184,7 +187,7 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
 
   void onClickOpenTweet(TweetWithCard tweet) {
     Navigator.pushNamed(context, routeStatus,
-        arguments: StatusScreenArguments(id: tweet.idStr!, username: tweet.user!.screenName!));
+        arguments: StatusScreenArguments(id: tweet.idStr!, username: tweet.user!.screenName!, tweetOpened: true));
   }
 
   List<TweetTextPart> convertTextPartsToTweetEntities(List<String> parts) {
@@ -216,17 +219,22 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
     var actualTweet = tweet.retweetedStatusWithCard ?? tweet;
 
     // This is some super long text that I think only Twitter Blue users can write
-    var noteText = tweet.noteText;
-
+    var noteText = tweet.retweetedStatusWithCard?.noteText ?? tweet.noteText;
+    // get the longest tweet
+    var tweetTextRaw = noteText ?? actualTweet.fullText ?? actualTweet.text!;
+    //remove all https from text
+    var tweetTextRawIndex = tweetTextRaw.indexOf("https");
+    //build text without https links
+    var tweetTextFinal = tweetTextRaw.substring(0, tweetTextRawIndex == -1 ? tweetTextRaw.length : tweetTextRawIndex);
     // Generate all the tweet entities (mentions, hashtags, etc.) from the tweet text
-    Runes tweetText = Runes(noteText ?? actualTweet.fullText ?? actualTweet.text!);
-
+    Runes tweetText = Runes(tweetTextFinal);
     // If we're not given a text display range, we just display the entire text
     List<int> displayTextRange;
-    if (noteText == null) {
-      displayTextRange = actualTweet.displayTextRange ?? [0, tweetText.length];
+    //show full length of tweet when the tweet is opened
+    if (widget.tweetOpened) {
+      displayTextRange = [0, tweetText.length];
     } else {
-      displayTextRange = [0, noteText.length];
+      displayTextRange = actualTweet.displayTextRange ?? [0, tweetText.length];
     }
 
     Iterable<int> runes = tweetText.getRange(displayTextRange[0], displayTextRange[1]);
@@ -262,6 +270,11 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
     var textPart = _convertRunesToText(runes, index);
     if (textPart != null) {
       things.add(TweetTextPart(null, textPart));
+    }
+
+    //if the text of tweet is longer than what is gonna be displayed, add text
+    if (tweetTextFinal.length - 2 > displayTextRange[1]) {
+      things.add(TweetTextPart(null, L10n.current.clickToShowMore));
     }
 
     setState(() {
@@ -407,7 +420,7 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
                   }
                 })
               ]),
-              onTap: () => onClickOpenTweet(tweet),
+              onTap: () => !widget.tweetOpened ? onClickOpenTweet(tweet) : null,
             )),
       );
     }
