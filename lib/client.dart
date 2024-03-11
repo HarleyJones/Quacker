@@ -437,31 +437,53 @@ class Twitter {
     return createUnconversationedChainsGraphql(timeline, 'tweet', [], true, includeReplies);
   }
 
-  static Future<List<UserWithExtra>> searchUsers(String query, {int limit = 25, String? maxId, String? cursor}) async {
-    var queryParameters = {
-      ...defaultParams,
-      'count': limit.toString(),
-      'max_id': maxId,
-      'q': query,
-      'pc': '1',
-      'spelling_corrections': '1',
-      'result_filter': 'user'
+  static Future<List<UserWithExtra>> searchUsers(String query, {int limit = 25, String? cursor}) async {
+    var variables = {
+      "rawQuery": query,
+      "count": limit.toString(),
+      "product": 'People',
+      "withDownvotePerspective": false,
+      "withReactionsMetadata": false,
+      "withReactionsPerspective": false
     };
 
     if (cursor != null) {
-      queryParameters['cursor'] = cursor;
+      variables['cursor'] = cursor;
     }
 
-    var response =
-        await _twitterApi.client.get(Uri.https('api.twitter.com', '/1.1/users/search.json', queryParameters));
+    var uri = Uri.https('api.twitter.com', '/i/api/graphql/nK1dw4oV3k4w5TdtcAdSww/SearchTimeline',
+        {'variables': jsonEncode(variables)});
 
-    List result = json.decode(response.body);
+    var response = await _twitterApi.client.get(uri);
+    print(response.body);
+    if (response.body.isEmpty) {
+      return [];
+    }
 
+    var result = json.decode(response.body);
     if (result.isEmpty) {
       return [];
     }
 
-    return result.map((e) => UserWithExtra.fromJson(e)).toList();
+    List instructions =
+        List.from(result?['data']?['search_by_raw_query']?['search_timeline']?['timeline']?['instructions'] ?? []);
+    if (instructions.isEmpty) {
+      return [];
+    }
+    List addEntries = List.from(
+        instructions.firstWhere((e) => e['type'] == 'TimelineAddEntries', orElse: () => null)?['entries'] ?? []);
+    if (addEntries.isEmpty) {
+      return [];
+    }
+
+    return addEntries
+        .where((entry) => entry['entryId']?.startsWith('user-'))
+        .where((entry) => entry['content']?['itemContent']?['user_results']?['result']?['legacy'] != null)
+        .map((entry) {
+      var res = entry['content']['itemContent']['user_results']['result'];
+      return UserWithExtra.fromJson(
+          {...res['legacy'], 'id_str': res['rest_id'], 'ext_is_blue_verified': res['is_blue_verified']});
+    }).toList();
   }
 
   static Future<List<TrendLocation>> getTrendLocations() async {

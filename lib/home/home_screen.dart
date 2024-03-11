@@ -134,6 +134,8 @@ class _HomeScreenState extends State<_HomeScreen> {
                     }
 
                     switch (e.id) {
+                      case 'feed':
+                        return FeedScreen(scrollController: scrollController, id: '-1', name: L10n.current.feed);
                       case 'subscriptions':
                         return const SubscriptionsScreen();
                       case 'groups':
