@@ -1,4 +1,3 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
@@ -29,15 +28,6 @@ class SettingsThemeFragment extends StatelessWidget {
               child: Text(L10n.of(context).dark),
             ),
           ]),
-          PrefDropdown(
-              title: Text(L10n.of(context).theme),
-              fullWidth: false,
-              pref: optionThemeColorScheme,
-              items: FlexScheme.values
-                  .getRange(0, FlexScheme.values.length - 1)
-                  .sorted((a, b) => a.name.compareTo(b.name))
-                  .map((scheme) => DropdownMenuItem(value: scheme.name, child: Text(scheme.name.capitalize)))
-                  .toList()),
           PrefSwitch(
             title: Text(L10n.of(context).true_black),
             pref: optionThemeTrueBlack,

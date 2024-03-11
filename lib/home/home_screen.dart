@@ -230,6 +230,7 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
     _pageController?.dispose();
   }
 
+  int currentPage = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -240,15 +241,24 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
           // Reset the height when the page changes, otherwise the navigation bar stays hidden forever
           scrollController.bottomNavigationBar.heightNotifier.value = 1;
           scrollController.bottomNavigationBar.setTab(page);
+          setState(() {
+            currentPage = page;
+          });
         }),
         children: _children,
       ),
-      bottomNavigationBar: ScrollBottomNavigationBar(
-        controller: scrollController,
-        showUnselectedLabels: false,
-        items: [
-          ..._pages.map((e) => BottomNavigationBarItem(icon: Icon(e.icon, size: 22), label: e.titleBuilder(context)))
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: currentPage,
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        destinations: [
+          ..._pages.map((e) => NavigationDestination(icon: Icon(e.icon, size: 22), label: e.titleBuilder(context)))
         ],
+        onDestinationSelected: (int value) {
+          setState(() {
+            currentPage = value;
+            _pageController?.jumpToPage(value);
+          });
+        },
       ),
     );
   }

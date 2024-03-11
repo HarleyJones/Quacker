@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_preview/device_preview.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -161,7 +161,6 @@ Future<void> main() async {
     optionSubscriptionOrderByField: 'name',
     optionThemeMode: 'system',
     optionThemeTrueBlack: false,
-    optionThemeColorScheme: 'gold',
     optionTweetsHideSensitive: true,
     optionUserTrendsLocations: jsonEncode({
       'active': {'name': 'Worldwide', 'woeid': 1},
@@ -250,7 +249,6 @@ class _FritterAppState extends State<FritterApp> {
 
   String _themeMode = 'system';
   bool _trueBlack = false;
-  FlexScheme _colorScheme = FlexScheme.gold;
   Locale? _locale;
 
   @override
@@ -272,10 +270,6 @@ class _FritterAppState extends State<FritterApp> {
       }
     }
 
-    void setColorScheme(String colorSchemeName) {
-      _colorScheme = FlexScheme.values.byName(colorSchemeName);
-    }
-
     // TODO: This doesn't work on iOS
     void setDisableScreenshots(final bool secureModeEnabled) async {
       if (secureModeEnabled) {
@@ -290,7 +284,6 @@ class _FritterAppState extends State<FritterApp> {
       setLocale(prefService.get<String>(optionLocale));
       _themeMode = prefService.get(optionThemeMode);
       _trueBlack = prefService.get(optionThemeTrueBlack);
-      setColorScheme(prefService.get(optionThemeColorScheme));
       setDisableScreenshots(prefService.get(optionDisableScreenshots));
     });
 
@@ -314,12 +307,6 @@ class _FritterAppState extends State<FritterApp> {
     prefService.addKeyListener(optionThemeMode, () {
       setState(() {
         _themeMode = prefService.get(optionThemeMode);
-      });
-    });
-
-    prefService.addKeyListener(optionThemeColorScheme, () {
-      setState(() {
-        setColorScheme(prefService.get(optionThemeColorScheme));
       });
     });
 
@@ -349,105 +336,86 @@ class _FritterAppState extends State<FritterApp> {
         break;
     }
 
-    return MaterialApp(
-      localeListResolutionCallback: (locales, supportedLocales) {
-        List supportedLocalesCountryCode = [];
-        for (var item in supportedLocales) {
-          supportedLocalesCountryCode.add(item.countryCode);
-        }
-
-        List supportedLocalesLanguageCode = [];
-        for (var item in supportedLocales) {
-          supportedLocalesLanguageCode.add(item.languageCode);
-        }
-
-        locales!;
-        List localesCountryCode = [];
-        for (var item in locales) {
-          localesCountryCode.add(item.countryCode);
-        }
-
-        List localesLanguageCode = [];
-        for (var item in locales) {
-          localesLanguageCode.add(item.languageCode);
-        }
-
-        for (var i = 0; i < locales.length; i++) {
-          if (supportedLocalesCountryCode.contains(localesCountryCode[i]) &&
-              supportedLocalesLanguageCode.contains(localesLanguageCode[i])) {
-            log.info('Yes country: ${localesCountryCode[i]}, ${localesLanguageCode[i]}');
-            return Locale(localesLanguageCode[i], localesCountryCode[i]);
-          } else if (supportedLocalesLanguageCode.contains(localesLanguageCode[i])) {
-            log.info('Yes language: ${localesLanguageCode[i]}');
-            return Locale(localesLanguageCode[i]);
-          } else {
-            log.info('Nothing');
+    return DynamicColorBuilder(builder: (lightDynamic, darkDynamic) {
+      return MaterialApp(
+        localeListResolutionCallback: (locales, supportedLocales) {
+          List supportedLocalesCountryCode = [];
+          for (var item in supportedLocales) {
+            supportedLocalesCountryCode.add(item.countryCode);
           }
-        }
-        return const Locale('en');
-      },
-      localizationsDelegates: const [
-        L10n.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: L10n.delegate.supportedLocales,
-      locale: _locale ?? DevicePreview.locale(context),
-      title: 'Quacker',
-      theme: FlexThemeData.light(
-        scheme: _colorScheme,
-        surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-        blendLevel: 20,
-        appBarOpacity: 0.95,
-        tabBarStyle: FlexTabBarStyle.flutterDefault,
-        subThemesData: const FlexSubThemesData(
-          blendOnLevel: 20,
-          blendOnColors: false,
-        ),
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: true,
-        appBarStyle: FlexAppBarStyle.primary,
-      ),
-      darkTheme: FlexThemeData.dark(
-        scheme: _colorScheme,
-        darkIsTrueBlack: _trueBlack,
-        surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-        blendLevel: 20,
-        appBarOpacity: 0.95,
-        tabBarStyle: FlexTabBarStyle.flutterDefault,
-        subThemesData: const FlexSubThemesData(
-          blendOnLevel: 20,
-          blendOnColors: false,
-        ),
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: true,
-        appBarStyle: _trueBlack ? FlexAppBarStyle.surface : FlexAppBarStyle.primary,
-      ),
-      themeMode: themeMode,
-      initialRoute: '/',
-      routes: {
-        routeHome: (context) => const DefaultPage(),
-        routeGroup: (context) => const GroupScreen(),
-        routeProfile: (context) => const ProfileScreen(),
-        routeSearch: (context) => const SearchScreen(),
-        routeSettings: (context) => const SettingsScreen(),
-        routeSettingsExport: (context) => const SettingsExportScreen(),
-        routeSettingsHome: (context) => const SettingsScreen(initialPage: 'home'),
-        routeStatus: (context) => const StatusScreen(),
-        routeSubscriptionsImport: (context) => const SubscriptionImportScreen()
-      },
-      builder: (context, child) {
-        // Replace the default red screen of death with a slightly friendlier one
-        ErrorWidget.builder = (FlutterErrorDetails details) => FullPageErrorWidget(
-              error: details.exception,
-              stackTrace: details.stack,
-              prefix: L10n.of(context).something_broke_in_fritter,
-            );
 
-        return DevicePreview.appBuilder(context, child ?? Container());
-      },
-    );
+          List supportedLocalesLanguageCode = [];
+          for (var item in supportedLocales) {
+            supportedLocalesLanguageCode.add(item.languageCode);
+          }
+
+          locales!;
+          List localesCountryCode = [];
+          for (var item in locales) {
+            localesCountryCode.add(item.countryCode);
+          }
+
+          List localesLanguageCode = [];
+          for (var item in locales) {
+            localesLanguageCode.add(item.languageCode);
+          }
+
+          for (var i = 0; i < locales.length; i++) {
+            if (supportedLocalesCountryCode.contains(localesCountryCode[i]) &&
+                supportedLocalesLanguageCode.contains(localesLanguageCode[i])) {
+              log.info('Yes country: ${localesCountryCode[i]}, ${localesLanguageCode[i]}');
+              return Locale(localesLanguageCode[i], localesCountryCode[i]);
+            } else if (supportedLocalesLanguageCode.contains(localesLanguageCode[i])) {
+              log.info('Yes language: ${localesLanguageCode[i]}');
+              return Locale(localesLanguageCode[i]);
+            } else {
+              log.info('Nothing');
+            }
+          }
+          return const Locale('en');
+        },
+        localizationsDelegates: const [
+          L10n.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: L10n.delegate.supportedLocales,
+        locale: _locale ?? DevicePreview.locale(context),
+        title: 'Quacker',
+        theme: ThemeData(
+          colorScheme: lightDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.light),
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData(
+          colorScheme: darkDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.dark),
+          useMaterial3: true,
+        ),
+        themeMode: themeMode,
+        initialRoute: '/',
+        routes: {
+          routeHome: (context) => const DefaultPage(),
+          routeGroup: (context) => const GroupScreen(),
+          routeProfile: (context) => const ProfileScreen(),
+          routeSearch: (context) => const SearchScreen(),
+          routeSettings: (context) => const SettingsScreen(),
+          routeSettingsExport: (context) => const SettingsExportScreen(),
+          routeSettingsHome: (context) => const SettingsScreen(initialPage: 'home'),
+          routeStatus: (context) => const StatusScreen(),
+          routeSubscriptionsImport: (context) => const SubscriptionImportScreen()
+        },
+        builder: (context, child) {
+          // Replace the default red screen of death with a slightly friendlier one
+          ErrorWidget.builder = (FlutterErrorDetails details) => FullPageErrorWidget(
+                error: details.exception,
+                stackTrace: details.stack,
+                prefix: L10n.of(context).something_broke_in_fritter,
+              );
+
+          return DevicePreview.appBuilder(context, child ?? Container());
+        },
+      );
+    });
   }
 }
 
