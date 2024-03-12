@@ -451,8 +451,8 @@ class Twitter {
       variables['cursor'] = cursor;
     }
 
-    var uri = Uri.https('api.twitter.com', '/i/api/graphql/nK1dw4oV3k4w5TdtcAdSww/SearchTimeline',
-        {'variables': jsonEncode(variables)});
+    var uri = Uri.https('api.twitter.com', '/i/api/graphql/gkjsKepM6gl_HmFWoWKfgg/SearchTimeline',
+        {'variables': jsonEncode(variables), 'features': jsonEncode(gqlFeatures)});
 
     var response = await _twitterApi.client.get(uri);
     print(response.body);
