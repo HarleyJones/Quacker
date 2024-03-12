@@ -47,7 +47,9 @@ class _SubscriptionGroupsState extends State<SubscriptionGroups> {
         child: Column(
           children: [
             Container(
-              color: color != null ? color.withOpacity(0.9) : Theme.of(context).highlightColor,
+              decoration: BoxDecoration(
+                  color: color != null ? color.withOpacity(0.9) : Theme.of(context).highlightColor,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Icon(deserializeIconData(icon), size: 24),
@@ -55,7 +57,9 @@ class _SubscriptionGroupsState extends State<SubscriptionGroups> {
             Expanded(
                 child: Container(
               alignment: Alignment.center,
-              color: color != null ? color.withOpacity(0.4) : Colors.white10,
+              decoration: BoxDecoration(
+                  color: color != null ? color.withOpacity(0.4) : Colors.white10,
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))),
               width: double.infinity,
               padding: const EdgeInsets.all(8),
               child: Text(title,
@@ -255,22 +259,25 @@ class _SubscriptionGroupEditDialogState extends State<SubscriptionGroupEditDialo
     return AlertDialog(
       actions: [
         SizedBox(
-          width: screenWidth,
-          child: screenWidth >= breakpointScreenWidth2 ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            ...buttonsLst1,
-            ...buttonsLst2,
-          ]) : screenWidth >= breakpointScreenWidth1 ? Column(mainAxisSize: MainAxisSize.min, children: [
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                ...buttonsLst1,
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              ...buttonsLst2,
-            ]),
-          ]) : Column(mainAxisSize: MainAxisSize.min, children: [
-            ...buttonsLst1,
-            ...buttonsLst2,
-          ])
-        ),
+            width: screenWidth,
+            child: screenWidth >= breakpointScreenWidth2
+                ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    ...buttonsLst1,
+                    ...buttonsLst2,
+                  ])
+                : screenWidth >= breakpointScreenWidth1
+                    ? Column(mainAxisSize: MainAxisSize.min, children: [
+                        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          ...buttonsLst1,
+                        ]),
+                        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          ...buttonsLst2,
+                        ]),
+                      ])
+                    : Column(mainAxisSize: MainAxisSize.min, children: [
+                        ...buttonsLst1,
+                        ...buttonsLst2,
+                      ])),
       ],
       content: Form(
         key: _formKey,
