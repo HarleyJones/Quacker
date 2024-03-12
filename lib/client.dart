@@ -23,7 +23,7 @@ class _FritterTwitterClient extends TwitterClient {
 
   static var userAgentHeader = {
     'user-agent':
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.3",
     // "Pragma": "no-cache",
     "Cache-Control": "no-cache"
     // "If-Modified-Since": "Sat, 1 Jan 2000 00:00:00 GMT",
@@ -37,7 +37,7 @@ class _FritterTwitterClient extends TwitterClient {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        return Future.error(response);
+        return Future.error(response.reasonPhrase ?? response.statusCode);
       }
     });
   }
@@ -441,6 +441,7 @@ class Twitter {
     var variables = {
       "rawQuery": query,
       "count": limit.toString(),
+      "querySource": "typed_query",
       "product": 'People',
       "withDownvotePerspective": false,
       "withReactionsMetadata": false,
@@ -451,8 +452,8 @@ class Twitter {
       variables['cursor'] = cursor;
     }
 
-    var uri = Uri.https('api.twitter.com', '/i/api/graphql/nK1dw4oV3k4w5TdtcAdSww/SearchTimeline',
-        {'variables': jsonEncode(variables)});
+    var uri = Uri.https('twitter.com', '/i/api/graphql/-KWrbTBsPifMuLUqqDiU_A/SearchTimeline',
+        {'variables': jsonEncode(variables), 'features': jsonEncode(gqlFeatures)});
 
     var response = await _twitterApi.client.get(uri);
     print(response.body);
