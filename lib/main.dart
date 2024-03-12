@@ -388,7 +388,10 @@ class _FritterAppState extends State<FritterApp> {
           useMaterial3: true,
         ),
         darkTheme: ThemeData(
-          colorScheme: darkDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.dark),
+          colorScheme: (_trueBlack == true
+              ? (darkDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.dark))
+                  .copyWith(background: Colors.black, surface: Colors.black)
+              : (darkDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.dark))),
           useMaterial3: true,
         ),
         themeMode: themeMode,
