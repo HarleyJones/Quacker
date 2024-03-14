@@ -25,11 +25,11 @@
 </p>
  
 ## Features:
-* Feed: View all your subscriptions in a chronological feed
-* Material You: Looks and feels fluent
-* Transfer: Easily transfer your data to another device
-* Private: Doesn't use the official twitter api
-* Updated: Constantly improving week by week
+* Feed: View your `Following` or if you prefer your `For You` feed
+* Material You: Made to suit you
+* Transfer: Easily export your data
+* Private: Most of your data stays on device
+* Updated: Constantly being worked on
 
 ## Screenshots
 
