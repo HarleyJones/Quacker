@@ -498,7 +498,7 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
                                             style: const TextStyle(fontWeight: FontWeight.w500))),
                                     if (tweet.user!.verified ?? false) const SizedBox(width: 4),
                                     if (tweet.user!.verified ?? false)
-                                      Icon(Icons.verified_outlined, size: 18, color: Theme.of(context).primaryColor)
+                                      Icon(Icons.verified_outlined, size: 18, color: Colors.blue)
                                   ],
                                 ),
                               ),
