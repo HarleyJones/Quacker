@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/settings/_about.dart';
@@ -56,19 +57,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
       initialPage = 0;
     }
 
-    return ScaffoldWithBottomNavigation(
-      initialPage: initialPage,
-      pages: pages,
-      builder: (scrollController) {
-        return [
-          const SettingsGeneralFragment(),
-          const SettingsHomeFragment(),
-          const SettingsThemeFragment(),
-          SettingsDataFragment(legacyExportPath: _legacyExportPath),
-          const SettingsAccountFragment(),
-          SettingsAboutFragment(appVersion: appVersion)
-        ];
-      },
+    return Scaffold(
+      appBar: AppBar(title: Text("Settings")),
+      body: ListView(children: [
+        ListTile(
+          title: Text(L10n.current.general),
+          leading: Icon(Icons.settings),
+          onTap: () =>
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext c) => SettingsGeneralFragment())),
+        ),
+        ListTile(
+          title: Text(L10n.current.home),
+          leading: Icon(Icons.home_filled),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext c) => SettingsHomeFragment())),
+        ),
+        ListTile(
+          title: Text(L10n.current.theme),
+          leading: Icon(Icons.format_paint),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext c) => SettingsThemeFragment())),
+        ),
+        ListTile(
+          title: Text(L10n.current.data),
+          leading: Icon(Icons.storage),
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext c) => SettingsDataFragment(
+                        legacyExportPath: '',
+                      ))),
+        ),
+        ListTile(
+          title: Text(L10n.current.account),
+          leading: Icon(Icons.account_circle),
+          onTap: () =>
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext c) => SettingsAccountFragment())),
+        ),
+        ListTile(
+          title: Text(L10n.current.about),
+          leading: Icon(Icons.info),
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext c) => SettingsAboutFragment(
+                        appVersion: appVersion,
+                      ))),
+        ),
+      ]),
     );
   }
 }
