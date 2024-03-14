@@ -72,15 +72,6 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
 
   String _buildSearchQuery(List<Subscription> users) {
     var query = '';
-    if (!widget.includeReplies) {
-      query += '-filter:replies ';
-    }
-
-    if (!widget.includeRetweets) {
-            query += '-filter:retweets ';
-                } else {
-                      query += 'include:nativeretweets ';
-                          }
 
     var remainingLength = 512 - query.length;
 
@@ -94,8 +85,8 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
 
       // If we can add this user to the query and still be less than ~512 characters, do so
       if (query.length + queryToAdd.length < remainingLength) {
-        if (query.isNotEmpty) {
-          query += '+OR+';
+        if (query != '' && query.isNotEmpty) {
+          query += ' OR ';
         }
 
         query += queryToAdd;
@@ -106,6 +97,17 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
       }
     }
 
+    if (!widget.includeReplies) {
+      query += ' -filter:replies ';
+    }
+
+    if (!widget.includeRetweets) {
+      query += ' -filter:retweets ';
+    } else {
+      query += ' include:nativeretweets ';
+    }
+
+    print(query);
     return query;
   }
 
@@ -164,8 +166,9 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
 
           // Perform our search for the next page of results for this chunk, and add those tweets to our collection
           var query = _buildSearchQuery(chunk.users);
-          var result = await Twitter.searchTweets(query, widget.includeReplies, limit: 100, cursor: searchCursor);
-
+          TweetStatus result =
+              await Twitter.searchTweets(query, widget.includeReplies, limit: 25, cursor: searchCursor);
+          print(result.chains.length);
           if (result.chains.isNotEmpty) {
             tweets.addAll(result.chains);
 
