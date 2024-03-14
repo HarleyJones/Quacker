@@ -113,7 +113,7 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
             return RefreshIndicator(
               onRefresh: () async => _pagingController.refresh(),
               child: PagedListView<String?, TweetChain>(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.only(top: 4),
                 pagingController: _pagingController,
                 addAutomaticKeepAlives: false,
                 builderDelegate: PagedChildBuilderDelegate(

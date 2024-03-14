@@ -20,11 +20,6 @@ import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_bottom_navigation_bar/scroll_bottom_navigation_bar.dart';
 
-import '../forYou/_tweets.dart';
-import '../forYou/foryou.dart';
-import '../profile/profile.dart';
-import '../profile/profile_model.dart';
-
 typedef NavigationTitleBuilder = String Function(BuildContext context);
 
 class NavigationPage {
@@ -55,7 +50,6 @@ final List<NavigationPage> defaultHomePages = [
   NavigationPage('subscriptions', (c) => L10n.of(c).subscriptions, Icons.subscriptions_outlined),
   NavigationPage('groups', (c) => L10n.of(c).groups, Icons.group_outlined),
   NavigationPage('trending', (c) => L10n.of(c).trending, Icons.trending_up_rounded),
-  NavigationPage('foryou', (c) => L10n.of(c).foryou, Icons.person),
   NavigationPage('saved', (c) => L10n.of(c).saved, Icons.bookmark_border_rounded),
 ];
 
@@ -142,8 +136,6 @@ class _HomeScreenState extends State<_HomeScreen> {
                         return GroupsScreen(scrollController: scrollController);
                       case 'trending':
                         return TrendsScreen(scrollController: scrollController);
-                      case 'foryou':
-                        return ForYouScreen();
                       case 'saved':
                         return SavedScreen(scrollController: scrollController);
                       default:
