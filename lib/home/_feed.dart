@@ -30,6 +30,7 @@ class _FeedScreenState extends State<FeedScreen>
 
   late TabController _tabController;
   int _tab = 0;
+  dynamic _tabValue = L10n.current.following;
 
   @override
   void initState() {
@@ -73,23 +74,34 @@ class _FeedScreenState extends State<FeedScreen>
                 pinned: false,
                 snap: true,
                 floating: true,
-                title: Text(L10n.current.feed),
+                title: DropdownButton(
+                    padding: EdgeInsets.only(left: 8),
+                    underline: Container(),
+                    value: _tabValue,
+                    onChanged: (value) => setState(() {
+                          if (value == L10n.current.foryou) {
+                            _tab = 0;
+                          } else if (value == L10n.current.following) {
+                            _tab = 1;
+                          }
+                          _tabValue = value;
+                        }),
+                    items: [
+                      DropdownMenuItem(value: L10n.current.following, child: Text(L10n.current.following)),
+                      DropdownMenuItem(value: L10n.current.foryou, child: Text(L10n.current.foryou))
+                    ]),
                 actions: _tab == 0
                     ? [...createCommonAppBarActions(context)]
                     : [
                         IconButton(
                             icon: const Icon(Icons.more_vert), onPressed: () => showFeedSettings(context, model)),
                         IconButton(
-                            icon: const Icon(Icons.refresh_rounded),
+                            icon: const Icon(Icons.refresh),
                             onPressed: () async {
                               await model.loadGroup();
                             }),
                         ...createCommonAppBarActions(context)
                       ],
-                bottom: TabBar(
-                  controller: _tabController,
-                  tabs: [Tab(child: Text(L10n.current.foryou)), Tab(child: Text(L10n.current.following))],
-                ),
               ),
             ];
           },

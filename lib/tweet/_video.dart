@@ -118,7 +118,7 @@ class _TweetVideoState extends State<TweetVideo> {
               },
             );
           },
-          iconData: Icons.download_outlined,
+          iconData: Icons.download,
           title: L10n.of(context).download,
         )
       ],

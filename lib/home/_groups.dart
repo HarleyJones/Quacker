@@ -24,7 +24,7 @@ class GroupsScreen extends StatelessWidget {
             title: Text(L10n.current.groups),
             actions: [
               PopupMenuButton<String>(
-                icon: const Icon(Icons.sort_rounded),
+                icon: const Icon(Icons.sort),
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: 'name',
@@ -38,7 +38,7 @@ class GroupsScreen extends StatelessWidget {
                 onSelected: (value) => context.read<GroupsModel>().changeOrderSubscriptionGroupsBy(value),
               ),
               IconButton(
-                icon: const Icon(Icons.sort_by_alpha_rounded),
+                icon: const Icon(Icons.sort_by_alpha),
                 onPressed: () => context.read<GroupsModel>().toggleOrderSubscriptionGroupsAscending(),
               ),
               ...createCommonAppBarActions(context),

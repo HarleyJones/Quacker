@@ -185,7 +185,7 @@ class _SubscriptionImportScreenState extends State<SubscriptionImportScreen> {
                           children: [
                             const Padding(
                               padding: EdgeInsets.all(16),
-                              child: Icon(Icons.check_circle_outlined, size: 36, color: Colors.green),
+                              child: Icon(Icons.check_circle, size: 36, color: Colors.green),
                             ),
                             Text(
                               L10n.of(context).finished_with_snapshotData_users(
@@ -203,7 +203,7 @@ class _SubscriptionImportScreenState extends State<SubscriptionImportScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.import_export_rounded),
+        child: const Icon(Icons.import_export),
         onPressed: () async => await importSubscriptions(),
       ),
     );

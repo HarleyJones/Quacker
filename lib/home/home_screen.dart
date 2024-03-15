@@ -32,11 +32,11 @@ class NavigationPage {
 List<Widget> createCommonAppBarActions(BuildContext context) {
   return [
     IconButton(
-      icon: const Icon(Icons.search_rounded),
+      icon: const Icon(Icons.search),
       onPressed: () => Navigator.pushNamed(context, routeSearch, arguments: SearchArguments(0, focusInputOnOpen: true)),
     ),
     IconButton(
-      icon: const Icon(Icons.settings_outlined),
+      icon: const Icon(Icons.settings),
       onPressed: () {
         Navigator.pushNamed(context, routeSettings);
       },
@@ -45,11 +45,11 @@ List<Widget> createCommonAppBarActions(BuildContext context) {
 }
 
 final List<NavigationPage> defaultHomePages = [
-  NavigationPage('feed', (c) => L10n.of(c).feed, Icons.rss_feed_rounded),
-  NavigationPage('subscriptions', (c) => L10n.of(c).subscriptions, Icons.subscriptions_outlined),
-  NavigationPage('groups', (c) => L10n.of(c).groups, Icons.group_outlined),
-  NavigationPage('trending', (c) => L10n.of(c).trending, Icons.trending_up_rounded),
-  NavigationPage('saved', (c) => L10n.of(c).saved, Icons.bookmark_border_rounded),
+  NavigationPage('feed', (c) => L10n.of(c).feed, Icons.rss_feed),
+  NavigationPage('subscriptions', (c) => L10n.of(c).subscriptions, Icons.subscriptions),
+  NavigationPage('groups', (c) => L10n.of(c).groups, Icons.group),
+  NavigationPage('trending', (c) => L10n.of(c).trending, Icons.trending_up),
+  NavigationPage('saved', (c) => L10n.of(c).saved, Icons.bookmark_border),
 ];
 
 class HomeScreen extends StatelessWidget {
@@ -181,7 +181,7 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
     var widgetPages = pages;
     if (widgetPages.length < 2) {
       widgetPages.addAll(List.generate(2 - widgetPages.length, (index) {
-        return NavigationPage('none', (context) => L10n.current.missing_page, Icons.disabled_by_default_outlined);
+        return NavigationPage('none', (context) => L10n.current.missing_page, Icons.disabled_by_default);
       }));
     }
 

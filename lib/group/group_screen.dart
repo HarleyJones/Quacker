@@ -120,13 +120,13 @@ class SubscriptionGroupScreen extends StatelessWidget {
                 actions: [
                   IconButton(icon: const Icon(Icons.more_vert), onPressed: () => showFeedSettings(context, model)),
                   IconButton(
-                      icon: const Icon(Icons.arrow_upward_rounded),
+                      icon: const Icon(Icons.arrow_upward),
                       onPressed: () async {
                         await scrollController.animateTo(0,
                             duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                       }),
                   IconButton(
-                      icon: const Icon(Icons.refresh_rounded),
+                      icon: const Icon(Icons.refresh),
                       onPressed: () async {
                         await model.loadGroup();
                       }),

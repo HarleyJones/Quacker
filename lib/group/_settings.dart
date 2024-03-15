@@ -23,7 +23,7 @@ void showFeedSettings(BuildContext context, GroupModel model) {
               children: [
                 ListTile(
                   leading: IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded),
+                      icon: const Icon(Icons.arrow_back),
                       onPressed: () {
                         Navigator.of(context).pop();
                       }),

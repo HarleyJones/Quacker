@@ -98,7 +98,7 @@ class TweetCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(Icons.link_rounded, size: 12, color: Colors.white),
+                  const Icon(Icons.link, size: 12, color: Colors.white),
                   const SizedBox(width: 4),
                   Text(uri,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(

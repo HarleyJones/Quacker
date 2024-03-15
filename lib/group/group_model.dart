@@ -11,7 +11,7 @@ import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
 import 'package:uuid/uuid.dart';
 
-var defaultGroupIcon = '{"pack":"custom","key":"rss_feed_rounded"}';
+var defaultGroupIcon = '{"pack":"custom","key":"rss_feed"}';
 
 IconData deserializeIconData(String iconData) {
   try {
@@ -24,7 +24,7 @@ IconData deserializeIconData(String iconData) {
   }
 
   // Use this as a default;
-  return Icons.rss_feed_rounded;
+  return Icons.rss_feed;
 }
 
 class GroupModel extends Store<SubscriptionGroupGet> {

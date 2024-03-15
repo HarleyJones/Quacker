@@ -16,15 +16,15 @@ class SubscriptionsScreen extends StatelessWidget {
         title: Text(L10n.current.subscriptions),
         actions: [
           IconButton(
-            icon: const Icon(Icons.import_export_rounded),
+            icon: const Icon(Icons.import_export),
             onPressed: () => Navigator.pushNamed(context, routeSubscriptionsImport),
           ),
           IconButton(
-            icon: const Icon(Icons.refresh_rounded),
+            icon: const Icon(Icons.refresh),
             onPressed: () => context.read<SubscriptionsModel>().refreshSubscriptionData(),
           ),
           PopupMenuButton<String>(
-            icon: const Icon(Icons.sort_rounded),
+            icon: const Icon(Icons.sort),
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: 'name',
@@ -42,7 +42,7 @@ class SubscriptionsScreen extends StatelessWidget {
             onSelected: (value) => context.read<SubscriptionsModel>().changeOrderSubscriptionsBy(value),
           ),
           IconButton(
-            icon: const Icon(Icons.sort_by_alpha_rounded),
+            icon: const Icon(Icons.sort_by_alpha),
             onPressed: () => context.read<SubscriptionsModel>().toggleOrderSubscriptionsAscending(),
           ),
           ...createCommonAppBarActions(context)

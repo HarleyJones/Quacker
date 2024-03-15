@@ -167,7 +167,7 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
           Navigator.pop(context);
           _onSpeedButtonTap();
         },
-        iconData: Icons.speed_rounded,
+        iconData: Icons.speed,
         title: L10n.of(context).playback_speed,
       )
     ];
@@ -321,7 +321,7 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
               left: 6.0,
             ),
             child: Icon(
-              _latestValue.volume > 0 ? Icons.volume_up_outlined : Icons.volume_off_outlined,
+              _latestValue.volume > 0 ? Icons.volume_up : Icons.volume_off,
               color: Colors.white,
             ),
           ),
@@ -345,7 +345,7 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
           ),
           child: Center(
             child: Icon(
-              chewieController.isFullScreen ? Icons.fullscreen_exit_rounded : Icons.fullscreen_rounded,
+              chewieController.isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
               color: Colors.white,
             ),
           ),
@@ -449,7 +449,7 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
           right: 12.0,
         ),
         child: Icon(
-          _subtitleOn ? Icons.closed_caption_outlined : Icons.closed_caption_disabled_outlined,
+          _subtitleOn ? Icons.closed_caption : Icons.closed_caption_disabled,
           color: _subtitleOn ? Colors.white : Colors.grey[700],
         ),
       ),
@@ -642,7 +642,7 @@ class FritterCenterPlayButton extends StatelessWidget {
               child: IconButton(
                 iconSize: 32,
                 icon: isFinished
-                    ? Icon(Icons.replay_rounded, color: iconColor)
+                    ? Icon(Icons.replay, color: iconColor)
                     : AnimatedPlayPause(
                         color: iconColor,
                         playing: isPlaying,

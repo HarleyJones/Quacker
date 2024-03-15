@@ -81,7 +81,7 @@ class SubscriptionUsersList extends StatelessWidget {
 
         return ListTile(
           dense: true,
-          leading: const SizedBox(width: 48, child: Icon(Icons.search_rounded)),
+          leading: const SizedBox(width: 48, child: Icon(Icons.search)),
           title: Text(user.name, maxLines: 1, overflow: TextOverflow.ellipsis),
           subtitle: Text(L10n.current.search_term),
           trailing: SizedBox(

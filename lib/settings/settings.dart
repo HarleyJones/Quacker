@@ -54,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         ListTile(
           title: Text(L10n.current.home),
-          leading: Icon(Icons.home_filled),
+          leading: const Icon(Icons.home),
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext c) => SettingsHomeFragment())),
         ),
         ListTile(

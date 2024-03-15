@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/trends/_list.dart';
 import 'package:quacker/trends/_settings.dart';
 import 'package:quacker/trends/_tabs.dart';
 
-class TrendsScreen extends StatefulWidget {
+class SearchScreen extends StatefulWidget {
   final ScrollController scrollController;
 
-  const TrendsScreen({Key? key, required this.scrollController}) : super(key: key);
+  const SearchScreen({Key? key, required this.scrollController}) : super(key: key);
 
   @override
-  State<TrendsScreen> createState() => _TrendsScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _TrendsScreenState extends State<TrendsScreen> with AutomaticKeepAliveClientMixin<TrendsScreen> {
+class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClientMixin<SearchScreen> {
   @override
   bool get wantKeepAlive => true;
 
@@ -21,7 +22,7 @@ class _TrendsScreenState extends State<TrendsScreen> with AutomaticKeepAliveClie
     super.build(context);
 
     return Scaffold(
-      appBar: const TrendsTabBar(),
+      appBar: AppBar(title: Text(L10n.current.search), bottom: TrendsTabBar()),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () async => showDialog(

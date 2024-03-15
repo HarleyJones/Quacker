@@ -337,7 +337,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                                           ),
                                           if (user.verified ?? false) const SizedBox(width: 6),
                                           if (user.verified ?? false)
-                                            const Icon(Icons.verified_outlined, size: 24, color: Colors.blue)
+                                            const Icon(Icons.verified, size: 24, color: Colors.blue)
                                         ],
                                       ),
                                       Container(
@@ -378,7 +378,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                                                   child: Row(
                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
-                                                      const Icon(Icons.person_outlined, size: 12, color: Colors.white),
+                                                      const Icon(Icons.person, size: 12, color: Colors.white),
                                                       const SizedBox(width: 4),
                                                       Text.rich(TextSpan(children: [
                                                         TextSpan(
@@ -398,7 +398,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                                                   child: Row(
                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
-                                                      const Icon(Icons.person_outlined, size: 12, color: Colors.white),
+                                                      const Icon(Icons.person, size: 12, color: Colors.white),
                                                       const SizedBox(width: 4),
                                                       Text.rich(TextSpan(children: [
                                                         TextSpan(
@@ -418,8 +418,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                                                   child: Row(
                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
-                                                      const Icon(Icons.location_on_outlined,
-                                                          size: 12, color: Colors.white),
+                                                      const Icon(Icons.location_on, size: 12, color: Colors.white),
                                                       const SizedBox(width: 4),
                                                       Text(user.location!, style: metadataTextStyle),
                                                     ],
@@ -431,7 +430,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                                                     child: Row(
                                                       crossAxisAlignment: CrossAxisAlignment.center,
                                                       children: [
-                                                        const Icon(Icons.link_rounded, size: 12, color: Colors.white),
+                                                        const Icon(Icons.link, size: 12, color: Colors.white),
                                                         const SizedBox(width: 4),
                                                         Builder(builder: (context) {
                                                           var url = user.entities?.url?.urls
@@ -464,8 +463,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                                                   child: Row(
                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                     children: [
-                                                      const Icon(Icons.calendar_today_outlined,
-                                                          size: 12, color: Colors.white),
+                                                      const Icon(Icons.calendar_today, size: 12, color: Colors.white),
                                                       const SizedBox(width: 4),
                                                       Text(
                                                           L10n.of(context)
@@ -555,7 +553,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
           ? null
           : FloatingActionButton(
               onPressed: _scrollToTop,
-              child: const Icon(Icons.arrow_upward_rounded),
+              child: const Icon(Icons.arrow_upward),
             ),
     );
   }

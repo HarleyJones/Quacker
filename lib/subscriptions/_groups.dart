@@ -113,7 +113,7 @@ class _SubscriptionGroupsState extends State<SubscriptionGroups> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.add_rounded, size: 16),
+                        const Icon(Icons.add, size: 16),
                         const SizedBox(height: 4),
                         Text(
                           L10n.of(context).newTrans,
@@ -214,7 +214,7 @@ class _SubscriptionGroupEditDialogState extends State<SubscriptionGroupEditDialo
     }
 
     // Filter the Material icons to only the ones the app uses
-    var iconPack = icons.entries.where((value) => value.key.endsWith('_outlined') || value.key.endsWith('_outline'));
+    var iconPack = icons.entries.where((value) => value.key.endsWith('') || value.key.endsWith('_outline'));
 
     List<Widget> buttonsLst1 = [
       TextButton(
@@ -309,7 +309,7 @@ class _SubscriptionGroupEditDialogState extends State<SubscriptionGroupEditDialo
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.palette_outlined, color: color),
+                    icon: Icon(Icons.palette, color: color),
                     onPressed: () {
                       showDialog(
                           context: context,
@@ -378,7 +378,7 @@ class _SubscriptionGroupEditDialogState extends State<SubscriptionGroupEditDialo
                         subscription is SearchSubscription ? L10n.current.search_term : '@${subscription.screenName}';
 
                     var icon = subscription is SearchSubscription
-                        ? const SizedBox(width: 48, child: Icon(Icons.search_rounded))
+                        ? const SizedBox(width: 48, child: Icon(Icons.search))
                         : UserAvatar(uri: subscription.profileImageUrlHttps);
 
                     return CheckboxListTile(

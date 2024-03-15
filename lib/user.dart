@@ -83,7 +83,7 @@ class UserTile extends StatelessWidget {
         children: [
           Flexible(child: Text(user.name, maxLines: 1, overflow: TextOverflow.ellipsis)),
           if (user.verified) const SizedBox(width: 6),
-          if (user.verified) const Icon(Icons.verified_outlined, size: 14, color: Colors.blue)
+          if (user.verified) const Icon(Icons.verified, size: 14, color: Colors.blue)
         ],
       ),
       subtitle: Text('@${user.screenName}', maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -124,8 +124,8 @@ class _FollowButtonSelectGroupDialogState extends State<FollowButtonSelectGroupD
       searchHint: L10n.of(context).search,
       confirmText: Text(L10n.of(context).ok),
       cancelText: Text(L10n.of(context).cancel),
-      searchIcon: Icon(Icons.search_rounded, color: color),
-      closeSearchIcon: Icon(Icons.close_rounded, color: color),
+      searchIcon: Icon(Icons.search, color: color),
+      closeSearchIcon: Icon(Icons.close, color: color),
       itemsTextStyle: Theme.of(context).textTheme.bodyLarge,
       selectedColor: Theme.of(context).colorScheme.secondary,
       unselectedColor: color,
@@ -160,8 +160,7 @@ class FollowButton extends StatelessWidget {
       onState: (_, state) {
         var followed = state.any((element) => element.id == user.id);
 
-        var icon =
-            followed ? Icon(Icons.person_remove_outlined, color: color) : Icon(Icons.person_add_outlined, color: color);
+        var icon = followed ? Icon(Icons.person_remove, color: color) : Icon(Icons.person_add, color: color);
         var text = followed ? L10n.of(context).unsubscribe : L10n.of(context).subscribe;
 
         return PopupMenuButton<String>(

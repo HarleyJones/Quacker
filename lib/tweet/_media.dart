@@ -221,7 +221,7 @@ class _TweetMediaViewState extends State<TweetMediaView> {
       appBar: AppBar(
         actions: [
           AsyncButtonBuilder(
-            child: const Icon(Icons.download_outlined),
+            child: const Icon(Icons.download),
             builder: (context, child, callback, buttonState) {
               return IconButton(onPressed: callback, icon: child);
             },

@@ -102,7 +102,7 @@ class _MainSearchScreenState extends State<_MainSearchScreen> with SingleTickerP
             textInputAction: TextInputAction.search,
           ),
           actions: [
-            IconButton(icon: const Icon(Icons.close_rounded), onPressed: () => _queryController.clear()),
+            IconButton(icon: const Icon(Icons.close), onPressed: () => _queryController.clear()),
             ScopedBuilder<SubscriptionsModel, List<Subscription>>.transition(
               store: subscriptionsModel,
               onState: (_, state) {
@@ -115,7 +115,7 @@ class _MainSearchScreenState extends State<_MainSearchScreen> with SingleTickerP
                       var currentlyFollowed = state.any((element) => element.id == id);
                       if (!currentlyFollowed) {
                         return IconButton(
-                            icon: const Icon(Icons.save_outlined),
+                            icon: const Icon(Icons.save),
                             onPressed: () async {
                               await subscriptionsModel.toggleSubscribe(
                                   SearchSubscription(id: id, createdAt: DateTime.now()), currentlyFollowed);
@@ -137,8 +137,8 @@ class _MainSearchScreenState extends State<_MainSearchScreen> with SingleTickerP
               child: TabBar(
                 controller: _tabController,
                 tabs: const [
-                  Tab(icon: Icon(Icons.person_outlined)),
-                  Tab(icon: Icon(Icons.comment_outlined)),
+                  Tab(icon: Icon(Icons.person)),
+                  Tab(icon: Icon(Icons.comment)),
                 ],
                 labelColor: Theme.of(context).appBarTheme.foregroundColor,
                 indicatorColor: Theme.of(context).appBarTheme.foregroundColor,
