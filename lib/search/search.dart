@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:quacker/client.dart';
+import 'package:quacker/api/regular.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/generated/l10n.dart';
@@ -25,31 +25,31 @@ class SearchArguments {
   SearchArguments(this.initialTab, {this.query, this.focusInputOnOpen = false});
 }
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+class MainSearchScreen extends StatelessWidget {
+  const MainSearchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as SearchArguments;
 
-    return _SearchScreen(
+    return _MainSearchScreen(
         initialTab: arguments.initialTab, query: arguments.query, focusInputOnOpen: arguments.focusInputOnOpen);
   }
 }
 
-class _SearchScreen extends StatefulWidget {
+class _MainSearchScreen extends StatefulWidget {
   final int initialTab;
   final String? query;
   final bool focusInputOnOpen;
 
-  const _SearchScreen({Key? key, required this.initialTab, this.query, this.focusInputOnOpen = false})
+  const _MainSearchScreen({Key? key, required this.initialTab, this.query, this.focusInputOnOpen = false})
       : super(key: key);
 
   @override
-  State<_SearchScreen> createState() => _SearchScreenState();
+  State<_MainSearchScreen> createState() => _MainSearchScreenState();
 }
 
-class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderStateMixin {
+class _MainSearchScreenState extends State<_MainSearchScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _queryController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 

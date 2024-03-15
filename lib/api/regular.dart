@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
 import 'package:quiver/iterables.dart';
-import 'WebFlowAuth/webFlowAuth_model.dart';
+import '../WebFlowAuth/webFlowAuth_model.dart';
 
 const Duration _defaultTimeout = Duration(seconds: 30);
 

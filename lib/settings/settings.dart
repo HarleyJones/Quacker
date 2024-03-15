@@ -43,20 +43,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     var appVersion = 'v${_packageInfo.version}+${_packageInfo.buildNumber}';
 
-    var pages = [
-      NavigationPage('general', (c) => L10n.of(c).general, Icons.settings),
-      NavigationPage('home', (c) => L10n.of(c).home, Icons.home),
-      NavigationPage('theme', (c) => L10n.of(c).theme, Icons.format_paint),
-      NavigationPage('data', (c) => L10n.of(c).data, Icons.storage),
-      NavigationPage('account', (c) => L10n.of(c).account, Icons.account_box_sharp),
-      NavigationPage('about', (c) => L10n.of(c).about, Icons.help),
-    ];
-
-    var initialPage = pages.indexWhere((element) => element.id == widget.initialPage);
-    if (initialPage == -1) {
-      initialPage = 0;
-    }
-
     return Scaffold(
       appBar: AppBar(title: Text("Settings")),
       body: ListView(children: [

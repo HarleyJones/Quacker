@@ -18,7 +18,6 @@ import 'package:quacker/ui/physics.dart';
 import 'package:quacker/utils/debounce.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
-import 'package:scroll_bottom_navigation_bar/scroll_bottom_navigation_bar.dart';
 
 typedef NavigationTitleBuilder = String Function(BuildContext context);
 
@@ -175,11 +174,6 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
 
     _pageController = PageController(initialPage: widget.initialPage);
 
-    scrollController.bottomNavigationBar.setTab(widget.initialPage);
-    scrollController.bottomNavigationBar.tabListener((index) {
-      _pageController?.animateToPage(index, curve: Curves.easeInOut, duration: const Duration(milliseconds: 100));
-    });
-
     _children = widget.builder(scrollController);
   }
 
@@ -205,15 +199,6 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
         _pages = newPages;
       });
     }
-
-    var page = _pageController?.page?.toInt();
-    if (page != null) {
-      // Ensure we're not trying to show a page that no longer exists (i.e. one that was selected, but now deleted)
-      var currentTab = scrollController.bottomNavigationBar.tabNotifier.value;
-      if (currentTab >= newPages.length) {
-        scrollController.bottomNavigationBar.tabNotifier.value = newPages.length - 1;
-      }
-    }
   }
 
   @override
@@ -230,9 +215,6 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
         controller: _pageController,
         physics: const LessSensitiveScrollPhysics(),
         onPageChanged: (page) => Debouncer.debounce('page-change', const Duration(milliseconds: 200), () {
-          // Reset the height when the page changes, otherwise the navigation bar stays hidden forever
-          scrollController.bottomNavigationBar.heightNotifier.value = 1;
-          scrollController.bottomNavigationBar.setTab(page);
           setState(() {
             currentPage = page;
           });
@@ -241,7 +223,9 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPage,
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        height: 50,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        indicatorShape: CircleBorder(),
         destinations: [
           ..._pages.map((e) => NavigationDestination(icon: Icon(e.icon, size: 22), label: e.titleBuilder(context)))
         ],

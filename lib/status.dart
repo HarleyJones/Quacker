@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quacker/client.dart';
+import 'package:quacker/api/regular.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile.dart';

@@ -400,7 +400,7 @@ class _FritterAppState extends State<FritterApp> {
           routeHome: (context) => const DefaultPage(),
           routeGroup: (context) => const GroupScreen(),
           routeProfile: (context) => const ProfileScreen(),
-          routeSearch: (context) => const SearchScreen(),
+          routeSearch: (context) => const MainSearchScreen(),
           routeSettings: (context) => const SettingsScreen(),
           routeSettingsExport: (context) => const SettingsExportScreen(),
           routeSettingsHome: (context) => const SettingsScreen(initialPage: 'home'),
