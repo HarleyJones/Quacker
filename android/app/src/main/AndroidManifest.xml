@@ -6,9 +6,6 @@
     <!-- Force usage of the file picker library even on SDKs < 19, as we handle it at runtime -->
     <uses-sdk tools:overrideLibrary="com.kineapps.flutter_file_dialog" />
 
-    <!-- Required for importing from qr code -->
-    <uses-permission android:name="android.permission.CAMERA" android:required="false"/>
-
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
