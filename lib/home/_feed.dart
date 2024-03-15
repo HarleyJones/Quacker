@@ -93,12 +93,12 @@ class _FeedScreenState extends State<FeedScreen>
               ),
             ];
           },
-          body: TabBarView(controller: _tabController, children: [
+          body: [
             forYouTweets,
             SubscriptionGroupScreenContent(
               id: widget.id,
             ),
-          ]));
+          ][_tab]);
     });
   }
 }
