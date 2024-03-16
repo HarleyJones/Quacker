@@ -13,11 +13,11 @@
     <img alt="Get it on IzzyOnDroid" src="https://img.shields.io/badge/Get_it_on-IzzyOnDroid-blue?style=for-the-badge&labelColor=18FFFF&color=64FFDA"></a>
 </p>
 <p align="center">
-<img alt="GitHub Release" src="https://img.shields.io/github/v/release/TheHCJ/Quacker?style=flat-square&labelColor=8C9EFF&color=536DFE">
-<img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue?style=flat-square&labelColor=82B1FF&color=448AFF">
-<img alt="GitHub Actions CI Status" src="https://img.shields.io/github/actions/workflow/status/TheHCJ/Quacker/ci.yml?branch=master&style=flat-square&label=ci&labelColor=B9F6CA&color=69F0AE">
-<img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/TheHCJ/Quacker?style=flat-square&labelColor=FFE57F&color=FFD740">
-<img alt="Views" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fhits.dwyl.com%2FTheHCJ%2FQuacker.json&style=flat-square&label=views&labelColor=FF8A80&color=FF5252">
+<a href="https://github.com/TheHCJ/Quacker/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/TheHCJ/Quacker?style=flat-square&labelColor=8C9EFF&color=536DFE"></a>
+<a href="/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue?style=flat-square&labelColor=82B1FF&color=448AFF"></a>
+<a href="https://github.com/TheHCJ/Quacker/actions/workflows/ci.yml"><img alt="GitHub Actions CI Status" src="https://img.shields.io/github/actions/workflow/status/TheHCJ/Quacker/ci.yml?branch=master&style=flat-square&label=ci&labelColor=B9F6CA&color=69F0AE">
+<a href="https://github.com/TheHCJ/Quacker"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/TheHCJ/Quacker?style=flat-square&labelColor=FFE57F&color=FFD740"></a>
+<a href="https://github.com/TheHCJ/Quacker"><img alt="Views" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fhits.dwyl.com%2FTheHCJ%2FQuacker.json&style=flat-square&label=views&labelColor=FF8A80&color=FF5252"></a>
 </p>
  
 ## Features:
