@@ -1,7 +1,7 @@
 <h1 align="center"> Quacker </h1> <br>
 <p align="center">
   <a href="https://github.com/thehcj/quacker">
-    <img alt="Quacker" title="Quacker" src="fastlane/metadata/android/en-US/images/icon.png" width="144">
+    <img alt="Quacker" title="Quacker" src="fastlane/metadata/android/en-US/images/icon.png" width="144" style="border-radius: 50%;">
   </a>
 </p>
 <p align="center">
