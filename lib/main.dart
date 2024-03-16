@@ -23,6 +23,7 @@ import 'package:quacker/profile/profile.dart';
 import 'package:quacker/saved/saved_tweet_model.dart';
 import 'package:quacker/search/search.dart';
 import 'package:quacker/search/search_model.dart';
+import 'package:quacker/settings/_home.dart';
 import 'package:quacker/settings/settings.dart';
 import 'package:quacker/settings/settings_export_screen.dart';
 import 'package:quacker/status.dart';
