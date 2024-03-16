@@ -10,18 +10,14 @@
 
 <p align="center">
   <a href="https://apt.izzysoft.de/fdroid/index/apk/com.thehcj.quacker">
-    <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
-       alt="Get it on IzzyOnDroid"
-       height="80">
-   </a>
+    <img alt="Get it on IzzyOnDroid" src="https://img.shields.io/badge/Get_it_on-IzzyOnDroid-blue?style=for-the-badge&labelColor=18FFFF&color=64FFDA"></a>
 </p>
 <p align="center">
-<a href="https://github.com/thehcj/quacker/releases" alt="GitHub release"><img src="https://img.shields.io/github/release/thehcj/quacker.svg?style=for-the-badge" ></a>
-<a href="/LICENSE" alt="License: MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge"></a>
-<a href="https://github.com/thehcj/quacker/actions" alt="Build Status"><img src="https://img.shields.io/github/actions/workflow/status/TheHCJ/Quacker/ci.yml?style=for-the-badge&label=ci
-"></a>
-<a href="https://github.com/TheHCJ/Quacker/" alt="Stars"><img src="https://img.shields.io/github/stars/TheHCJ/Quacker?style=for-the-badge&logoColor=e6e6fa&color=ffd700
-"></a>
+<img alt="GitHub Release" src="https://img.shields.io/github/v/release/TheHCJ/Quacker?style=flat-square&labelColor=8C9EFF&color=536DFE">
+<img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-blue?style=flat-square&labelColor=82B1FF&color=448AFF">
+<img alt="GitHub Actions CI Status" src="https://img.shields.io/github/actions/workflow/status/TheHCJ/Quacker/ci.yml?branch=master&style=flat-square&label=ci&labelColor=B9F6CA&color=69F0AE">
+<img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/TheHCJ/Quacker?style=flat-square&labelColor=FFE57F&color=FFD740">
+<img alt="Views" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fhits.dwyl.com%2FTheHCJ%2FQuacker.json&style=flat-square&label=views&labelColor=FF8A80&color=FF5252">
 </p>
  
 ## Features:
