@@ -1,5 +1,1 @@
-• Feed: View all your subscriptions in a chronological feed
-• Material You: Looks and feels fluent
-• Sync: In sync with the current fritter build
-• Private: Doesn't use the official twitter api
-• Updated: Constantly improving week by week
+Quacker is a more private and clean way to browse Twitter. This also includes feed viewing, subscription grouping, offline tweet saving and more!
