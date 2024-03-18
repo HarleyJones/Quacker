@@ -5,7 +5,7 @@
   </a>
 </p>
 <p align="center">
-  A better way to browse Twitter
+  A private and clean way to browse X
 </p>
 
 <p align="center">
