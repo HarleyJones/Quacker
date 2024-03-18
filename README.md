@@ -17,8 +17,6 @@
 <a href="/LICENSE"><img alt="License: MIT" src="https://badgen.net/github/license/TheHCJ/Quacker"></a>
 <a href="https://github.com/TheHCJ/Quacker/actions/workflows/ci.yml"><img alt="GitHub Actions CI Status" src="https://github.com/TheHCJ/Quacker/actions/workflows/ci.yml/badge.svg">
 <a href="https://github.com/TheHCJ/Quacker"><img alt="GitHub Repo stars" src="https://badgen.net/github/stars/TheHCJ/Quacker"></a>
-<a href="https://github.com/TheHCJ/Quacker"><img alt="Views" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fhits.dwyl.com%2FTheHCJ%2FQuacker.json&label=views&color=FF5252"></a>
-<a href="https://github.com/TheHCJ/Quacker"><img alt="Snyk security" src="https://snyk.io/test/github/TheHCJ/Quacker/badge.svg"></a>
 </p>
  
 ## Features:
