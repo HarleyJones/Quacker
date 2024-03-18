@@ -17,6 +17,9 @@
 <a href="/LICENSE"><img alt="License: MIT" src="https://badgen.net/github/license/TheHCJ/Quacker"></a>
 <a href="https://github.com/TheHCJ/Quacker/actions/workflows/ci.yml"><img alt="GitHub Actions CI Status" src="https://github.com/TheHCJ/Quacker/actions/workflows/ci.yml/badge.svg">
 <a href="https://github.com/TheHCJ/Quacker"><img alt="GitHub Repo stars" src="https://badgen.net/github/stars/TheHCJ/Quacker"></a>
+<a href="https://hosted.weblate.org/engage/quacker/">
+<img src="https://hosted.weblate.org/widget/quacker/quacker/svg-badge.svg" alt="Translation status" />
+</a>
 </p>
  
 ## Features:
@@ -43,4 +46,16 @@ If you feel like something is missing from Quacker, feel free to [open an issue]
 If you're looking for something to dip your toes into the codebase, check if there are any issues labelled good first issue. Otherwise, if you see another issue you'd like to tackle, go for it - just fork the repository, push to a branch, and create a PR detailing your changes. We'll review it and merge it in, once it meets all our checks and balances!
 
 ### Translations
-You can fork this repo and edit the `lib/l10n` files and make a pull request to translate this app into your language.
+Quacker uses [Weblate](https://hosted.weblate.org/projects/quacker/quacker/) for translations. You can help by translating the app into your preferred language(s)!
+
+## MIT LICENSE
+```
+Copyright 2021 Jonjo McKay
+Copyright 2024 Harley Jones
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
