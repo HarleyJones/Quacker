@@ -13,13 +13,12 @@
     <img alt="Get it on IzzyOnDroid" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="80"></a>
 </p>
 <p align="center">
-<a href="https://github.com/TheHCJ/Quacker/releases/latest"><img alt="GitHub Release" src="https://badgen.net/github/release/TheHCJ/Quacker/stable"></a>
-<a href="/LICENSE"><img alt="License: MIT" src="https://badgen.net/github/license/TheHCJ/Quacker"></a>
-<a href="https://github.com/TheHCJ/Quacker/actions/workflows/ci.yml"><img alt="GitHub Actions CI Status" src="https://github.com/TheHCJ/Quacker/actions/workflows/ci.yml/badge.svg">
-<a href="https://github.com/TheHCJ/Quacker"><img alt="GitHub Repo stars" src="https://badgen.net/github/stars/TheHCJ/Quacker"></a>
-<a href="https://hosted.weblate.org/engage/quacker/">
-<img src="https://hosted.weblate.org/widget/quacker/quacker/svg-badge.svg" alt="Translation status" />
-</a>
+<a href="https://github.com/TheHCJ/Quacker/issues"><img alt="GitHub Repo issues" src="https://m3-markdown-badges.vercel.app/issues/2/1/TheHCJ/Quacker"></a>
+<a href="https://github.com/TheHCJ/Quacker"><img alt="GitHub Repo stars" src="https://m3-markdown-badges.vercel.app/stars/3/2/TheHCJ/Quacker"></a>
+<br>
+<a href="https://flutter.dev"><img alt="Flutter" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Flutter/flutter1.svg" height=20></a>
+<a href="/LICENSE"><img alt="License: MIT" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/LicenceMIT/licencemit1.svg" height=20></a>
+<a href="https://android.com"><img alt="Android" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Android/android1.svg" height=20></a>
 </p>
  
 ## Features:
@@ -45,7 +44,9 @@ If you feel like something is missing from Quacker, feel free to [open an issue]
 ### Fix a bug
 If you're looking for something to dip your toes into the codebase, check if there are any issues labelled good first issue. Otherwise, if you see another issue you'd like to tackle, go for it - just fork the repository, push to a branch, and create a PR detailing your changes. We'll review it and merge it in, once it meets all our checks and balances!
 
-### Translations
+<h1>Translations <a href="https://hosted.weblate.org/engage/quacker/">
+<img src="https://hosted.weblate.org/widget/quacker/quacker/svg-badge.svg" alt="Translation status" />
+</a></h1>
 Quacker uses [Weblate](https://hosted.weblate.org/projects/quacker/quacker/) for translations. You can help by translating the app into your preferred language(s)!
 
 ## MIT LICENSE
