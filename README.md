@@ -17,7 +17,7 @@
 <a href="https://github.com/TheHCJ/Quacker"><img alt="GitHub Repo stars" src="https://m3-markdown-badges.vercel.app/stars/3/2/TheHCJ/Quacker"></a>
 <br>
 <a href="https://flutter.dev"><img alt="Flutter" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Flutter/flutter1.svg" height=20></a>
-<a href="/LICENSE"><img alt="License: MIT" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/LicenceMIT/licencemit1.svg" height=20></a>
+<a href="https://github.com/TheHCJ/Quacker?tab=readme-ov-file#translations-"><img alt="License: MIT" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/LicenceMIT/licencemit1.svg" height=20></a>
 <a href="https://android.com"><img alt="Android" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Android/android1.svg" height=20></a>
 </p>
  
