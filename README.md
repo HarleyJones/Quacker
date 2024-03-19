@@ -44,12 +44,15 @@ If you feel like something is missing from Quacker, feel free to [open an issue]
 ### Fix a bug
 If you're looking for something to dip your toes into the codebase, check if there are any issues labelled good first issue. Otherwise, if you see another issue you'd like to tackle, go for it - just fork the repository, push to a branch, and create a PR detailing your changes. We'll review it and merge it in, once it meets all our checks and balances!
 
-<h1>Translations <a href="https://hosted.weblate.org/engage/quacker/">
-<img src="https://hosted.weblate.org/widget/quacker/quacker/svg-badge.svg" alt="Translation status" />
-</a></h1>
-Quacker uses [Weblate](https://hosted.weblate.org/projects/quacker/quacker/) for translations. You can help by translating the app into your preferred language(s)!
+## Translations <a href="https://hosted.weblate.org/engage/quacker/"><img src="https://hosted.weblate.org/widget/quacker/quacker/svg-badge.svg" alt="Translation status" /></a>
 
-## MIT LICENSE
+You can help by translating the app into your preferred language(s)!
+1. You can use [Weblate](https://hosted.weblate.org/projects/quacker/quacker/) for translations (RECOMMENDED)
+2. You can use the [⚐ Translations](https://github.com/TheHCJ/Quacker/issues/new?assignees=&labels=needs+triage&projects=&template=--translations.md&title=%5BTRANSLATION%5D) issue template
+
+## LICENSE
+TL;DR: We don't care what you do with the code within Quacker aslong as you include this license within your project
+
 ```
 Copyright 2021 Jonjo McKay
 Copyright 2024 Harley Jones
@@ -60,3 +63,6 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
+<br>
+<br>
+<p align=center>Made with 💙 by Harley Jones</p>
