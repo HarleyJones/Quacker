@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: ⚙️ Feature request
 about: Want a feature? Tell us!
 title: "[FEATURE REQUEST]"
 labels: needs triage
