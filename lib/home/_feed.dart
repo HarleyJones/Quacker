@@ -106,10 +106,10 @@ class _FeedScreenState extends State<FeedScreen>
             ];
           },
           body: [
-            forYouTweets,
             SubscriptionGroupScreenContent(
               id: widget.id,
             ),
+            forYouTweets,
           ][_tab]);
     });
   }
