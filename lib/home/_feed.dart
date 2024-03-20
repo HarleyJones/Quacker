@@ -80,9 +80,9 @@ class _FeedScreenState extends State<FeedScreen>
                     value: _tabValue,
                     onChanged: (value) => setState(() {
                           if (value == L10n.current.foryou) {
-                            _tab = 0;
-                          } else if (value == L10n.current.following) {
                             _tab = 1;
+                          } else if (value == L10n.current.following) {
+                            _tab = 0;
                           }
                           _tabValue = value;
                         }),
