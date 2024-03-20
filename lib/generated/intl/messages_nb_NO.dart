@@ -173,9 +173,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "help_support_fritters_future": MessageLookupByLibrary.simpleMessage(
             "Hjelp til å støtte Quackers fremtid"),
         "home": MessageLookupByLibrary.simpleMessage("Hjem"),
-        "if_you_have_any_feedback_on_this_feature_please_leave_it_on":
-            MessageLookupByLibrary.simpleMessage(
-                "Hvis du har tilbakemeldinger om denne funksjonen, vennligst la den være på"),
         "import": MessageLookupByLibrary.simpleMessage("Importer"),
         "import_data_from_another_device": MessageLookupByLibrary.simpleMessage(
             "Importer data fra en annen enhet"),

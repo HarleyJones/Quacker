@@ -60,10 +60,10 @@ class L10n {
     );
   }
 
-  /// `Couldn't find any tweets by this user!`
+  /// `Couldn't find any posts by this user!`
   String get could_not_find_any_tweets_by_this_user {
     return Intl.message(
-      'Couldn\'t find any tweets by this user!',
+      'Couldn\'t find any posts by this user!',
       name: 'could_not_find_any_tweets_by_this_user',
       desc: '',
       args: [],
@@ -80,10 +80,10 @@ class L10n {
     );
   }
 
-  /// `Unable to load the tweet`
+  /// `Unable to load the post`
   String get unable_to_load_the_tweet {
     return Intl.message(
-      'Unable to load the tweet',
+      'Unable to load the post',
       name: 'unable_to_load_the_tweet',
       desc: '',
       args: [],
@@ -182,30 +182,30 @@ class L10n {
     );
   }
 
-  /// `Unable to load the next page of tweets`
+  /// `Unable to load the next page of posts`
   String get unable_to_load_the_next_page_of_tweets {
     return Intl.message(
-      'Unable to load the next page of tweets',
+      'Unable to load the next page of posts',
       name: 'unable_to_load_the_next_page_of_tweets',
       desc: '',
       args: [],
     );
   }
 
-  /// `Unable to load the tweets for the feed`
+  /// `Unable to load the posts for the feed`
   String get unable_to_load_the_tweets_for_the_feed {
     return Intl.message(
-      'Unable to load the tweets for the feed',
+      'Unable to load the posts for the feed',
       name: 'unable_to_load_the_tweets_for_the_feed',
       desc: '',
       args: [],
     );
   }
 
-  /// `Couldn't find any tweets from the last 7 days!`
+  /// `Couldn't find any posts from the last 7 days!`
   String get could_not_find_any_tweets_from_the_last_7_days {
     return Intl.message(
-      'Couldn\'t find any tweets from the last 7 days!',
+      'Couldn\'t find any posts from the last 7 days!',
       name: 'could_not_find_any_tweets_from_the_last_7_days',
       desc: '',
       args: [],
@@ -242,10 +242,10 @@ class L10n {
     );
   }
 
-  /// `Note: Due to a Twitter limitation, not all tweets may be included`
+  /// `Note: Due to a X limitation, not all posts may be included`
   String get note_due_to_a_twitter_limitation_not_all_tweets_may_be_included {
     return Intl.message(
-      'Note: Due to a Twitter limitation, not all tweets may be included',
+      'Note: Due to a X limitation, not all posts may be included',
       name: 'note_due_to_a_twitter_limitation_not_all_tweets_may_be_included',
       desc: '',
       args: [],
@@ -262,30 +262,30 @@ class L10n {
     );
   }
 
-  /// `Include retweets`
+  /// `Include reposts`
   String get include_retweets {
     return Intl.message(
-      'Include retweets',
+      'Include reposts',
       name: 'include_retweets',
       desc: '',
       args: [],
     );
   }
 
-  /// `Unable to find your saved tweets.`
+  /// `Unable to find your saved posts.`
   String get unable_to_find_your_saved_tweets {
     return Intl.message(
-      'Unable to find your saved tweets.',
+      'Unable to find your saved posts.',
       name: 'unable_to_find_your_saved_tweets',
       desc: '',
       args: [],
     );
   }
 
-  /// `You haven't saved any tweets yet!`
+  /// `You haven't saved any posts yet!`
   String get you_have_not_saved_any_tweets_yet {
     return Intl.message(
-      'You haven\'t saved any tweets yet!',
+      'You haven\'t saved any posts yet!',
       name: 'you_have_not_saved_any_tweets_yet',
       desc: '',
       args: [],
@@ -392,10 +392,10 @@ class L10n {
     );
   }
 
-  /// `Unable to load the tweets`
+  /// `Unable to load the posts`
   String get unable_to_load_the_tweets {
     return Intl.message(
-      'Unable to load the tweets',
+      'Unable to load the posts',
       name: 'unable_to_load_the_tweets',
       desc: '',
       args: [],
@@ -412,20 +412,20 @@ class L10n {
     );
   }
 
-  /// `Tweets`
+  /// `Posts`
   String get tweets {
     return Intl.message(
-      'Tweets',
+      'Posts',
       name: 'tweets',
       desc: '',
       args: [],
     );
   }
 
-  /// `Tweets & Replies`
+  /// `Posts & Replies`
   String get tweets_and_replies {
     return Intl.message(
-      'Tweets & Replies',
+      'Posts & Replies',
       name: 'tweets_and_replies',
       desc: '',
       args: [],
@@ -542,10 +542,10 @@ class L10n {
     );
   }
 
-  /// `Export tweets?`
+  /// `Export posts?`
   String get export_tweets {
     return Intl.message(
-      'Export tweets?',
+      'Export posts?',
       name: 'export_tweets',
       desc: '',
       args: [],
@@ -885,10 +885,10 @@ class L10n {
     );
   }
 
-  /// `Hide tweet authors. Avoid confirmation bias based on authoritative arguments.`
+  /// `Hide post authors. Avoid confirmation bias based on authoritative arguments.`
   String get activate_non_confirmation_bias_mode_description {
     return Intl.message(
-      'Hide tweet authors. Avoid confirmation bias based on authoritative arguments.',
+      'Hide post authors. Avoid confirmation bias based on authoritative arguments.',
       name: 'activate_non_confirmation_bias_mode_description',
       desc: '',
       args: [],
@@ -1227,11 +1227,11 @@ class L10n {
     );
   }
 
-  /// `To import subscriptions from an existing Twitter account, enter your username below.`
+  /// `To import subscriptions from an existing X account, enter your username below.`
   String
       get to_import_subscriptions_from_an_existing_twitter_account_enter_your_username_below {
     return Intl.message(
-      'To import subscriptions from an existing Twitter account, enter your username below.',
+      'To import subscriptions from an existing X account, enter your username below.',
       name:
           'to_import_subscriptions_from_an_existing_twitter_account_enter_your_username_below',
       desc: '',
@@ -1239,33 +1239,13 @@ class L10n {
     );
   }
 
-  /// `Please note that the method Quacker uses to import subscriptions is heavily rate-limited by Twitter, so this may fail if you have a lot of followed accounts.`
+  /// `Please note that the method Quacker uses to import subscriptions is heavily rate-limited by X, so this may fail if you have a lot of followed accounts.`
   String
       get please_note_that_the_method_fritter_uses_to_import_subscriptions_is_heavily_rate_limited_by_twitter_so_this_may_fail_if_you_have_a_lot_of_followed_accounts {
     return Intl.message(
-      'Please note that the method Quacker uses to import subscriptions is heavily rate-limited by Twitter, so this may fail if you have a lot of followed accounts.',
+      'Please note that the method Quacker uses to import subscriptions is heavily rate-limited by X, so this may fail if you have a lot of followed accounts.',
       name:
           'please_note_that_the_method_fritter_uses_to_import_subscriptions_is_heavily_rate_limited_by_twitter_so_this_may_fail_if_you_have_a_lot_of_followed_accounts',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `If you have any feedback on this feature, please leave it on`
-  String get if_you_have_any_feedback_on_this_feature_please_leave_it_on {
-    return Intl.message(
-      'If you have any feedback on this feature, please leave it on',
-      name: 'if_you_have_any_feedback_on_this_feature_please_leave_it_on',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `the GitHub issue (#143)`
-  String get the_github_issue {
-    return Intl.message(
-      'the GitHub issue (#143)',
-      name: 'the_github_issue',
       desc: '',
       args: [],
     );
@@ -1283,10 +1263,10 @@ class L10n {
     );
   }
 
-  /// `Enter your Twitter username`
+  /// `Enter your X username`
   String get enter_your_twitter_username {
     return Intl.message(
-      'Enter your Twitter username',
+      'Enter your X username',
       name: 'enter_your_twitter_username',
       desc: '',
       args: [],
@@ -1353,10 +1333,10 @@ class L10n {
     );
   }
 
-  /// `Import from Twitter`
+  /// `Import from X`
   String get import_from_twitter {
     return Intl.message(
-      'Import from Twitter',
+      'Import from X',
       name: 'import_from_twitter',
       desc: '',
       args: [],
@@ -1466,16 +1446,16 @@ class L10n {
     );
   }
 
-  /// `{num, plural, zero{no tweets} one{one tweet} two{two tweets} few{{numFormatted} tweets} many{{numFormatted} tweet} other{{numFormatted} tweets}}`
+  /// `{num, plural, zero{no posts} one{one post} two{two posts} few{{numFormatted} posts} many{{numFormatted} post} other{{numFormatted} posts}}`
   String tweets_number(num num, Object numFormatted) {
     return Intl.plural(
       num,
-      zero: 'no tweets',
-      one: 'one tweet',
-      two: 'two tweets',
-      few: '$numFormatted tweets',
-      many: '$numFormatted tweet',
-      other: '$numFormatted tweets',
+      zero: 'no posts',
+      one: 'one post',
+      two: 'two posts',
+      few: '$numFormatted posts',
+      many: '$numFormatted post',
+      other: '$numFormatted posts',
       name: 'tweets_number',
       desc: '',
       args: [num, numFormatted],
@@ -1528,12 +1508,12 @@ class L10n {
     );
   }
 
-  /// `Unable to save the media. Twitter returned a status of {responseStatusCode}`
+  /// `Unable to save the media. X returned a status of {responseStatusCode}`
   String
       unable_to_save_the_media_twitter_returned_a_status_of_response_statusCode(
           Object responseStatusCode) {
     return Intl.message(
-      'Unable to save the media. Twitter returned a status of $responseStatusCode',
+      'Unable to save the media. X returned a status of $responseStatusCode',
       name:
           'unable_to_save_the_media_twitter_returned_a_status_of_response_statusCode',
       desc: '',
@@ -1621,21 +1601,21 @@ class L10n {
     );
   }
 
-  /// `{thisTweetUserName} retweeted {timeAgo}`
+  /// `{thisTweetUserName} reposted {timeAgo}`
   String this_tweet_user_name_retweeted(
       Object thisTweetUserName, Object timeAgo) {
     return Intl.message(
-      '$thisTweetUserName retweeted $timeAgo',
+      '$thisTweetUserName reposted $timeAgo',
       name: 'this_tweet_user_name_retweeted',
       desc: '',
       args: [thisTweetUserName, timeAgo],
     );
   }
 
-  /// `Sorry, the replied tweet could not be found!`
+  /// `Sorry, the replied post could not be found!`
   String get sorry_the_replied_tweet_could_not_be_found {
     return Intl.message(
-      'Sorry, the replied tweet could not be found!',
+      'Sorry, the replied post could not be found!',
       name: 'sorry_the_replied_tweet_could_not_be_found',
       desc: '',
       args: [],
@@ -1652,30 +1632,30 @@ class L10n {
     );
   }
 
-  /// `The tweet did not contain any text. This is unexpected`
+  /// `The post did not contain any text. This is unexpected`
   String get the_tweet_did_not_contain_any_text_this_is_unexpected {
     return Intl.message(
-      'The tweet did not contain any text. This is unexpected',
+      'The post did not contain any text. This is unexpected',
       name: 'the_tweet_did_not_contain_any_text_this_is_unexpected',
       desc: '',
       args: [],
     );
   }
 
-  /// `This tweet is unavailable. It was probably deleted.`
+  /// `This post is unavailable. It was probably deleted.`
   String get this_tweet_is_unavailable {
     return Intl.message(
-      'This tweet is unavailable. It was probably deleted.',
+      'This post is unavailable. It was probably deleted.',
       name: 'this_tweet_is_unavailable',
       desc: '',
       args: [],
     );
   }
 
-  /// `Pinned tweet`
+  /// `Pinned post`
   String get pinned_tweet {
     return Intl.message(
-      'Pinned tweet',
+      'Pinned post',
       name: 'pinned_tweet',
       desc: '',
       args: [],
@@ -1712,30 +1692,30 @@ class L10n {
     );
   }
 
-  /// `Share tweet content`
+  /// `Share post content`
   String get share_tweet_content {
     return Intl.message(
-      'Share tweet content',
+      'Share post content',
       name: 'share_tweet_content',
       desc: '',
       args: [],
     );
   }
 
-  /// `Share tweet link`
+  /// `Share post link`
   String get share_tweet_link {
     return Intl.message(
-      'Share tweet link',
+      'Share post link',
       name: 'share_tweet_link',
       desc: '',
       args: [],
     );
   }
 
-  /// `Share tweet content and link`
+  /// `Share post content and link`
   String get share_tweet_content_and_link {
     return Intl.message(
-      'Share tweet content and link',
+      'Share post content and link',
       name: 'share_tweet_content_and_link',
       desc: '',
       args: [],
@@ -1752,30 +1732,30 @@ class L10n {
     );
   }
 
-  /// `Twitter says the page does not exist, but that may not be true`
+  /// `X says the page does not exist, but that may not be true`
   String get page_not_found {
     return Intl.message(
-      'Twitter says the page does not exist, but that may not be true',
+      'X says the page does not exist, but that may not be true',
       name: 'page_not_found',
       desc: '',
       args: [],
     );
   }
 
-  /// `Twitter says access to this is forbidden`
+  /// `X says access to this is forbidden`
   String get forbidden {
     return Intl.message(
-      'Twitter says access to this is forbidden',
+      'X says access to this is forbidden',
       name: 'forbidden',
       desc: '',
       args: [],
     );
   }
 
-  /// `Twitter has invalidated our access token. Please try re-opening Quacker!`
+  /// `X has invalidated our access token. Please try re-opening Quacker!`
   String get bad_guest_token {
     return Intl.message(
-      'Twitter has invalidated our access token. Please try re-opening Quacker!',
+      'X has invalidated our access token. Please try re-opening Quacker!',
       name: 'bad_guest_token',
       desc: '',
       args: [],
@@ -1852,10 +1832,10 @@ class L10n {
     );
   }
 
-  /// `Could not contact Twitter`
+  /// `Could not contact X`
   String get could_not_contact_twitter {
     return Intl.message(
-      'Could not contact Twitter',
+      'Could not contact X',
       name: 'could_not_contact_twitter',
       desc: '',
       args: [],
@@ -1986,10 +1966,10 @@ class L10n {
     );
   }
 
-  /// `Blue theme based on the Twitter color scheme`
+  /// `Blue theme based on the X color scheme`
   String get blue_theme_based_on_the_twitter_color_scheme {
     return Intl.message(
-      'Blue theme based on the Twitter color scheme',
+      'Blue theme based on the X color scheme',
       name: 'blue_theme_based_on_the_twitter_color_scheme',
       desc: '',
       args: [],
@@ -2156,20 +2136,20 @@ class L10n {
     );
   }
 
-  /// `Hide sensitive tweets`
+  /// `Hide sensitive posts`
   String get hide_sensitive_tweets {
     return Intl.message(
-      'Hide sensitive tweets',
+      'Hide sensitive posts',
       name: 'hide_sensitive_tweets',
       desc: '',
       args: [],
     );
   }
 
-  /// `Whether to hide tweets marked as sensitive`
+  /// `Whether to hide posts marked as sensitive`
   String get whether_to_hide_tweets_marked_as_sensitive {
     return Intl.message(
-      'Whether to hide tweets marked as sensitive',
+      'Whether to hide posts marked as sensitive',
       name: 'whether_to_hide_tweets_marked_as_sensitive',
       desc: '',
       args: [],
@@ -2206,10 +2186,10 @@ class L10n {
     );
   }
 
-  /// `This tweet contains potentially sensitive content. Would you like to view it?`
+  /// `This post contains potentially sensitive content. Would you like to view it?`
   String get possibly_sensitive_tweet {
     return Intl.message(
-      'This tweet contains potentially sensitive content. Would you like to view it?',
+      'This post contains potentially sensitive content. Would you like to view it?',
       name: 'possibly_sensitive_tweet',
       desc: '',
       args: [],
@@ -2316,10 +2296,10 @@ class L10n {
     );
   }
 
-  /// `This saved tweet could not be displayed, as it's too big to load. Please report it to the developers.`
+  /// `This saved post could not be displayed, as it's too big to load. Please report it to the developers.`
   String get saved_tweet_too_large {
     return Intl.message(
-      'This saved tweet could not be displayed, as it\'s too big to load. Please report it to the developers.',
+      'This saved post could not be displayed, as it\'s too big to load. Please report it to the developers.',
       name: 'saved_tweet_too_large',
       desc: '',
       args: [],
@@ -2406,10 +2386,10 @@ class L10n {
     );
   }
 
-  /// `This functionality is no longer supported by Twitter!`
+  /// `This functionality is no longer supported by X!`
   String get functionality_unsupported {
     return Intl.message(
-      'This functionality is no longer supported by Twitter!',
+      'This functionality is no longer supported by X!',
       name: 'functionality_unsupported',
       desc: '',
       args: [],
@@ -2426,40 +2406,40 @@ class L10n {
     );
   }
 
-  /// `Twitter account`
+  /// `Account`
   String get account {
     return Intl.message(
-      'Twitter account',
+      'Account',
       name: 'account',
       desc: '',
       args: [],
     );
   }
 
-  /// `Browsing Tweets`
+  /// `Browsing Posts`
   String get browsingTweets {
     return Intl.message(
-      'Browsing Tweets',
+      'Browsing Posts',
       name: 'browsingTweets',
       desc: '',
       args: [],
     );
   }
 
-  /// `Login name`
+  /// `Username`
   String get loginNameTwitterAcc {
     return Intl.message(
-      'Login name',
+      'Username',
       name: 'loginNameTwitterAcc',
       desc: '',
       args: [],
     );
   }
 
-  /// `Login password`
+  /// `Password`
   String get passwordTwitterAcc {
     return Intl.message(
-      'Login password',
+      'Password',
       name: 'passwordTwitterAcc',
       desc: '',
       args: [],
@@ -2516,10 +2496,10 @@ class L10n {
     );
   }
 
-  /// `Maximum of tweet's loads while showing less than 5 tweets`
+  /// `Maximum of post's loads while showing less than 5 posts`
   String get loadTweetCounterMaximumSubtitle {
     return Intl.message(
-      'Maximum of tweet`s loads while showing less than 5 tweets',
+      'Maximum of post`s loads while showing less than 5 posts',
       name: 'loadTweetCounterMaximumSubtitle',
       desc: '',
       args: [],
@@ -2536,20 +2516,20 @@ class L10n {
     );
   }
 
-  /// `Filtr exclude tweets containing an expression. Each filter is separated by a pipe(|): "+"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression"+", use this one :^((?!expression).)*\$`
+  /// `Filter exclude posts containing an expression. Each filter is separated by a pipe(|): "+"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression"+", use this one :^((?!expression).)*\$`
   String get regexSubtitle {
     return Intl.message(
-      'Filtr exclude tweets containing an expression. Each filter is separated by a pipe(|): "+"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression"+", use this one :^((?!expression).)*\\\$',
+      'Filter exclude posts containing an expression. Each filter is separated by a pipe(|): "+"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression"+", use this one :^((?!expression).)*\\\$',
       name: 'regexSubtitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `For-you`
+  /// `For You`
   String get foryou {
     return Intl.message(
-      'For-you',
+      'For You',
       name: 'foryou',
       desc: '',
       args: [],

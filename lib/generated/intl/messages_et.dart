@@ -198,9 +198,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "hide_sensitive_tweets": MessageLookupByLibrary.simpleMessage(
             "Peida võimalikud ebasobiliku sisuga säutsud"),
         "home": MessageLookupByLibrary.simpleMessage("Koduleht"),
-        "if_you_have_any_feedback_on_this_feature_please_leave_it_on":
-            MessageLookupByLibrary.simpleMessage(
-                "Kui sul on selle funktsioonaalsuse kohta tagasisidet, palun kirjuta sellest aadressil"),
         "import": MessageLookupByLibrary.simpleMessage("Import"),
         "import_data_from_another_device": MessageLookupByLibrary.simpleMessage(
             "Impordi andmed muust seadmest"),
@@ -350,8 +347,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "thanks_for_helping_fritter": MessageLookupByLibrary.simpleMessage(
             "Täname, et aitad Quacker\'it! 💖"),
         "the_file_does_not_exist_please_ensure_it_is_located_at_file_path": m13,
-        "the_github_issue": MessageLookupByLibrary.simpleMessage(
-            "veakirjeldus GitHub\'is (#143)"),
         "the_tweet_did_not_contain_any_text_this_is_unexpected":
             MessageLookupByLibrary.simpleMessage(
                 "Säutsus puudus sisu. See on nüüd küll ootamatu"),

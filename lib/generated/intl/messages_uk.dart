@@ -112,9 +112,6 @@ class MessageLookup extends MessageLookupByLibrary {
             "Допоможіть зробити Quacker ще кращим"),
         "help_support_fritters_future": MessageLookupByLibrary.simpleMessage(
             "Допоможіть підтримати майбутнє Quacker"),
-        "if_you_have_any_feedback_on_this_feature_please_leave_it_on":
-            MessageLookupByLibrary.simpleMessage(
-                "Якщо у вас є відгуки про цю функцію, будь ласка, залиште їх на"),
         "import": MessageLookupByLibrary.simpleMessage("Імпорт"),
         "import_data_from_another_device": MessageLookupByLibrary.simpleMessage(
             "Імпортуйте дані з іншого пристрою"),
@@ -191,8 +188,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "thanks_for_helping_fritter":
             MessageLookupByLibrary.simpleMessage("Дякуємо за допомогу! 💖"),
         "the_file_does_not_exist_please_ensure_it_is_located_at_file_path": m13,
-        "the_github_issue":
-            MessageLookupByLibrary.simpleMessage("GitHub issue (#143)"),
         "theme": MessageLookupByLibrary.simpleMessage("Тема"),
         "theme_mode": MessageLookupByLibrary.simpleMessage("Режим теми"),
         "there_were_no_trends_returned_this_is_unexpected_please_report_as_a_bug_if_possible":

@@ -188,9 +188,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "hide_sensitive_tweets":
             MessageLookupByLibrary.simpleMessage("Ezkutatu txio sentikorrak"),
         "home": MessageLookupByLibrary.simpleMessage("Hasiera"),
-        "if_you_have_any_feedback_on_this_feature_please_leave_it_on":
-            MessageLookupByLibrary.simpleMessage(
-                "Funtzio honi buruzko iruzkinen bat baduzu, utzi"),
         "import": MessageLookupByLibrary.simpleMessage("Inportatu"),
         "import_data_from_another_device": MessageLookupByLibrary.simpleMessage(
             "Inportatu datuak beste gailu batetik"),
@@ -328,8 +325,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "thanks_for_helping_fritter": MessageLookupByLibrary.simpleMessage(
             "Eskerrik asko Quacker laguntzeagatik! 💖"),
         "the_file_does_not_exist_please_ensure_it_is_located_at_file_path": m13,
-        "the_github_issue":
-            MessageLookupByLibrary.simpleMessage("Github arazoa (#143)"),
         "the_tweet_did_not_contain_any_text_this_is_unexpected":
             MessageLookupByLibrary.simpleMessage("Txioak ez zuen testurik"),
         "theme": MessageLookupByLibrary.simpleMessage("Gaia"),

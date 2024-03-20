@@ -195,9 +195,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "hide_sensitive_tweets":
             MessageLookupByLibrary.simpleMessage("Hassas tweetleri gizle"),
         "home": MessageLookupByLibrary.simpleMessage("Ana sayfa"),
-        "if_you_have_any_feedback_on_this_feature_please_leave_it_on":
-            MessageLookupByLibrary.simpleMessage(
-                "Bu özellikle ilgili herhangi bir görüşünüz varsa lütfen geri bildirim yapın"),
         "import": MessageLookupByLibrary.simpleMessage("İçe aktar"),
         "import_data_from_another_device": MessageLookupByLibrary.simpleMessage(
             "Verileri başka bir cihazdan aktarın"),
@@ -344,8 +341,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "thanks_for_helping_fritter": MessageLookupByLibrary.simpleMessage(
             "Quacker\'a yardım ettiğin için teşekkürler! 💖"),
         "the_file_does_not_exist_please_ensure_it_is_located_at_file_path": m13,
-        "the_github_issue":
-            MessageLookupByLibrary.simpleMessage("GitHub sorunu (#143)"),
         "the_tweet_did_not_contain_any_text_this_is_unexpected":
             MessageLookupByLibrary.simpleMessage(
                 "Tweet\'te herhangi bir metin yoktu. Bu beklenmedik bir şey"),

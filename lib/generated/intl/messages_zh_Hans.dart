@@ -165,8 +165,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("帮助支持 Quacker 的未来🍚"),
         "hide_sensitive_tweets": MessageLookupByLibrary.simpleMessage("隐藏敏感推文"),
         "home": MessageLookupByLibrary.simpleMessage("主页"),
-        "if_you_have_any_feedback_on_this_feature_please_leave_it_on":
-            MessageLookupByLibrary.simpleMessage("如果您对此功能有任何反馈，请留言于"),
         "import": MessageLookupByLibrary.simpleMessage("导入"),
         "import_data_from_another_device":
             MessageLookupByLibrary.simpleMessage("从其他设备导入数据"),
@@ -287,8 +285,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "thanks_for_helping_fritter":
             MessageLookupByLibrary.simpleMessage("感谢您帮助 Quacker！💖"),
         "the_file_does_not_exist_please_ensure_it_is_located_at_file_path": m13,
-        "the_github_issue":
-            MessageLookupByLibrary.simpleMessage("GitHub Issue (#143)"),
         "the_tweet_did_not_contain_any_text_this_is_unexpected":
             MessageLookupByLibrary.simpleMessage("该推文不包含任何文字"),
         "theme": MessageLookupByLibrary.simpleMessage("主题"),

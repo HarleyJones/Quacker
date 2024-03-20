@@ -53,16 +53,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "The file does not exist. Please ensure it is located at ${filePath}";
 
   static String m14(thisTweetUserName, timeAgo) =>
-      "${thisTweetUserName} retweeted ${timeAgo}";
+      "${thisTweetUserName} reposted ${timeAgo}";
 
   static String m15(num, numFormatted) =>
-      "${Intl.plural(num, zero: 'no tweets', one: 'one tweet', two: 'two tweets', few: '${numFormatted} tweets', many: '${numFormatted} tweet', other: '${numFormatted} tweets')}";
+      "${Intl.plural(num, zero: 'no posts', one: 'one post', two: 'two posts', few: '${numFormatted} posts', many: '${numFormatted} post', other: '${numFormatted} posts')}";
 
   static String m16(widgetPlaceName) =>
       "Unable to load the trends for ${widgetPlaceName}";
 
   static String m17(responseStatusCode) =>
-      "Unable to save the media. Twitter returned a status of ${responseStatusCode}";
+      "Unable to save the media. X returned a status of ${responseStatusCode}";
 
   static String m18(releaseVersion) =>
       "Update to ${releaseVersion} through your F-Droid client";
@@ -72,12 +72,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "DeleteTwitterCookies": MessageLookupByLibrary.simpleMessage(
             "Delete all cookies of the account"),
         "about": MessageLookupByLibrary.simpleMessage("About"),
-        "account": MessageLookupByLibrary.simpleMessage("Twitter account"),
+        "account": MessageLookupByLibrary.simpleMessage("Account"),
         "account_suspended":
             MessageLookupByLibrary.simpleMessage("Account suspended"),
         "activate_non_confirmation_bias_mode_description":
             MessageLookupByLibrary.simpleMessage(
-                "Hide tweet authors. Avoid confirmation bias based on authoritative arguments."),
+                "Hide post authors. Avoid confirmation bias based on authoritative arguments."),
         "activate_non_confirmation_bias_mode_label":
             MessageLookupByLibrary.simpleMessage(
                 "Activate non-confirmation bias mode"),
@@ -97,12 +97,12 @@ class MessageLookup extends MessageLookupByLibrary {
             m0,
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "bad_guest_token": MessageLookupByLibrary.simpleMessage(
-            "Twitter has invalidated our access token. Please try re-opening Quacker!"),
+            "X has invalidated our access token. Please try re-opening Quacker!"),
         "blue_theme_based_on_the_twitter_color_scheme":
             MessageLookupByLibrary.simpleMessage(
-                "Blue theme based on the Twitter color scheme"),
+                "Blue theme based on the X color scheme"),
         "browsingTweets":
-            MessageLookupByLibrary.simpleMessage("Browsing Tweets"),
+            MessageLookupByLibrary.simpleMessage("Browsing Posts"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "catastrophic_failure":
             MessageLookupByLibrary.simpleMessage("Catastrophic failure"),
@@ -119,13 +119,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "copied_version_to_clipboard":
             MessageLookupByLibrary.simpleMessage("Copied version to clipboard"),
         "could_not_contact_twitter":
-            MessageLookupByLibrary.simpleMessage("Could not contact Twitter"),
+            MessageLookupByLibrary.simpleMessage("Could not contact X"),
         "could_not_find_any_tweets_by_this_user":
             MessageLookupByLibrary.simpleMessage(
-                "Couldn\'t find any tweets by this user!"),
+                "Couldn\'t find any posts by this user!"),
         "could_not_find_any_tweets_from_the_last_7_days":
             MessageLookupByLibrary.simpleMessage(
-                "Couldn\'t find any tweets from the last 7 days!"),
+                "Couldn\'t find any posts from the last 7 days!"),
         "country": MessageLookupByLibrary.simpleMessage("Country"),
         "dark": MessageLookupByLibrary.simpleMessage("Dark"),
         "data": MessageLookupByLibrary.simpleMessage("Data"),
@@ -163,7 +163,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username":
-            MessageLookupByLibrary.simpleMessage("Enter your Twitter username"),
+            MessageLookupByLibrary.simpleMessage("Enter your X username"),
         "export": MessageLookupByLibrary.simpleMessage("Export"),
         "export_settings":
             MessageLookupByLibrary.simpleMessage("Export settings?"),
@@ -174,7 +174,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Export subscription groups?"),
         "export_subscriptions":
             MessageLookupByLibrary.simpleMessage("Export subscriptions?"),
-        "export_tweets": MessageLookupByLibrary.simpleMessage("Export tweets?"),
+        "export_tweets": MessageLookupByLibrary.simpleMessage("Export posts?"),
         "export_your_data":
             MessageLookupByLibrary.simpleMessage("Export your data"),
         "feed": MessageLookupByLibrary.simpleMessage("Feed"),
@@ -184,12 +184,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "followers": MessageLookupByLibrary.simpleMessage("Followers"),
         "following": MessageLookupByLibrary.simpleMessage("Following"),
         "forbidden": MessageLookupByLibrary.simpleMessage(
-            "Twitter says access to this is forbidden"),
-        "foryou": MessageLookupByLibrary.simpleMessage("For-you"),
+            "X says access to this is forbidden"),
+        "foryou": MessageLookupByLibrary.simpleMessage("For You"),
         "fritter": MessageLookupByLibrary.simpleMessage("Quacker"),
         "fritter_blue": MessageLookupByLibrary.simpleMessage("Quacker blue"),
         "functionality_unsupported": MessageLookupByLibrary.simpleMessage(
-            "This functionality is no longer supported by Twitter!"),
+            "This functionality is no longer supported by X!"),
         "general": MessageLookupByLibrary.simpleMessage("General"),
         "generic_username": MessageLookupByLibrary.simpleMessage("User"),
         "group_name": m6,
@@ -199,23 +199,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "help_support_fritters_future": MessageLookupByLibrary.simpleMessage(
             "Help support Quacker\'s future"),
         "hide_sensitive_tweets":
-            MessageLookupByLibrary.simpleMessage("Hide sensitive tweets"),
+            MessageLookupByLibrary.simpleMessage("Hide sensitive posts"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
-        "if_you_have_any_feedback_on_this_feature_please_leave_it_on":
-            MessageLookupByLibrary.simpleMessage(
-                "If you have any feedback on this feature, please leave it on"),
         "import": MessageLookupByLibrary.simpleMessage("Import"),
         "import_data_from_another_device": MessageLookupByLibrary.simpleMessage(
             "Import data from another device"),
         "import_from_twitter":
-            MessageLookupByLibrary.simpleMessage("Import from Twitter"),
+            MessageLookupByLibrary.simpleMessage("Import from X"),
         "import_subscriptions":
             MessageLookupByLibrary.simpleMessage("Import subscriptions"),
         "imported_snapshot_data_users_so_far": m7,
         "include_replies":
             MessageLookupByLibrary.simpleMessage("Include replies"),
         "include_retweets":
-            MessageLookupByLibrary.simpleMessage("Include retweets"),
+            MessageLookupByLibrary.simpleMessage("Include reposts"),
         "joined": m8,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "language_subtitle":
@@ -232,10 +229,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "loadTweetCounterMaximum":
             MessageLookupByLibrary.simpleMessage("Number of Loads"),
         "loadTweetCounterMaximumSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Maximum of tweet`s loads while showing less than 5 tweets"),
+            "Maximum of post`s loads while showing less than 5 posts"),
         "logging": MessageLookupByLibrary.simpleMessage("Logging"),
-        "loginNameTwitterAcc":
-            MessageLookupByLibrary.simpleMessage("Login name"),
+        "loginNameTwitterAcc": MessageLookupByLibrary.simpleMessage("Username"),
         "media": MessageLookupByLibrary.simpleMessage("Media"),
         "media_size": MessageLookupByLibrary.simpleMessage("Media size"),
         "medium": MessageLookupByLibrary.simpleMessage("Medium"),
@@ -259,7 +255,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "not_set": MessageLookupByLibrary.simpleMessage("Not set"),
         "note_due_to_a_twitter_limitation_not_all_tweets_may_be_included":
             MessageLookupByLibrary.simpleMessage(
-                "Note: Due to a Twitter limitation, not all tweets may be included"),
+                "Note: Due to a X limitation, not all posts may be included"),
         "numberFormat_format_total_votes": m9,
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "only_public_subscriptions_can_be_imported":
@@ -272,14 +268,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "open_in_browser":
             MessageLookupByLibrary.simpleMessage("Open in browser"),
         "page_not_found": MessageLookupByLibrary.simpleMessage(
-            "Twitter says the page does not exist, but that may not be true"),
-        "passwordTwitterAcc":
-            MessageLookupByLibrary.simpleMessage("Login password"),
+            "X says the page does not exist, but that may not be true"),
+        "passwordTwitterAcc": MessageLookupByLibrary.simpleMessage("Password"),
         "permission_not_granted": MessageLookupByLibrary.simpleMessage(
             "Permission not granted. Please try again after granting!"),
         "pick_a_color": MessageLookupByLibrary.simpleMessage("Pick a color!"),
         "pick_an_icon": MessageLookupByLibrary.simpleMessage("Pick an icon!"),
-        "pinned_tweet": MessageLookupByLibrary.simpleMessage("Pinned tweet"),
+        "pinned_tweet": MessageLookupByLibrary.simpleMessage("Pinned post"),
         "playback_speed":
             MessageLookupByLibrary.simpleMessage("Playback speed"),
         "please_check_your_internet_connection_error_message": m10,
@@ -290,19 +285,19 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Please make sure the data you wish to import is located there, then press the import button below."),
         "please_note_that_the_method_fritter_uses_to_import_subscriptions_is_heavily_rate_limited_by_twitter_so_this_may_fail_if_you_have_a_lot_of_followed_accounts":
             MessageLookupByLibrary.simpleMessage(
-                "Please note that the method Quacker uses to import subscriptions is heavily rate-limited by Twitter, so this may fail if you have a lot of followed accounts."),
+                "Please note that the method Quacker uses to import subscriptions is heavily rate-limited by X, so this may fail if you have a lot of followed accounts."),
         "possibly_sensitive":
             MessageLookupByLibrary.simpleMessage("Potentially sensitive"),
         "possibly_sensitive_profile": MessageLookupByLibrary.simpleMessage(
             "This profile may include potentially sensitive images, language, or other content. Do you still want to view it?"),
         "possibly_sensitive_tweet": MessageLookupByLibrary.simpleMessage(
-            "This tweet contains potentially sensitive content. Would you like to view it?"),
+            "This post contains potentially sensitive content. Would you like to view it?"),
         "prefix": MessageLookupByLibrary.simpleMessage("prefix"),
         "private_profile":
             MessageLookupByLibrary.simpleMessage("Private profile"),
         "regex": MessageLookupByLibrary.simpleMessage("Regex filters"),
         "regexSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Filtr exclude tweets containing an expression. Each filter is separated by a pipe(|): \"+\"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression\"+\", use this one :^((?!expression).)*\\\$"),
+            "Filter exclude posts containing an expression. Each filter is separated by a pipe(|): \"+\"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression\"+\", use this one :^((?!expression).)*\\\$"),
         "released_under_the_mit_license": MessageLookupByLibrary.simpleMessage(
             "Released under the MIT License"),
         "replying_to": MessageLookupByLibrary.simpleMessage("Replying to"),
@@ -319,7 +314,7 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Save bandwidth with smaller images"),
         "saved": MessageLookupByLibrary.simpleMessage("Saved"),
         "saved_tweet_too_large": MessageLookupByLibrary.simpleMessage(
-            "This saved tweet could not be displayed, as it\'s too big to load. Please report it to the developers."),
+            "This saved post could not be displayed, as it\'s too big to load. Please report it to the developers."),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "search_term": MessageLookupByLibrary.simpleMessage("Search term"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
@@ -332,11 +327,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "share_base_url_description": MessageLookupByLibrary.simpleMessage(
             "Use a custom base URL when sharing"),
         "share_tweet_content":
-            MessageLookupByLibrary.simpleMessage("Share tweet content"),
-        "share_tweet_content_and_link": MessageLookupByLibrary.simpleMessage(
-            "Share tweet content and link"),
+            MessageLookupByLibrary.simpleMessage("Share post content"),
+        "share_tweet_content_and_link":
+            MessageLookupByLibrary.simpleMessage("Share post content and link"),
         "share_tweet_link":
-            MessageLookupByLibrary.simpleMessage("Share tweet link"),
+            MessageLookupByLibrary.simpleMessage("Share post link"),
         "should_check_for_updates_description":
             MessageLookupByLibrary.simpleMessage(
                 "Check for updates when Quacker starts"),
@@ -350,7 +345,7 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Something just went wrong in Quacker, and an error report has been generated. The report can be sent to the Quacker developers to help fix the problem."),
         "sorry_the_replied_tweet_could_not_be_found":
             MessageLookupByLibrary.simpleMessage(
-                "Sorry, the replied tweet could not be found!"),
+                "Sorry, the replied post could not be found!"),
         "subscribe": MessageLookupByLibrary.simpleMessage("Subscribe"),
         "subscriptions": MessageLookupByLibrary.simpleMessage("Subscriptions"),
         "subtitles": MessageLookupByLibrary.simpleMessage("Subtitles"),
@@ -362,11 +357,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "thanks_for_helping_fritter": MessageLookupByLibrary.simpleMessage(
             "Thanks for helping Quacker! 💖"),
         "the_file_does_not_exist_please_ensure_it_is_located_at_file_path": m13,
-        "the_github_issue":
-            MessageLookupByLibrary.simpleMessage("the GitHub issue (#143)"),
         "the_tweet_did_not_contain_any_text_this_is_unexpected":
             MessageLookupByLibrary.simpleMessage(
-                "The tweet did not contain any text. This is unexpected"),
+                "The post did not contain any text. This is unexpected"),
         "theme": MessageLookupByLibrary.simpleMessage("Theme"),
         "theme_mode": MessageLookupByLibrary.simpleMessage("Theme Mode"),
         "there_were_no_trends_returned_this_is_unexpected_please_report_as_a_bug_if_possible":
@@ -379,7 +372,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "This took too long to load. Please check your network connection!"),
         "this_tweet_is_unavailable": MessageLookupByLibrary.simpleMessage(
-            "This tweet is unavailable. It was probably deleted."),
+            "This post is unavailable. It was probably deleted."),
         "this_tweet_user_name_retweeted": m14,
         "this_user_does_not_follow_anyone":
             MessageLookupByLibrary.simpleMessage(
@@ -392,15 +385,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "timed_out": MessageLookupByLibrary.simpleMessage("Timed out"),
         "to_import_subscriptions_from_an_existing_twitter_account_enter_your_username_below":
             MessageLookupByLibrary.simpleMessage(
-                "To import subscriptions from an existing Twitter account, enter your username below."),
+                "To import subscriptions from an existing X account, enter your username below."),
         "toggle_all": MessageLookupByLibrary.simpleMessage("Toggle All"),
         "trending": MessageLookupByLibrary.simpleMessage("Trending"),
         "trends": MessageLookupByLibrary.simpleMessage("Trends"),
         "true_black": MessageLookupByLibrary.simpleMessage("True Black?"),
         "tweetFilters": MessageLookupByLibrary.simpleMessage("Filters"),
-        "tweets": MessageLookupByLibrary.simpleMessage("Tweets"),
+        "tweets": MessageLookupByLibrary.simpleMessage("Posts"),
         "tweets_and_replies":
-            MessageLookupByLibrary.simpleMessage("Tweets & Replies"),
+            MessageLookupByLibrary.simpleMessage("Posts & Replies"),
         "tweets_number": m15,
         "twitterCookiesDeleted": MessageLookupByLibrary.simpleMessage(
             "All cookies of the account are deleted"),
@@ -411,7 +404,7 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Unable to find the available trend locations."),
         "unable_to_find_your_saved_tweets":
             MessageLookupByLibrary.simpleMessage(
-                "Unable to find your saved tweets."),
+                "Unable to find your saved posts."),
         "unable_to_import":
             MessageLookupByLibrary.simpleMessage("Unable to import"),
         "unable_to_load_home_pages": MessageLookupByLibrary.simpleMessage(
@@ -435,7 +428,7 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Unable to load the next page of replies"),
         "unable_to_load_the_next_page_of_tweets":
             MessageLookupByLibrary.simpleMessage(
-                "Unable to load the next page of tweets"),
+                "Unable to load the next page of posts"),
         "unable_to_load_the_profile":
             MessageLookupByLibrary.simpleMessage("Unable to load the profile"),
         "unable_to_load_the_search_results":
@@ -443,12 +436,12 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Unable to load the search results."),
         "unable_to_load_the_trends_for_widget_place_name": m16,
         "unable_to_load_the_tweet":
-            MessageLookupByLibrary.simpleMessage("Unable to load the tweet"),
+            MessageLookupByLibrary.simpleMessage("Unable to load the post"),
         "unable_to_load_the_tweets":
-            MessageLookupByLibrary.simpleMessage("Unable to load the tweets"),
+            MessageLookupByLibrary.simpleMessage("Unable to load the posts"),
         "unable_to_load_the_tweets_for_the_feed":
             MessageLookupByLibrary.simpleMessage(
-                "Unable to load the tweets for the feed"),
+                "Unable to load the posts for the feed"),
         "unable_to_refresh_the_subscriptions":
             MessageLookupByLibrary.simpleMessage(
                 "Unable to refresh the subscriptions"),
@@ -482,7 +475,7 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Whether errors should be reported to "),
         "whether_to_hide_tweets_marked_as_sensitive":
             MessageLookupByLibrary.simpleMessage(
-                "Whether to hide tweets marked as sensitive"),
+                "Whether to hide posts marked as sensitive"),
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage(
                 "Which tab is shown when the app opens"),
@@ -493,7 +486,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "yes_please": MessageLookupByLibrary.simpleMessage("Yes, please"),
         "you_have_not_saved_any_tweets_yet":
             MessageLookupByLibrary.simpleMessage(
-                "You haven\'t saved any tweets yet!"),
+                "You haven\'t saved any posts yet!"),
         "you_must_have_at_least_2_home_screen_pages":
             MessageLookupByLibrary.simpleMessage(
                 "You must have at least 2 home screen pages"),

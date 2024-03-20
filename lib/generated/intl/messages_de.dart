@@ -197,9 +197,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "hide_sensitive_tweets":
             MessageLookupByLibrary.simpleMessage("Anstößige Tweets ausblenden"),
         "home": MessageLookupByLibrary.simpleMessage("Start"),
-        "if_you_have_any_feedback_on_this_feature_please_leave_it_on":
-            MessageLookupByLibrary.simpleMessage(
-                "Wenn du Feedback zu dieser Funktion hast, hinterlasse es bitte unter"),
         "import": MessageLookupByLibrary.simpleMessage("Importieren"),
         "import_data_from_another_device": MessageLookupByLibrary.simpleMessage(
             "Daten von einem anderen Gerät importieren"),
@@ -349,8 +346,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "thanks_for_helping_fritter": MessageLookupByLibrary.simpleMessage(
             "Danke, dass du Quacker unterstützt! 💖"),
         "the_file_does_not_exist_please_ensure_it_is_located_at_file_path": m13,
-        "the_github_issue":
-            MessageLookupByLibrary.simpleMessage("dem GitHub-Issue (#143)"),
         "the_tweet_did_not_contain_any_text_this_is_unexpected":
             MessageLookupByLibrary.simpleMessage(
                 "Der Tweet enthält keinen Text. Das kommt unerwartet"),
