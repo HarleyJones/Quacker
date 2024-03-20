@@ -111,24 +111,6 @@ class _SubscriptionImportScreenState extends State<SubscriptionImportScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
-              child: Text.rich(TextSpan(children: [
-                TextSpan(text: '${L10n.of(context).if_you_have_any_feedback_on_this_feature_please_leave_it_on} '),
-                WidgetSpan(
-                    child: InkWell(
-                  onTap: () => openUri('https://github.com/jonjomckay/fritter/issues/143'),
-                  child: Text(L10n.of(context).the_github_issue,
-                      style: const TextStyle(
-                        color: Colors.blue,
-                      )),
-                )),
-                TextSpan(
-                  text:
-                      '. ${L10n.of(context).selecting_individual_accounts_to_import_and_assigning_groups_are_both_planned_for_the_future_already}',
-                )
-              ])),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
               child: TextFormField(
                 decoration: InputDecoration(
                   border: const UnderlineInputBorder(),
