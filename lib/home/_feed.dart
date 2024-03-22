@@ -90,7 +90,7 @@ class _FeedScreenState extends State<FeedScreen>
                       DropdownMenuItem(value: L10n.current.following, child: Text(L10n.current.following)),
                       DropdownMenuItem(value: L10n.current.foryou, child: Text(L10n.current.foryou))
                     ]),
-                actions: _tab == 0
+                actions: _tab == 1
                     ? [...createCommonAppBarActions(context)]
                     : [
                         IconButton(
