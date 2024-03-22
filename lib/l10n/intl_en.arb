@@ -415,6 +415,7 @@
   "loginNameTwitterAcc": "Username",
   "passwordTwitterAcc": "Password",
   "emailTwitterAcc": "Email",
+  "login": "Login",
   "twitterCookiesDeleted": "All cookies of the account are deleted",
   "DeleteTwitterCookies": "Delete all cookies of the account",
   "tweetFilters": "Filters",

@@ -231,6 +231,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "loadTweetCounterMaximumSubtitle": MessageLookupByLibrary.simpleMessage(
             "Maximum of post`s loads while showing less than 5 posts"),
         "logging": MessageLookupByLibrary.simpleMessage("Logging"),
+        "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginNameTwitterAcc": MessageLookupByLibrary.simpleMessage("Username"),
         "media": MessageLookupByLibrary.simpleMessage("Media"),
         "media_size": MessageLookupByLibrary.simpleMessage("Media size"),
