@@ -412,18 +412,42 @@ class Twitter {
     var variables = {
       "rawQuery": query,
       "count": limit.toString(),
+      "querySource": "typed_query",
       "product": 'Latest',
       "withDownvotePerspective": false,
       "withReactionsMetadata": false,
       "withReactionsPerspective": false
     };
 
+    var _features = {
+      "responsive_web_graphql_exclude_directive_enabled": true,
+      "verified_phone_label_enabled": false,
+      "creator_subscriptions_tweet_preview_api_enabled": true,
+      "responsive_web_graphql_timeline_navigation_enabled": true,
+      "responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
+      "c9s_tweet_anatomy_moderator_badge_enabled": true,
+      "tweetypie_unmention_optimization_enabled": true,
+      "responsive_web_edit_tweet_api_enabled": true,
+      "graphql_is_translatable_rweb_tweet_is_translatable_enabled": true,
+      "view_counts_everywhere_api_enabled": true,
+      "longform_notetweets_consumption_enabled": true,
+      "responsive_web_twitter_article_tweet_consumption_enabled": true,
+      "tweet_awards_web_tipping_enabled": false,
+      "freedom_of_speech_not_reach_fetch_enabled": true,
+      "standardized_nudges_misinfo": true,
+      "tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled": true,
+      "rweb_video_timestamps_enabled": true,
+      "longform_notetweets_rich_text_read_enabled": true,
+      "longform_notetweets_inline_media_enabled": true,
+      "responsive_web_enhance_cards_enabled": false
+    };
+
     if (cursor != null) {
       variables['cursor'] = cursor;
     }
 
-    var uri = Uri.https('twitter.com', '/i/api/graphql/gkjsKepM6gl_HmFWoWKfgg/SearchTimeline',
-        {'variables': jsonEncode(variables), 'features': jsonEncode(gqlFeatures)});
+    var uri = Uri.https('twitter.com', '/i/api/graphql/flaR-PUMshxFWZWPNpq4zA/SearchTimeline',
+        {'variables': jsonEncode(variables), 'features': jsonEncode(_features)});
 
     var response = await _twitterApi.client.get(uri);
     var result = json.decode(response.body);
@@ -850,6 +874,10 @@ class Twitter {
         return false;
       }
 
+      if (t['content']['itemContent']['promotedMetadata'] != null) {
+        return false;
+      }
+
       if (includeReplies) {
         return true;
       }
@@ -860,76 +888,24 @@ class Twitter {
 
     var filteredTweets = allTweets.where(includeTweet);
 
-    Map<String, Map<String, dynamic>> cards = {};
-
     var globalTweets = Map.fromEntries(filteredTweets.map((e) {
       var elm = e['content']['itemContent']['tweet_results']['result'];
-      if (elm['card']?['legacy'] != null) {
-        Map<String, dynamic> card = elm['card']['legacy'];
-        List bindingValuesList = card['binding_values'] as List;
-        Map bindingValues = bindingValuesList.fold({}, (prev, elm) {
-          prev[elm['key']] = elm['value'];
-          return prev;
-        });
-        card['binding_values'] = bindingValues;
-        cards[elm['rest_id'] as String] = card;
+
+      if (elm['rest_id'] == null) {
+        elm = elm['tweet'];
       }
-      return MapEntry(elm['rest_id'] as String, elm['legacy']);
+
+      return MapEntry(elm['rest_id'].toString(), elm);
     }));
 
-    Map<String, bool> blueCheckUsers = {};
-
-    var globalUsers = Map.fromEntries(filteredTweets.map((e) {
-      var elm = e['content']['itemContent']['tweet_results']['result']['core']['user_results']['result'];
-      blueCheckUsers[elm['rest_id'] as String] = elm['is_blue_verified'];
-      return MapEntry(elm['rest_id'] as String, elm['legacy']);
-    }));
-
-    Map<String, Map> quotedStatusNotesTweets = {};
-
-    quotedStatusNotesTweets = filteredTweets.fold({}, (prev, e) {
-      var result = e['content']['itemContent']['tweet_results']['result'];
-      var restId = result['rest_id'];
-      var quotedResult = result['quoted_status_result']?['result'];
-      if (quotedResult != null) {
-        prev[restId] = {};
-        prev[restId]!['quotedResult'] = quotedResult;
-      }
-      var noteResult = result['note_tweet']?['note_tweet_results']?['result'];
-      if (noteResult != null) {
-        if (prev[restId] == null) {
-          prev[restId] = {};
-        }
-        prev[restId]!['noteText'] = noteResult['text'];
-        prev[restId]!['noteEntities'] = Entities.fromJson(noteResult['entity_set']);
-      }
-      return prev;
-    });
-
-    var tweets = globalTweets.values.map((e) => TweetWithCard.fromCardJson(globalTweets, globalUsers, e)).toList();
-
-    for (var twt in tweets) {
-      if (twt.user?.idStr != null) {
-        twt.user!.verified = blueCheckUsers[twt.user!.idStr];
-      }
-      twt.card ??= cards[twt.idStr];
-      if (twt.quotedStatus == null && quotedStatusNotesTweets[twt.idStr]?['quotedResult'] != null) {
-        TweetWithCard twtCard =
-            TweetWithCard.fromGraphqlJson(quotedStatusNotesTweets[twt.idStr]!['quotedResult'] as Map<String, dynamic>);
-        twt.quotedStatus = twtCard;
-        twt.quotedStatusWithCard = twtCard;
-      }
-      twt.noteText ??= quotedStatusNotesTweets[twt.idStr]?['noteText'];
-      if (quotedStatusNotesTweets[twt.idStr]?['noteEntities'] != null) {
-        Entities noteEntities = quotedStatusNotesTweets[twt.idStr]!['noteEntities'];
-        twt.entities = twt.entities == null ? noteEntities : TweetWithCard.copyEntities(noteEntities, twt.entities!);
-        twt.extendedEntities = twt.extendedEntities == null
-            ? noteEntities
-            : TweetWithCard.copyEntities(noteEntities, twt.extendedEntities!);
-      }
+    var tweets = [];
+    try {
+      tweets = globalTweets.values.map((e) => TweetWithCard.fromGraphqlJson(e)).toList();
+    } catch (exc) {
+      rethrow;
     }
 
-    return {for (var e in tweets) e.idStr!: e};
+    return {for (var e in tweets) e.idStr: e};
   }
 
   static Map<String, TweetWithCard> _createTweets(
@@ -1038,25 +1014,28 @@ class TweetWithCard extends Tweet {
 
   factory TweetWithCard.fromGraphqlJson(Map<String, dynamic> result) {
     var retweetedStatus;
-    // if(result['tweet']!= null){
-    //   int a=1;
-    // }
-    if (result['tweet'] != null)
-      result = result['tweet'];
-    else if (result['legacy']?['retweeted_status_result']?['result'] != null) {
-      retweetedStatus = TweetWithCard.fromGraphqlJson(result['legacy']['retweeted_status_result']['result']);
-    } else {
-      retweetedStatus = null;
+    var quotedStatus;
+    var user;
+
+    if (result['tweet'] != null) {
+      result = result['tweet']!;
+    } else if (result['legacy']?['retweeted_status_result']?['result'] != null) {
+      retweetedStatus = TweetWithCard.fromGraphqlJson(result['legacy']['retweeted_status_result']['result']!);
     }
-    var quotedStatus = result['quoted_status_result'] == null ||
-            result['quoted_status_result']['result']["__typename"] == "TweetWithVisibilityResults"
-        ? null
-        : TweetWithCard.fromGraphqlJson(result['quoted_status_result']['result']);
+
+    if (result['quoted_status_result'] != null &&
+        result['quoted_status_result']['result']?['__typename'] != 'TweetWithVisibilityResults') {
+      quotedStatus = TweetWithCard.fromGraphqlJson(result['quoted_status_result']['result']!);
+    }
+
     var resCore = result['core']?['user_results']?['result'];
-    var user = resCore?['legacy'] == null
-        ? null
-        : UserWithExtra.fromJson(
-            {...resCore['legacy'], 'id_str': resCore['rest_id'], 'ext_is_blue_verified': resCore['is_blue_verified']});
+    if (resCore != null && resCore['legacy'] != null) {
+      user = UserWithExtra.fromJson({
+        ...resCore['legacy']!,
+        'id_str': resCore['rest_id'].toString(),
+        'ext_is_blue_verified': resCore['is_blue_verified'],
+      });
+    }
 
     String? noteText;
     Entities? noteEntities;
@@ -1066,22 +1045,32 @@ class TweetWithCard extends Tweet {
       noteText = noteResult['text'];
       noteEntities = Entities.fromJson(noteResult['entity_set']);
     }
+
     if (result['tombstone'] != null) {
-      TweetWithCard tweet = TweetWithCard.tombstone(result['tombstone']);
-      return tweet;
+      return TweetWithCard.tombstone(result['tombstone']!);
     }
 
-    TweetWithCard tweet =
-        TweetWithCard.fromData(result['legacy'], noteText, noteEntities, user, retweetedStatus, quotedStatus);
+    var tweet = TweetWithCard.fromData(
+      result['legacy'],
+      noteText,
+      noteEntities,
+      user,
+      retweetedStatus,
+      quotedStatus,
+    );
+
     if (tweet.card == null && result['card']?['legacy'] != null) {
       tweet.card = result['card']['legacy'];
-      List bindingValuesList = tweet.card!['binding_values'] as List;
-      Map<String, dynamic> bindingValues = bindingValuesList.fold({}, (prev, elm) {
-        prev[elm['key']] = elm['value'];
-        return prev;
-      });
-      tweet.card!['binding_values'] = bindingValues;
+      var bindingValuesList = tweet.card!['binding_values'] as List?;
+      if (bindingValuesList != null) {
+        var bindingValues = <String, dynamic>{};
+        for (var elm in bindingValuesList) {
+          bindingValues[elm['key'] as String] = elm['value'];
+        }
+        tweet.card!['binding_values'] = bindingValues;
+      }
     }
+
     return tweet;
   }
 
