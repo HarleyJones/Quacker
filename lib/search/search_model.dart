@@ -1,5 +1,5 @@
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:quacker/api/regular.dart';
+import 'package:quacker/client/authenticatedClient.dart';
 import 'package:quacker/user.dart';
 
 class SearchTweetsModel extends Store<List<TweetWithCard>> {

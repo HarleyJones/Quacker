@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
 import 'package:quiver/iterables.dart';
-import '../WebFlowAuth/webFlowAuth_model.dart';
+import 'authenticate.dart';
 
 const Duration _defaultTimeout = Duration(seconds: 30);
 
@@ -49,13 +49,12 @@ class _FritterTwitterClient extends TwitterClient {
     WebFlowAuthModel webFlowAuthModel = WebFlowAuthModel(prefs);
     var authHeader = await webFlowAuthModel.GetAuthHeader(userAgentHeader);
     var response = await http.get(uri, headers: {
-      ...?headers, ...?authHeader, ...?userAgentHeader,
+      ...?headers, ...authHeader, ...userAgentHeader,
       //'authorization': _bearerToken,
       //'x-guest-token': (await getToken()).toString(),
       'x-twitter-active-user': 'yes',
       'user-agent': userAgentHeader.toString()
     });
-    print(response.body);
 
     var headerRateLimitReset = response.headers['x-rate-limit-reset'];
     var headerRateLimitRemaining = response.headers['x-rate-limit-remaining'];

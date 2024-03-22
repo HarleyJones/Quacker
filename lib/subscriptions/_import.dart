@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:quacker/api/anomynous.dart';
+import 'package:quacker/client/authenticatedClient.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/database/repository.dart';
 import 'package:quacker/group/group_model.dart';

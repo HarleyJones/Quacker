@@ -4,7 +4,7 @@ import 'package:quacker/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:pref/pref.dart';
 
-import '../WebFlowAuth/webFlowAuth_model.dart';
+import '../client/authenticate.dart';
 
 class SettingsAccountFragment extends StatelessWidget {
   const SettingsAccountFragment({Key? key}) : super(key: key);

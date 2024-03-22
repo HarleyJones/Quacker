@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
-import 'package:quacker/forYou/_tweets.dart';
+import 'package:quacker/forYou.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/group/_settings.dart';
 import 'package:quacker/group/group_model.dart';

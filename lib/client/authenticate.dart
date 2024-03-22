@@ -32,21 +32,18 @@ class WebFlowAuthModel extends ChangeNotifier {
 
   Future<void> GetGuestId(Map<String, String> userAgentHeader) async {
     kdt_Coookie = await GetKdtCookie();
-    print('getguest');
     if (kdt_Coookie != null) cookies.add(kdt_Coookie!);
 
     var request = http.Request("GET", Uri.parse('https://twitter.com/i/flow/login'))..followRedirects = false;
     request.headers.addAll(userAgentHeader);
     var response = await client.send(request);
 
-    print("${response.stream.toString()}: headers getguest");
-
     if (response.statusCode == 200) {
       var responseHeader = response.headers.toString();
       RegExpMatch? match = RegExp(r'(guest_id=.+?);').firstMatch(responseHeader);
       if (match != null) {
         var guest_id = match.group(1).toString();
-        print(guest_id);
+
         cookies.add(guest_id);
       } else {
         throw Exception("Guest ID not found in response headers");
@@ -417,13 +414,9 @@ class WebFlowAuthModel extends ChangeNotifier {
 
   Future<Map<dynamic, dynamic>> GetAuthHeader(Map<String, String> userAgentHeader) async {
     try {
-      print('auth');
       if (_authHeader == null) await GetAuthTokenFromPref();
-      print('auth');
       if (!await IsTokenExpired()) return _authHeader!;
-      print('auth');
       await GetGuestId(userAgentHeader);
-      print('auth 4');
       await GetGT(userAgentHeader);
       await GetFlowToken1(userAgentHeader);
       await GetFlowToken2(userAgentHeader);

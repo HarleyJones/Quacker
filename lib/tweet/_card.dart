@@ -4,7 +4,7 @@ import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
-import 'package:quacker/api/regular.dart';
+import 'package:quacker/client/authenticatedClient.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/tweet/_media.dart';

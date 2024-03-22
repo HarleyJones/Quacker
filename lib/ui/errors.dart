@@ -6,7 +6,7 @@ import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:quacker/api/regular.dart';
+import 'package:quacker/client/authenticatedClient.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 
