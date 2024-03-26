@@ -6,9 +6,11 @@ import 'package:pref/pref.dart';
 
 import '../client/authenticate.dart';
 
-class SettingsAccountFragment extends StatelessWidget {
-  const SettingsAccountFragment({Key? key}) : super(key: key);
+class SettingsAccountFragment extends StatefulWidget {
+  State<SettingsAccountFragment> createState() => _SettingsAccountFragment();
+}
 
+class _SettingsAccountFragment extends State<SettingsAccountFragment> {
   @override
   Widget build(BuildContext context) {
     var model = context.read<WebFlowAuthModel>();
@@ -102,13 +104,6 @@ class SettingsAccountFragment extends StatelessWidget {
               FilledButton(
                   onPressed: () async {
                     await model.DeleteAllCookies();
-                    await model.GetAuthHeader({
-                      'user-agent':
-                          "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.3",
-                      // "Pragma": "no-cache",
-                      "Cache-Control": "no-cache"
-                      // "If-Modified-Since": "Sat, 1 Jan 2000 00:00:00 GMT",
-                    });
                   },
                   child: Text(L10n.of(context).login)),
               SizedBox(
@@ -117,6 +112,9 @@ class SettingsAccountFragment extends StatelessWidget {
               OutlinedButton(
                   onPressed: () async {
                     await model.DeleteAllCookies();
+                    model.prefs.set(optionLoginNameTwitterAcc, "");
+                    model.prefs.set(optionPasswordTwitterAcc, "");
+                    model.prefs.set(optionEmailTwitterAcc, "");
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -124,6 +122,8 @@ class SettingsAccountFragment extends StatelessWidget {
                         ),
                       ),
                     );
+
+                    Navigator.pop(context);
                   },
                   child: Text(L10n.of(context).DeleteTwitterCookies))
             ],
