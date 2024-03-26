@@ -36,17 +36,15 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
   late PagingController<String?, TweetChain> _pagingController;
   static const int pageSize = 20;
   int loadTweetsCounter = 0;
-  late FilterModel filterModel;
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    filterModel = FilterModel(widget.user.idStr!, widget.pref);
     _pagingController = PagingController(firstPageKey: null);
     _pagingController.addPageRequestListener((cursor) {
-      _loadTweets(cursor, filterModel);
+      _loadTweets(cursor);
     });
   }
 
@@ -64,15 +62,18 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
     return loadTweetsCounter;
   }
 
-  Future _loadTweets(String? cursor, FilterModel filterModel) async {
+  Future _loadTweets(String? cursor) async {
     try {
-      var result = await Twitter.getTimelineTweets(widget.user.idStr!, widget.type, widget.pinnedTweets,
-          cursor: cursor,
-          count: pageSize,
-          includeReplies: widget.includeReplies,
-          getTweetsCounter: getLoadTweetsCounter,
-          incrementTweetsCounter: incrementLoadTweetsCounter,
-          filterModel: filterModel);
+      var result = await Twitter.getTimelineTweets(
+        widget.user.idStr!,
+        widget.type,
+        widget.pinnedTweets,
+        cursor: cursor,
+        count: pageSize,
+        includeReplies: widget.includeReplies,
+        getTweetsCounter: getLoadTweetsCounter,
+        incrementTweetsCounter: incrementLoadTweetsCounter,
+      );
 
       if (!mounted) {
         return;
@@ -128,18 +129,18 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
                     error: _pagingController.error[0],
                     stackTrace: _pagingController.error[1],
                     prefix: L10n.of(context).unable_to_load_the_tweets,
-                    onRetry: () => _loadTweets(_pagingController.firstPageKey, this.filterModel),
+                    onRetry: () => _loadTweets(_pagingController.firstPageKey),
                   ),
                   newPageErrorIndicatorBuilder: (context) => FullPageErrorWidget(
                     error: _pagingController.error[0],
                     stackTrace: _pagingController.error[1],
                     prefix: L10n.of(context).unable_to_load_the_next_page_of_tweets,
-                    onRetry: () => _loadTweets(_pagingController.nextPageKey, this.filterModel),
+                    onRetry: () => _loadTweets(_pagingController.nextPageKey),
                   ),
                   noItemsFoundIndicatorBuilder: (context) {
                     return Center(
                       child: Text(
-                        L10n.of(context).could_not_find_any_tweets_by_this_user,
+                        L10n.of(context).unable_to_load_the_tweets_for_the_feed,
                       ),
                     );
                   },

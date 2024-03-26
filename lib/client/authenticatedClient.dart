@@ -298,7 +298,7 @@ class Twitter {
     return replies;
   }
 
-  static List<TweetChain> createTweets(List<dynamic> addEntries, FilterModel filterModel, [bool isPinned = false]) {
+  static List<TweetChain> createTweets(FilterModel? filterModel, List<dynamic> addEntries, [bool isPinned = false]) {
     List<TweetChain> replies = [];
 
     for (var entry in addEntries) {
@@ -306,11 +306,13 @@ class Twitter {
       if (entryId.startsWith('tweet-')) {
         var result = entry['content']['itemContent']['tweet_results']['result'];
         TweetWithCard? tweet = TweetWithCard.fromGraphqlJson(result);
-        if (tweet != null) {
-          if (!FilterTweetRegEx(filterModel, tweet)) {
-            replies.add(
-                TweetChain(id: result['rest_id'] ?? result['tweet']['rest_id'], tweets: [tweet], isPinned: isPinned));
-          }
+
+        if (filterModel != null && !FilterTweetRegEx(filterModel, tweet)) {
+          replies.add(
+              TweetChain(id: result['rest_id'] ?? result['tweet']['rest_id'], tweets: [tweet], isPinned: isPinned));
+        } else if (filterModel == null) {
+          replies.add(
+              TweetChain(id: result['rest_id'] ?? result['tweet']['rest_id'], tweets: [tweet], isPinned: isPinned));
         }
       }
 
@@ -328,11 +330,13 @@ class Twitter {
             if (item['item']['itemContent']['tweet_results']?['result'] != null) {
               if (item['item']['itemContent']['tweet_results']['result']['tweet'] == null) {
                 var tweet = TweetWithCard.fromGraphqlJson(item['item']['itemContent']['tweet_results']['result']);
-                if (!FilterTweetRegEx(filterModel, tweet)) tweets.add(tweet);
+                if (filterModel != null && !FilterTweetRegEx(filterModel, tweet)) tweets.add(tweet);
+                if (filterModel == null) tweets.add(tweet);
               } else {
                 var tweet =
                     TweetWithCard.fromGraphqlJson(item['item']['itemContent']['tweet_results']['result']['tweet']);
-                if (!FilterTweetRegEx(filterModel, tweet)) tweets.add(tweet);
+                if (filterModel != null && !FilterTweetRegEx(filterModel, tweet)) tweets.add(tweet);
+                if (filterModel == null) tweets.add(tweet);
               }
             }
           }
@@ -554,14 +558,17 @@ class Twitter {
     return List.from(jsonDecode(result)).map((e) => Trends.fromJson(e)).toList(growable: false);
   }
 
-  static Future<TweetStatus> getTimelineTweets(String id, String type, List<String> pinnedTweets,
-      {int count = 10,
-      String? cursor,
-      bool includeReplies = true,
-      bool includeRetweets = true,
-      required int Function() getTweetsCounter,
-      required void Function() incrementTweetsCounter,
-      required FilterModel filterModel}) async {
+  static Future<TweetStatus> getTimelineTweets(
+    String id,
+    String type,
+    List<String> pinnedTweets, {
+    int count = 10,
+    String? cursor,
+    bool includeReplies = true,
+    bool includeRetweets = true,
+    required int Function() getTweetsCounter,
+    required void Function() incrementTweetsCounter,
+  }) async {
     bool showPinnedTweet = true;
     var query = {
       ...defaultParams,
@@ -590,9 +597,16 @@ class Twitter {
     var result = json.decode(response.body);
     //if this page is not first one on the profile page, dont add pinned tweet
     if (variables['cursor'] != null) showPinnedTweet = false;
-    return createTimelineChains(result, 'tweet', pinnedTweets, includeReplies == false, includeReplies, showPinnedTweet,
-        getTweetsCounter, incrementTweetsCounter,
-        filterModel: filterModel);
+    return createTimelineChains(
+      result,
+      'tweet',
+      pinnedTweets,
+      includeReplies == false,
+      includeReplies,
+      showPinnedTweet,
+      getTweetsCounter,
+      incrementTweetsCounter,
+    );
   }
 
   static Future<TweetStatus> getTweets(String id, String type, List<String> pinnedTweets,
@@ -767,10 +781,10 @@ class Twitter {
     String? cursorBottom = getCursor(addEntries, repEntries, 'cursor-bottom', 'Bottom');
     String? cursorTop = getCursor(addEntries, repEntries, 'cursor-top', 'Top');
 
-    var chains = createTweets(addEntries, filterModel);
+    var chains = createTweets(filterModel, addEntries);
     // var debugTweets = json.encode(chains);
     //var debugTweets2 = json.encode(addEntries);
-    var pinnedChains = createTweets(addPinnedEntries, filterModel, true);
+    var pinnedChains = createTweets(filterModel, addPinnedEntries, true);
 
     // Order all the conversations by newest first (assuming the ID is an incrementing key),
     // and create a chain from them
@@ -794,15 +808,15 @@ class Twitter {
   }
 
   static TweetStatus createTimelineChains(
-      Map<String, dynamic> result,
-      String tweetIndicator,
-      List<String> pinnedTweets,
-      bool mapToThreads,
-      bool includeReplies,
-      bool showPinnedTweet,
-      int Function() getTweetsCounter,
-      void Function() increaseTweetCounter,
-      {required FilterModel filterModel}) {
+    Map<String, dynamic> result,
+    String tweetIndicator,
+    List<String> pinnedTweets,
+    bool mapToThreads,
+    bool includeReplies,
+    bool showPinnedTweet,
+    int Function() getTweetsCounter,
+    void Function() increaseTweetCounter,
+  ) {
     var instructions = List.from(result["data"]["home"]["home_timeline_urt"]['instructions']);
     var addEntriesInstructions = instructions.firstWhereOrNull((e) => e['type'] == 'TimelineAddEntries');
     if (addEntriesInstructions == null) {
@@ -818,10 +832,10 @@ class Twitter {
 
     String? cursorBottom = getCursor(addEntries, repEntries, 'cursor-bottom', 'Bottom');
     String? cursorTop = getCursor(addEntries, repEntries, 'cursor-top', 'Top');
-    var chains = createTweets(addEntries, filterModel);
+    var chains = createTweets(null, addEntries);
     // var debugTweets = json.encode(chains);
     //var debugTweets2 = json.encode(addEntries);
-    var pinnedChains = createTweets(addPinnedEntries, filterModel, true);
+    var pinnedChains = createTweets(null, addPinnedEntries, true);
 
     // Order all the conversations by newest first (assuming the ID is an incrementing key),
     // and create a chain from them
@@ -838,7 +852,7 @@ class Twitter {
     if (chains.length < 5) increaseTweetCounter();
     //As soon as there is no tweet left that passes regex critera and we also reached maximum attemps
     //to find them, than stop loading more.
-    if (chains.length <= 5 && getTweetsCounter() > filterModel.GetLoadTweetsCounter()) {
+    if (chains.length <= 5) {
       cursorBottom = null;
     }
 
