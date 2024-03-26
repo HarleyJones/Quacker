@@ -165,10 +165,13 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
   PageController? _pageController;
   late List<Widget> _children;
   late List<NavigationPage> _pages;
+  int currentPage = 0;
 
   @override
   void initState() {
     super.initState();
+
+    currentPage = widget.initialPage;
 
     _pages = _padToMinimumPagesLength(widget.pages);
 
@@ -207,7 +210,6 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
     _pageController?.dispose();
   }
 
-  int currentPage = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
