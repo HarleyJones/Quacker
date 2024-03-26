@@ -349,7 +349,6 @@ class WebFlowAuthModel extends ChangeNotifier {
     _authHeader!.addAll({"Cookie": cookies.join(";")});
     _authHeader!.addAll({"authorization": _bearerToken});
     _authHeader!.addAll({"x-csrf-token": csrf_token});
-    print(_authHeader);
     await SetAuthHeader(_authHeader);
     //_authHeader!.addAll(userAgentHeader);
     //authHeader.addAll({"Host": "api.twitter.com"});

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dart_twitter_api/src/utils/date_utils.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:ffcache/ffcache.dart';
+import 'package:flutter/material.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile_model.dart';
 import 'package:quacker/user.dart';
@@ -37,7 +39,7 @@ class _FritterTwitterClient extends TwitterClient {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        return Future.error(response.reasonPhrase ?? response.statusCode);
+        return Future.error(HttpException(response.reasonPhrase ?? response.statusCode.toString()));
       }
     });
   }
@@ -502,7 +504,6 @@ class Twitter {
         {'variables': jsonEncode(variables), 'features': jsonEncode(searchFeatures)});
 
     var response = await _twitterApi.client.get(uri);
-    print(response.body);
     if (response.body.isEmpty) {
       return [];
     }

@@ -107,7 +107,6 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
       query += ' include:nativeretweets ';
     }
 
-    print(query);
     return query;
   }
 
@@ -167,8 +166,8 @@ class _SubscriptionGroupFeedState extends State<SubscriptionGroupFeed> {
           // Perform our search for the next page of results for this chunk, and add those tweets to our collection
           var query = _buildSearchQuery(chunk.users);
           TweetStatus result =
-              await Twitter.searchTweets(query, widget.includeReplies, limit: 25, cursor: searchCursor);
-          print(result.chains.length);
+              await Twitter.searchTweets(query, widget.includeReplies, limit: 100, cursor: searchCursor);
+
           if (result.chains.isNotEmpty) {
             tweets.addAll(result.chains);
 
