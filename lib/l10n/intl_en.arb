@@ -424,5 +424,6 @@
   "regex": "Regex filters",
   "regexSubtitle": "Filter exclude posts containing an expression. Each filter is separated by a pipe(|): \"+\"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression\"+\", use this one :^((?!expression).)*\\$",
   "foryou": "For You",
-  "clickToShowMore": " \nClick to show more.."
+  "clickToShowMore": " \nClick to show more..",
+  "show_navigation_labels": " Show navigation labels"
 }

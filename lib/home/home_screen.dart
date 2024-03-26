@@ -212,6 +212,7 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
 
   @override
   Widget build(BuildContext context) {
+    final showNavigationLabels = PrefService.of(context).get(optionShowNavigationLabels);
     return Scaffold(
       body: PageView(
         controller: _pageController,
@@ -225,9 +226,9 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPage,
-        height: 50,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-        indicatorShape: CircleBorder(),
+        labelBehavior: showNavigationLabels
+            ? NavigationDestinationLabelBehavior.alwaysShow
+            : NavigationDestinationLabelBehavior.alwaysHide,
         destinations: [
           ..._pages.map((e) => NavigationDestination(icon: Icon(e.icon, size: 22), label: e.titleBuilder(context)))
         ],

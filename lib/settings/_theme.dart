@@ -35,6 +35,10 @@ class SettingsThemeFragment extends StatelessWidget {
               L10n.of(context).use_true_black_for_the_dark_mode_theme,
             ),
           ),
+          PrefSwitch(
+            title: Text(L10n.of(context).show_navigation_labels),
+            pref: optionShowNavigationLabels,
+          ),
         ]),
       ),
     );

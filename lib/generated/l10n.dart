@@ -2555,6 +2555,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// ` Show navigation labels`
+  String get show_navigation_labels {
+    return Intl.message(
+      ' Show navigation labels',
+      name: 'show_navigation_labels',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

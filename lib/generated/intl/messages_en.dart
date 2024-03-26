@@ -338,6 +338,8 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Check for updates when Quacker starts"),
         "should_check_for_updates_label":
             MessageLookupByLibrary.simpleMessage("Check for updates"),
+        "show_navigation_labels":
+            MessageLookupByLibrary.simpleMessage(" Show navigation labels"),
         "small": MessageLookupByLibrary.simpleMessage("Small"),
         "something_broke_in_fritter":
             MessageLookupByLibrary.simpleMessage("Something broke in Quacker."),
