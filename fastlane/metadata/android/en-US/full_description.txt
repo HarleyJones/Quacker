@@ -1,1 +1,1 @@
-Quacker is a more private and clean way to browse Twitter. This also includes feed viewing, subscription grouping, offline tweet saving and more!
+Quacker is a more private and clean way to browse X. This also includes feed viewing, subscription grouping, offline tweet saving and more!
