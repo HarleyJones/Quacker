@@ -1,11 +1,11 @@
-package com.jonjomckay.fritter;
+package com.thehcj.quacker;
 
 import android.content.Context;
 import androidx.multidex.MultiDex;
 
 import io.flutter.app.FlutterApplication;
 
-public class FritterApplication extends FlutterApplication {
+public class QuackerApplication extends FlutterApplication {
 
     @Override
     protected void attachBaseContext(Context base) {
