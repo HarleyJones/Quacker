@@ -56,9 +56,6 @@ class _FeedScreenState extends State<FeedScreen>
     user.possiblySensitive = false;
     user.screenName = "ForYou";
 
-    dynamic forYouTweets = ForYouTweets(
-        user: user, type: 'profile', includeReplies: false, pinnedTweets: [], pref: PrefService.of(context));
-
     return Provider<GroupModel>(create: (context) {
       var model = GroupModel(widget.id);
       model.loadGroup();
@@ -68,6 +65,7 @@ class _FeedScreenState extends State<FeedScreen>
       var model = context.read<GroupModel>();
 
       return NestedScrollView(
+          controller: widget.scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
@@ -91,10 +89,24 @@ class _FeedScreenState extends State<FeedScreen>
                       DropdownMenuItem(value: L10n.current.foryou, child: Text(L10n.current.foryou))
                     ]),
                 actions: _tab == 1
-                    ? [...createCommonAppBarActions(context)]
+                    ? [
+                        IconButton(
+                            icon: const Icon(Icons.arrow_upward),
+                            onPressed: () async {
+                              await widget.scrollController
+                                  .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                            }),
+                        ...createCommonAppBarActions(context)
+                      ]
                     : [
                         IconButton(
                             icon: const Icon(Icons.more_vert), onPressed: () => showFeedSettings(context, model)),
+                        IconButton(
+                            icon: const Icon(Icons.arrow_upward),
+                            onPressed: () async {
+                              await widget.scrollController
+                                  .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                            }),
                         IconButton(
                             icon: const Icon(Icons.refresh),
                             onPressed: () async {
@@ -109,7 +121,8 @@ class _FeedScreenState extends State<FeedScreen>
             SubscriptionGroupScreenContent(
               id: widget.id,
             ),
-            forYouTweets,
+            ForYouTweets(
+                user: user, type: 'profile', includeReplies: false, pinnedTweets: [], pref: PrefService.of(context)),
           ][_tab]);
     });
   }
