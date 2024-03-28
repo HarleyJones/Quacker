@@ -79,18 +79,9 @@ android {
             minifyEnabled = true
             shrinkResources = true
 
-            ext.abiCodes = ["x86_64": 1, "armeabi-v7a": 2, "arm64-v8a": 3]
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
                     def abiName = output.getFilter(OutputFile.ABI)
-
-                    variant.outputs.each { output ->
-                        def abiVersionCode = project.ext.abiCodes.get(abiName)
-                        if (abiVersionCode != null) {
-                            output.versionCodeOverride = variant.versionCode * 10 + abiVersionCode
-                        }
-                    }
-
                     if (abiName == null) {
                         outputFileName = "quacker-v${defaultConfig.versionName}.apk"
                     } else {
@@ -98,7 +89,6 @@ android {
                     }
                 }
             }
-
         }
     }
 }
@@ -110,4 +100,14 @@ flutter {
 dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21"
+}
+
+ext.abiCodes = ["x86_64": 1, "armeabi-v7a": 2, "arm64-v8a": 3]
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        def abiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
+        if (abiVersionCode != null) {
+            output.versionCodeOverride = variant.versionCode * 10 + abiVersionCode
+        }
+    }
 }
