@@ -24,6 +24,7 @@ environment:
 
 dependency_overrides:  
   intl: ^0.17.0
+  win32: ^4.1.4
   
   extended_image:
     git:
@@ -47,10 +48,10 @@ dependencies:
   faker: ^2.1.0
   ffcache: ^1.1.0
   flutter_cache: ^0.1.0
-  file_picker: ^6.2.0
+  file_picker: ^8.0.0+1
   flutter_colorpicker: ^1.0.3
   flutter_file_dialog: ^3.0.1
-  flutter_iconpicker_plus: ^3.2.3
+  flutter_iconpicker: ^3.4.4
   flutter_localized_locales: ^2.0.3
   flutter_triple: ^3.0.0
   flutter_windowmanager: ^0.2.0
