@@ -60,7 +60,7 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
   void initState() {
     super.initState();
 
-    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: widget.initialTab);
     _bothControllers = CombinedChangeNotifier(_tabController, _queryController);
 
     if (widget.focusInputOnOpen) {
@@ -95,41 +95,45 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
         // Needed as we're nesting Scaffolds, which causes Flutter to calculate keyboard height incorrectly
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: TextField(
-            controller: _queryController,
-            focusNode: _focusNode,
-            style: searchTheme.textTheme.titleLarge,
-            textInputAction: TextInputAction.search,
-          ),
-          actions: [
-            IconButton(icon: const Icon(Icons.close), onPressed: () => _queryController.clear()),
-            ScopedBuilder<SubscriptionsModel, List<Subscription>>.transition(
-              store: subscriptionsModel,
-              onState: (_, state) {
-                return AnimatedBuilder(
-                  animation: _bothControllers,
-                  builder: (context, child) {
-                    var id = _queryController.text;
+            automaticallyImplyLeading: false,
+            forceMaterialTransparency: true,
+            flexibleSpace: Padding(
+              padding: EdgeInsets.fromLTRB(8, 36, 8, 4),
+              child: SearchBar(
+                controller: _queryController,
+                focusNode: _focusNode,
+                textInputAction: TextInputAction.search,
+                leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
+                trailing: [
+                  IconButton(icon: const Icon(Icons.close), onPressed: () => _queryController.clear()),
+                  ScopedBuilder<SubscriptionsModel, List<Subscription>>.transition(
+                    store: subscriptionsModel,
+                    onState: (_, state) {
+                      return AnimatedBuilder(
+                        animation: _bothControllers,
+                        builder: (context, child) {
+                          var id = _queryController.text;
 
-                    if (_tabController.index == 1) {
-                      var currentlyFollowed = state.any((element) => element.id == id);
-                      if (!currentlyFollowed) {
-                        return IconButton(
-                            icon: const Icon(Icons.save),
-                            onPressed: () async {
-                              await subscriptionsModel.toggleSubscribe(
-                                  SearchSubscription(id: id, createdAt: DateTime.now()), currentlyFollowed);
-                            });
-                      }
-                    }
+                          if (_tabController.index != 2) {
+                            var currentlyFollowed = state.any((element) => element.id == id);
+                            if (!currentlyFollowed) {
+                              return IconButton(
+                                  icon: const Icon(Icons.save),
+                                  onPressed: () async {
+                                    await subscriptionsModel.toggleSubscribe(
+                                        SearchSubscription(id: id, createdAt: DateTime.now()), currentlyFollowed);
+                                  });
+                            }
+                          }
 
-                    return Container();
-                  },
-                );
-              },
-            ),
-          ],
-        ),
+                          return Container();
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            )),
         body: Column(
           children: [
             Material(
