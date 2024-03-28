@@ -8,7 +8,6 @@ import 'package:ffcache/ffcache.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile_model.dart';
 import 'package:quacker/user.dart';
-import 'package:quacker/profile/filter_model.dart';
 import 'package:quacker/utils/cache.dart';
 import 'package:quacker/utils/iterables.dart';
 import 'package:http/http.dart' as http;
@@ -593,8 +592,7 @@ class Twitter {
       bool includeReplies = true,
       bool includeRetweets = true,
       required int Function() getTweetsCounter,
-      required void Function() incrementTweetsCounter,
-      required FilterModel filterModel}) async {
+      required void Function() incrementTweetsCounter}) async {
     bool showPinnedTweet = true;
     var query = {
       ...defaultParams,
@@ -631,8 +629,7 @@ class Twitter {
     //if this page is not first one on the profile page, dont add pinned tweet
     if (variables['cursor'] != null) showPinnedTweet = false;
     return createUnconversationedChains(result, 'tweet', pinnedTweets, includeReplies == false, includeReplies,
-        showPinnedTweet, getTweetsCounter, incrementTweetsCounter,
-        filterModel: filterModel);
+        showPinnedTweet, getTweetsCounter, incrementTweetsCounter);
   }
 
   static String? getCursor(List<dynamic> addEntries, List<dynamic> repEntries, String legacyType, String type) {
@@ -733,15 +730,15 @@ class Twitter {
   }
 
   static TweetStatus createUnconversationedChains(
-      Map<String, dynamic> result,
-      String tweetIndicator,
-      List<String> pinnedTweets,
-      bool mapToThreads,
-      bool includeReplies,
-      bool showPinnedTweet,
-      int Function() getTweetsCounter,
-      void Function() increaseTweetCounter,
-      {required FilterModel filterModel}) {
+    Map<String, dynamic> result,
+    String tweetIndicator,
+    List<String> pinnedTweets,
+    bool mapToThreads,
+    bool includeReplies,
+    bool showPinnedTweet,
+    int Function() getTweetsCounter,
+    void Function() increaseTweetCounter,
+  ) {
     var instructions = List.from(result["data"]["user"]["result"]["timeline_v2"]['timeline']['instructions']);
     var addEntriesInstructions = instructions.firstWhereOrNull((e) => e['type'] == 'TimelineAddEntries');
     if (addEntriesInstructions == null) {
@@ -779,7 +776,7 @@ class Twitter {
     if (chains.length < 5) increaseTweetCounter();
     //As soon as there is no tweet left that passes regex critera and we also reached maximum attemps
     //to find them, than stop loading more.
-    if (chains.length <= 5 && getTweetsCounter() > filterModel.GetLoadTweetsCounter()) {
+    if (chains.length <= 5) {
       cursorBottom = null;
     }
     return TweetStatus(chains: chains, cursorBottom: cursorBottom, cursorTop: cursorTop);

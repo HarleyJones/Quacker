@@ -8,9 +8,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
-
 import 'constants.dart';
-import 'profile/filter_model.dart';
 
 class ForYouTweets extends StatefulWidget {
   final UserWithExtra user;

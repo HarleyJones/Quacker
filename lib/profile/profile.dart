@@ -6,7 +6,6 @@ import 'package:flutter_triple/flutter_triple.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/generated/l10n.dart';
-import 'package:quacker/profile/_filters.dart';
 import 'package:quacker/profile/_follows.dart';
 import 'package:quacker/profile/_saved.dart';
 import 'package:quacker/profile/_tweets.dart';
@@ -530,7 +529,6 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                 ProfileFollows(user: user, type: 'following'),
                 ProfileFollows(user: user, type: 'followers'),
                 ProfileSaved(user: user),
-                Filters(user: user),
               ],
             ),
           ),
