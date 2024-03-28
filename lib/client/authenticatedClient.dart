@@ -530,6 +530,7 @@ class Twitter {
     var result = await _cache.getOrCreateAsJSON('trends.$location', const Duration(minutes: 2), () async {
       var trends = await _twitterApi.trendsService.place(id: location);
 
+      _FritterTwitterClient.log.info(jsonEncode(trends.map((e) => e.toJson()).toList()));
       return jsonEncode(trends.map((e) => e.toJson()).toList());
     });
 

@@ -26,8 +26,6 @@ class _FeedScreenState extends State<FeedScreen>
   @override
   bool get wantKeepAlive => true;
 
-  UserWithExtra user = UserWithExtra();
-
   late TabController _tabController;
   int _tab = 0;
   dynamic _tabValue = L10n.current.following;
@@ -51,10 +49,6 @@ class _FeedScreenState extends State<FeedScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    user.idStr = "1";
-    user.possiblySensitive = false;
-    user.screenName = "ForYou";
 
     return Provider<GroupModel>(create: (context) {
       var model = GroupModel(widget.id);
@@ -121,8 +115,7 @@ class _FeedScreenState extends State<FeedScreen>
             SubscriptionGroupScreenContent(
               id: widget.id,
             ),
-            ForYouTweets(
-                user: user, type: 'profile', includeReplies: false, pinnedTweets: [], pref: PrefService.of(context)),
+            ForYouTweets(type: 'profile', includeReplies: false, pinnedTweets: [], pref: PrefService.of(context)),
           ][_tab]);
     });
   }
