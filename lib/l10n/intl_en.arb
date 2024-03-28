@@ -418,12 +418,10 @@
   "login": "Login",
   "twitterCookiesDeleted": "All cookies of the account are deleted",
   "DeleteTwitterCookies": "Delete all cookies of the account",
-  "tweetFilters": "Filters",
-  "loadTweetCounterMaximum": "Number of Loads",
-  "loadTweetCounterMaximumSubtitle": "Maximum of post`s loads while showing less than 5 posts",
-  "regex": "Regex filters",
-  "regexSubtitle": "Filter exclude posts containing an expression. Each filter is separated by a pipe(|): \"+\"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression\"+\", use this one :^((?!expression).)*\\$",
   "foryou": "For You",
   "clickToShowMore": " \nClick to show more..",
-  "show_navigation_labels": " Show navigation labels"
+  "show_navigation_labels": " Show navigation labels",
+  "top": "Top",
+  "latest": "Latest",
+  "people": "People"
 }

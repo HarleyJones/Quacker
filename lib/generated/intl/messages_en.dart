@@ -218,6 +218,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "language_subtitle":
             MessageLookupByLibrary.simpleMessage("Requires a restart"),
         "large": MessageLookupByLibrary.simpleMessage("Large"),
+        "latest": MessageLookupByLibrary.simpleMessage("Latest"),
         "legacy_android_import":
             MessageLookupByLibrary.simpleMessage("Legacy Android Import"),
         "let_the_developers_know_if_something_is_broken":
@@ -226,10 +227,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "licenses": MessageLookupByLibrary.simpleMessage("Licenses"),
         "light": MessageLookupByLibrary.simpleMessage("Light"),
         "live": MessageLookupByLibrary.simpleMessage("LIVE"),
-        "loadTweetCounterMaximum":
-            MessageLookupByLibrary.simpleMessage("Number of Loads"),
-        "loadTweetCounterMaximumSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Maximum of post`s loads while showing less than 5 posts"),
         "logging": MessageLookupByLibrary.simpleMessage("Logging"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginNameTwitterAcc": MessageLookupByLibrary.simpleMessage("Username"),
@@ -271,6 +268,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_not_found": MessageLookupByLibrary.simpleMessage(
             "X says the page does not exist, but that may not be true"),
         "passwordTwitterAcc": MessageLookupByLibrary.simpleMessage("Password"),
+        "people": MessageLookupByLibrary.simpleMessage("People"),
         "permission_not_granted": MessageLookupByLibrary.simpleMessage(
             "Permission not granted. Please try again after granting!"),
         "pick_a_color": MessageLookupByLibrary.simpleMessage("Pick a color!"),
@@ -296,9 +294,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "prefix": MessageLookupByLibrary.simpleMessage("prefix"),
         "private_profile":
             MessageLookupByLibrary.simpleMessage("Private profile"),
-        "regex": MessageLookupByLibrary.simpleMessage("Regex filters"),
-        "regexSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Filter exclude posts containing an expression. Each filter is separated by a pipe(|): \"+\"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression\"+\", use this one :^((?!expression).)*\\\$"),
         "released_under_the_mit_license": MessageLookupByLibrary.simpleMessage(
             "Released under the MIT License"),
         "replying_to": MessageLookupByLibrary.simpleMessage("Replying to"),
@@ -390,10 +385,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "To import subscriptions from an existing X account, enter your username below."),
         "toggle_all": MessageLookupByLibrary.simpleMessage("Toggle All"),
+        "top": MessageLookupByLibrary.simpleMessage("Top"),
         "trending": MessageLookupByLibrary.simpleMessage("Trending"),
         "trends": MessageLookupByLibrary.simpleMessage("Trends"),
         "true_black": MessageLookupByLibrary.simpleMessage("True Black?"),
-        "tweetFilters": MessageLookupByLibrary.simpleMessage("Filters"),
         "tweets": MessageLookupByLibrary.simpleMessage("Posts"),
         "tweets_and_replies":
             MessageLookupByLibrary.simpleMessage("Posts & Replies"),

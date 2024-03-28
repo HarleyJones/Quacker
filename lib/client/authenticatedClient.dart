@@ -391,12 +391,13 @@ class Twitter {
     return TweetStatus(chains: chains, cursorBottom: cursorBottom, cursorTop: cursorTop);
   }
 
-  static Future<TweetStatus> searchTweets(String query, bool includeReplies, {int limit = 25, String? cursor}) async {
+  static Future<TweetStatus> searchTweets(String query, bool includeReplies,
+      {int limit = 25, String? cursor, String product = "Latest"}) async {
     var variables = {
       "rawQuery": query,
-      "count": 1, //TODO: Change before commit
+      "count": limit.toString(),
       "querySource": "typed_query",
-      "product": 'Latest',
+      "product": product,
       "withDownvotePerspective": false,
       "withReactionsMetadata": false,
       "withReactionsPerspective": false

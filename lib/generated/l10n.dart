@@ -2486,56 +2486,6 @@ class L10n {
     );
   }
 
-  /// `Filters`
-  String get tweetFilters {
-    return Intl.message(
-      'Filters',
-      name: 'tweetFilters',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Number of Loads`
-  String get loadTweetCounterMaximum {
-    return Intl.message(
-      'Number of Loads',
-      name: 'loadTweetCounterMaximum',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Maximum of post's loads while showing less than 5 posts`
-  String get loadTweetCounterMaximumSubtitle {
-    return Intl.message(
-      'Maximum of post`s loads while showing less than 5 posts',
-      name: 'loadTweetCounterMaximumSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Regex filters`
-  String get regex {
-    return Intl.message(
-      'Regex filters',
-      name: 'regex',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Filter exclude posts containing an expression. Each filter is separated by a pipe(|): "+"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression"+", use this one :^((?!expression).)*\$`
-  String get regexSubtitle {
-    return Intl.message(
-      'Filter exclude posts containing an expression. Each filter is separated by a pipe(|): "+"ExampleFilter1|ExampleFilter[2-3] \n If you want to show tweets containing just your expression"+", use this one :^((?!expression).)*\\\$',
-      name: 'regexSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `For You`
   String get foryou {
     return Intl.message(
@@ -2561,6 +2511,36 @@ class L10n {
     return Intl.message(
       ' Show navigation labels',
       name: 'show_navigation_labels',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Top`
+  String get top {
+    return Intl.message(
+      'Top',
+      name: 'top',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Latest`
+  String get latest {
+    return Intl.message(
+      'Latest',
+      name: 'latest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `People`
+  String get people {
+    return Intl.message(
+      'People',
+      name: 'people',
       desc: '',
       args: [],
     );

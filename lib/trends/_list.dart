@@ -76,7 +76,7 @@ class _TrendsListState extends State<TrendsList> {
                       ),
                 onTap: () => Navigator.pushNamed(context, routeSearch,
                     arguments:
-                        SearchArguments(1, focusInputOnOpen: false, query: Uri.decodeQueryComponent(trend.query!))));
+                        SearchArguments(0, focusInputOnOpen: false, query: Uri.decodeQueryComponent(trend.query!))));
           },
         );
       },

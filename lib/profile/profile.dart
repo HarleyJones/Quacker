@@ -291,12 +291,6 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      Tab(
-                        child: Text(
-                          L10n.of(context).tweetFilters,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
                     ],
                   ),
                   flexibleSpace: FlexibleSpaceBar(
