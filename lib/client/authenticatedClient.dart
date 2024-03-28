@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:dart_twitter_api/src/utils/date_utils.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:ffcache/ffcache.dart';
-import 'package:flutter/material.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile_model.dart';
 import 'package:quacker/user.dart';
@@ -298,7 +297,7 @@ class Twitter {
     return replies;
   }
 
-  static List<TweetChain> createTweets(FilterModel? filterModel, List<dynamic> addEntries, [bool isPinned = false]) {
+  static List<TweetChain> createTweets(List<dynamic> addEntries, [bool isPinned = false]) {
     List<TweetChain> replies = [];
 
     for (var entry in addEntries) {
@@ -307,13 +306,8 @@ class Twitter {
         var result = entry['content']['itemContent']['tweet_results']['result'];
         TweetWithCard? tweet = TweetWithCard.fromGraphqlJson(result);
 
-        if (filterModel != null && !FilterTweetRegEx(filterModel, tweet)) {
-          replies.add(
-              TweetChain(id: result['rest_id'] ?? result['tweet']['rest_id'], tweets: [tweet], isPinned: isPinned));
-        } else if (filterModel == null) {
-          replies.add(
-              TweetChain(id: result['rest_id'] ?? result['tweet']['rest_id'], tweets: [tweet], isPinned: isPinned));
-        }
+        replies
+            .add(TweetChain(id: result['rest_id'] ?? result['tweet']['rest_id'], tweets: [tweet], isPinned: isPinned));
       }
 
       if (entryId.startsWith('cursor-bottom') || entryId.startsWith('cursor-showMore')) {
@@ -330,13 +324,11 @@ class Twitter {
             if (item['item']['itemContent']['tweet_results']?['result'] != null) {
               if (item['item']['itemContent']['tweet_results']['result']['tweet'] == null) {
                 var tweet = TweetWithCard.fromGraphqlJson(item['item']['itemContent']['tweet_results']['result']);
-                if (filterModel != null && !FilterTweetRegEx(filterModel, tweet)) tweets.add(tweet);
-                if (filterModel == null) tweets.add(tweet);
+                tweets.add(tweet);
               } else {
                 var tweet =
                     TweetWithCard.fromGraphqlJson(item['item']['itemContent']['tweet_results']['result']['tweet']);
-                if (filterModel != null && !FilterTweetRegEx(filterModel, tweet)) tweets.add(tweet);
-                if (filterModel == null) tweets.add(tweet);
+                tweets.add(tweet);
               }
             }
           }
@@ -347,20 +339,6 @@ class Twitter {
       }
     }
     return replies;
-  }
-
-  static bool FilterTweetRegEx(FilterModel filterModel, TweetWithCard tweet) {
-    RegExp? regexFilter;
-    if (filterModel.GetRegex() != null && filterModel.GetRegex()!.isNotEmpty) {
-      regexFilter = RegExp(filterModel.GetRegex()!, caseSensitive: false, multiLine: true);
-    }
-    //Add the tweet into the tweet chain if there is no RegEx expression stored
-    // in the model of profile, or text of the tweet doesnt contain an expression given
-    // by the model.
-    if (regexFilter == null || !regexFilter!.hasMatch(tweet.fullText.toString())) {
-      return false;
-    } else
-      return true;
   }
 
   static Future<TweetStatus> getTweet(String id, {String? cursor}) async {
@@ -417,7 +395,7 @@ class Twitter {
   static Future<TweetStatus> searchTweets(String query, bool includeReplies, {int limit = 25, String? cursor}) async {
     var variables = {
       "rawQuery": query,
-      "count": limit.toString(),
+      "count": 1, //TODO: Change before commit
       "querySource": "typed_query",
       "product": 'Latest',
       "withDownvotePerspective": false,
@@ -718,7 +696,7 @@ class Twitter {
         .where((e) => e['entryId'].contains(tweetIndicator))
         .sorted((a, b) => b['sortIndex'].compareTo(a['sortIndex']))
         .map((e) => e['content']['itemContent']['tweet_results']['result']['rest_id'])
-        .cast<String>()
+        .cast<String?>()
         .toList();
 
     Map<String, List<TweetWithCard>> conversations =
@@ -781,10 +759,10 @@ class Twitter {
     String? cursorBottom = getCursor(addEntries, repEntries, 'cursor-bottom', 'Bottom');
     String? cursorTop = getCursor(addEntries, repEntries, 'cursor-top', 'Top');
 
-    var chains = createTweets(filterModel, addEntries);
+    var chains = createTweets(addEntries);
     // var debugTweets = json.encode(chains);
     //var debugTweets2 = json.encode(addEntries);
-    var pinnedChains = createTweets(filterModel, addPinnedEntries, true);
+    var pinnedChains = createTweets(addPinnedEntries, true);
 
     // Order all the conversations by newest first (assuming the ID is an incrementing key),
     // and create a chain from them
@@ -832,10 +810,10 @@ class Twitter {
 
     String? cursorBottom = getCursor(addEntries, repEntries, 'cursor-bottom', 'Bottom');
     String? cursorTop = getCursor(addEntries, repEntries, 'cursor-top', 'Top');
-    var chains = createTweets(null, addEntries);
+    var chains = createTweets(addEntries);
     // var debugTweets = json.encode(chains);
     //var debugTweets2 = json.encode(addEntries);
-    var pinnedChains = createTweets(null, addPinnedEntries, true);
+    var pinnedChains = createTweets(addPinnedEntries, true);
 
     // Order all the conversations by newest first (assuming the ID is an incrementing key),
     // and create a chain from them
