@@ -42,6 +42,11 @@ if (keystoreFile != null && !keystoreFile.isEmpty()) {
 android {
     compileSdkVersion 34
 
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
