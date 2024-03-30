@@ -21,6 +21,9 @@
 </a>
 <a href="https://android.com"><img alt="Android" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Android/android1.svg" height=20></a>
 </p>
+
+## Issues
+* 2FA accounts cannot login
  
 ## Features:
 * Feed: View your `Following` or if you prefer your `For You` feed
