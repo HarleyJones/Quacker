@@ -12,14 +12,12 @@
   <a href="https://apt.izzysoft.de/fdroid/index/apk/com.thehcj.quacker">
     <img alt="Get it on IzzyOnDroid" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="80"></a>
 </p>
+
 <p align="center">
-<a href="https://github.com/TheHCJ/Quacker/issues"><img alt="GitHub Repo issues" src="https://m3-markdown-badges.vercel.app/issues/2/1/TheHCJ/Quacker"></a>
-<a href="https://github.com/TheHCJ/Quacker"><img alt="GitHub Repo stars" src="https://m3-markdown-badges.vercel.app/stars/3/2/TheHCJ/Quacker"></a>
-<br>
-<a href="https://flutter.dev"><img alt="Flutter" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Flutter/flutter1.svg" height=20></a>
-<a href="https://github.com/TheHCJ/Quacker/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/TheHCJ/Quacker">
-</a>
-<a href="https://android.com"><img alt="Android" src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Android/android1.svg" height=20></a>
+<a href="https://github.com/TheHCJ/Quacker/releases" alt="GitHub release"><img src="https://img.shields.io/github/release/TheHCJ/Quacker.svg" ></a>
+<a href="/LICENSE" alt="License: MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
+<a href="https://github.com/TheHCJ/Quacker/actions" alt="Build Status"><img src="https://github.com/TheHCJ/Quacker/workflows/ci/badge.svg"></a>
+<a href="https://hosted.weblate.org/engage/quacker/" alt="Translation Status"><img src="https://hosted.weblate.org/widgets/quacker/-/svg-badge.svg"></a>
 </p>
 
 ## Issues
