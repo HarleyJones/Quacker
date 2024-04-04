@@ -72,34 +72,38 @@ class _ProfileFollowsState extends State<ProfileFollows> with AutomaticKeepAlive
   Widget build(BuildContext context) {
     super.build(context);
 
-    return PagedListView<int?, UserWithExtra>(
-      padding: EdgeInsets.zero,
-      pagingController: _pagingController,
-      addAutomaticKeepAlives: false,
-      builderDelegate: PagedChildBuilderDelegate(
-        itemBuilder: (context, user, index) => UserTile(user: UserSubscription.fromUser(user)),
-        firstPageErrorIndicatorBuilder: (context) => FullPageErrorWidget(
-          error: _pagingController.error[0],
-          stackTrace: _pagingController.error[1],
-          prefix: L10n.of(context).unable_to_load_the_list_of_follows,
-          onRetry: () => _loadFollows(_pagingController.firstPageKey),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.type == 'following' ? L10n.of(context).following : L10n.of(context).followers),
         ),
-        newPageErrorIndicatorBuilder: (context) => FullPageErrorWidget(
-          error: _pagingController.error[0],
-          stackTrace: _pagingController.error[1],
-          prefix: L10n.of(context).unable_to_load_the_next_page_of_follows,
-          onRetry: () => _loadFollows(_pagingController.nextPageKey),
-        ),
-        noItemsFoundIndicatorBuilder: (context) {
-          var text = widget.type == 'following'
-              ? L10n.of(context).this_user_does_not_follow_anyone
-              : L10n.of(context).this_user_does_not_have_anyone_following_them;
+        body: PagedListView<int?, UserWithExtra>(
+          padding: EdgeInsets.zero,
+          pagingController: _pagingController,
+          addAutomaticKeepAlives: false,
+          builderDelegate: PagedChildBuilderDelegate(
+            itemBuilder: (context, user, index) => UserTile(user: UserSubscription.fromUser(user)),
+            firstPageErrorIndicatorBuilder: (context) => FullPageErrorWidget(
+              error: _pagingController.error[0],
+              stackTrace: _pagingController.error[1],
+              prefix: L10n.of(context).unable_to_load_the_list_of_follows,
+              onRetry: () => _loadFollows(_pagingController.firstPageKey),
+            ),
+            newPageErrorIndicatorBuilder: (context) => FullPageErrorWidget(
+              error: _pagingController.error[0],
+              stackTrace: _pagingController.error[1],
+              prefix: L10n.of(context).unable_to_load_the_next_page_of_follows,
+              onRetry: () => _loadFollows(_pagingController.nextPageKey),
+            ),
+            noItemsFoundIndicatorBuilder: (context) {
+              var text = widget.type == 'following'
+                  ? L10n.of(context).this_user_does_not_follow_anyone
+                  : L10n.of(context).this_user_does_not_have_anyone_following_them;
 
-          return Center(
-            child: Text(text),
-          );
-        },
-      ),
-    );
+              return Center(
+                child: Text(text),
+              );
+            },
+          ),
+        ));
   }
 }

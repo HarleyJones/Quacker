@@ -557,8 +557,6 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                     includeReplies: false,
                     pinnedTweets: const [],
                     pref: PrefService.of(context)),
-                ProfileFollows(user: user, type: 'following'),
-                ProfileFollows(user: user, type: 'followers'),
                 ProfileSaved(user: user),
               ],
             ),
