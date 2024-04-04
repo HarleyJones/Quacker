@@ -459,6 +459,8 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
 
     return Consumer<ImportDataModel>(
         builder: (context, model, child) => Card(
+              color:
+                  prefs.get(optionThemeMode) == 'dark' && prefs.get(optionThemeTrueBlack) == true ? Colors.black : null,
               child: Row(
                 children: [
                   retweetSidebar,
