@@ -188,7 +188,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
 
       if (type == '@') {
         onTap = () async {
-          Navigator.restorablePushReplacementNamed(context, routeProfile,
+          Navigator.pushNamed(context, routeProfile,
               arguments: ProfileScreenArguments.fromScreenName(full.substring(1)));
         };
       }

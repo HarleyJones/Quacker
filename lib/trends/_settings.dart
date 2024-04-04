@@ -31,56 +31,58 @@ class _TrendsSettingsState extends State<TrendsSettings> {
     var prefs = PrefService.of(context);
     var model = context.read<TrendLocationsModel>();
 
-    return ScopedBuilder<TrendLocationsModel, List<TrendLocation>>.transition(
-      store: model,
-      onError: (_, e) => FullPageErrorWidget(
-        error: e,
-        stackTrace: null,
-        prefix: L10n.of(context).unable_to_find_the_available_trend_locations,
-        onRetry: () => model.loadLocations(),
+    return AlertDialog(
+      content: ScopedBuilder<TrendLocationsModel, List<TrendLocation>>.transition(
+        store: model,
+        onError: (_, e) => FullPageErrorWidget(
+          error: e,
+          stackTrace: null,
+          prefix: L10n.of(context).unable_to_find_the_available_trend_locations,
+          onRetry: () => model.loadLocations(),
+        ),
+        onLoading: (_) => const Center(child: CircularProgressIndicator()),
+        onState: (_, state) {
+          var place = UserTrendLocations.fromJson(jsonDecode(prefs.get(optionUserTrendsLocations))).active;
+
+          var countries = state.sorted((a, b) => a.name!.compareTo(b.name!)).groupBy((e) => e.country);
+
+          var names = countries.keys.sorted((a, b) => a!.compareTo(b!)).toList();
+
+          createLocationTile(TrendLocation item) {
+            var subtitle = item.parentid == 1 ? Text(L10n.of(context).country) : null;
+
+            return RadioListTile<int?>(
+                title: Text(item.name!),
+                subtitle: subtitle,
+                value: item.woeid,
+                selected: place.woeid == item.woeid,
+                groupValue: place.woeid,
+                onChanged: (value) async {
+                  await context.read<UserTrendLocationModel>().set(item);
+                  Navigator.pop(context);
+                });
+          }
+
+          return SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: countries.length,
+              itemBuilder: (context, index) {
+                var name = names[index]!;
+                if (name == '') {
+                  // If there's no country name, assume it's "Worldwide"
+                  return createLocationTile(TrendLocation.fromJson({'name': 'Worldwide', 'woeid': 1}));
+                }
+
+                return ExpansionTile(
+                  title: Text(name),
+                  children: [...countries[name]!.map((item) => createLocationTile(item))],
+                );
+              },
+            ),
+          );
+        },
       ),
-      onLoading: (_) => const Center(child: CircularProgressIndicator()),
-      onState: (_, state) {
-        var place = UserTrendLocations.fromJson(jsonDecode(prefs.get(optionUserTrendsLocations))).active;
-
-        var countries = state.sorted((a, b) => a.name!.compareTo(b.name!)).groupBy((e) => e.country);
-
-        var names = countries.keys.sorted((a, b) => a!.compareTo(b!)).toList();
-
-        createLocationTile(TrendLocation item) {
-          var subtitle = item.parentid == 1 ? Text(L10n.of(context).country) : null;
-
-          return ListTile(
-              title: Text(item.name!),
-              subtitle: subtitle,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              selectedTileColor: Theme.of(context).primaryColor,
-              selected: place.woeid == item.woeid,
-              onTap: () async {
-                await context.read<UserTrendLocationModel>().set(item);
-                Navigator.pop(context);
-              });
-        }
-
-        return SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            itemCount: countries.length,
-            itemBuilder: (context, index) {
-              var name = names[index]!;
-              if (name == '') {
-                // If there's no country name, assume it's "Worldwide"
-                return createLocationTile(TrendLocation.fromJson({'name': 'Worldwide', 'woeid': 1}));
-              }
-
-              return ExpansionTile(
-                title: Text(name),
-                children: [...countries[name]!.map((item) => createLocationTile(item))],
-              );
-            },
-          ),
-        );
-      },
     );
   }
 }

@@ -2545,16 +2545,6 @@ class L10n {
       args: [],
     );
   }
-
-  /// `Explore`
-  String get explore {
-    return Intl.message(
-      'Explore',
-      name: 'explore',
-      desc: '',
-      args: [],
-    );
-  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

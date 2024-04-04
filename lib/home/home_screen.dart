@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:quacker/constants.dart';
-import 'package:quacker/explore/explore.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/group/group_screen.dart';
 import 'package:quacker/home/_feed.dart';
@@ -13,6 +12,7 @@ import 'package:quacker/home/_saved.dart';
 import 'package:quacker/home/home_model.dart';
 import 'package:quacker/search/search.dart';
 import 'package:quacker/subscriptions/subscriptions.dart';
+import 'package:quacker/trends/trends.dart';
 import 'package:quacker/ui/errors.dart';
 import 'package:quacker/ui/physics.dart';
 import 'package:quacker/utils/debounce.dart';
@@ -44,8 +44,9 @@ List<Widget> createCommonAppBarActions(BuildContext context) {
 
 final List<NavigationPage> defaultHomePages = [
   NavigationPage('feed', (c) => L10n.of(c).feed, Icons.rss_feed),
-  NavigationPage('explore', (c) => L10n.of(c).explore, Icons.explore),
   NavigationPage('subscriptions', (c) => L10n.of(c).subscriptions, Icons.subscriptions),
+  NavigationPage('groups', (c) => L10n.of(c).groups, Icons.group),
+  NavigationPage('trending', (c) => L10n.of(c).trending, Icons.trending_up),
   NavigationPage('saved', (c) => L10n.of(c).saved, Icons.bookmark_border),
 ];
 
@@ -127,9 +128,13 @@ class _HomeScreenState extends State<_HomeScreen> {
                       case 'feed':
                         return FeedScreen(scrollController: scrollController, id: '-1', name: L10n.current.feed);
                       case 'subscriptions':
-                        return SubscriptionsScreen(scrollController: scrollController);
-                      case 'explore':
-                        return ExploreScreen(scrollController: scrollController);
+                        return SubscriptionsScreen(
+                          scrollController: scrollController,
+                        );
+                      case 'groups':
+                        return GroupsScreen(scrollController: scrollController);
+                      case 'trending':
+                        return TrendsScreen(scrollController: scrollController);
                       case 'saved':
                         return SavedScreen(scrollController: scrollController);
                       default:

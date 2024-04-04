@@ -164,7 +164,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username":
             MessageLookupByLibrary.simpleMessage("Enter your X username"),
-        "explore": MessageLookupByLibrary.simpleMessage("Explore"),
         "export": MessageLookupByLibrary.simpleMessage("Export"),
         "export_settings":
             MessageLookupByLibrary.simpleMessage("Export settings?"),
