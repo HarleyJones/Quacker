@@ -1,3 +1,8 @@
+> [!WARNING]  
+> I ([@TheHCJ](https://github.com/TheHCJ)) will be implementing most of Quacker's features into [Squawker](https://github.com/j-fbriere/squawker/) as I am unable to fully maintain this project.
+> 
+> Going forward I reccommend you migrate your data to [Squawker](https://github.com/j-fbriere/squawker/) as future updates are unlikely 
+
 <h1 align="center"> Quacker </h1> <br>
 <p align="center">
   <a href="https://github.com/thehcj/quacker">
