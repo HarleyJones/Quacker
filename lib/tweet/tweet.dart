@@ -286,18 +286,23 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
     });
   }
 
-  _createFooterIconButton(IconData icon, [Color? color, Function()? onPressed]) {
+  _createFooterIconButton(IconData icon, [Color? color, double? fill, Function()? onPressed]) {
     return IconButton(
-      icon: Icon(icon, size: 16, color: color),
+      icon: Icon(
+        icon,
+        fill: fill,
+      ),
+      color: color ?? Theme.of(context).colorScheme.primary,
+      iconSize: 24,
       onPressed: onPressed,
     );
   }
 
   _createFooterTextButton(IconData icon, String label, [Color? color, Function()? onPressed]) {
     return TextButton.icon(
-      icon: Icon(icon, size: 14, color: color),
+      icon: Icon(icon, size: 24, color: color),
       onPressed: onPressed,
-      label: Text(label, style: TextStyle(color: color, fontSize: 12.5)),
+      label: Text(label, style: TextStyle(color: color, fontSize: 14)),
     );
   }
 
@@ -430,7 +435,7 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
     Widget translateButton;
     switch (_translationStatus) {
       case TranslationStatus.original:
-        translateButton = _createFooterIconButton(Icons.translate, Colors.blue, () async => onClickTranslate());
+        translateButton = _createFooterIconButton(Icons.translate, Colors.blue, null, () async => onClickTranslate());
         break;
       case TranslationStatus.translating:
         translateButton = const Padding(
@@ -439,10 +444,11 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
         );
         break;
       case TranslationStatus.translationFailed:
-        translateButton = _createFooterIconButton(Icons.translate, Colors.red, () async => onClickTranslate());
+        translateButton = _createFooterIconButton(Icons.translate, Colors.red, null, () async => onClickTranslate());
         break;
       case TranslationStatus.translated:
-        translateButton = _createFooterIconButton(Icons.translate, Colors.green, () async => onClickShowOriginal());
+        translateButton =
+            _createFooterIconButton(Icons.translate, Colors.green, null, () async => onClickShowOriginal());
         break;
     }
 
@@ -530,24 +536,44 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
                       quotedTweet,
                       TweetCard(tweet: tweet, card: tweet.card),
                       Container(
+                        alignment: Alignment.center,
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         child: Scrollbar(
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                if (tweet.replyCount != null)
-                                  _createFooterTextButton(Icons.comment, numberFormat.format(tweet.replyCount), null,
-                                      () => onClickOpenTweet(tweet)),
-                                if (tweet.retweetCount != null)
-                                  _createFooterTextButton(Icons.repeat, numberFormat.format(tweet.retweetCount)),
-                                if (tweet.quoteCount != null)
-                                  _createFooterTextButton(Icons.chat, numberFormat.format(tweet.quoteCount)),
+                                _createFooterTextButton(
+                                    Icons.comment,
+                                    tweet.replyCount != null ? numberFormat.format(tweet.replyCount) : '',
+                                    null,
+                                    () => onClickOpenTweet(tweet)),
+                                if (tweet.retweetCount != null && tweet.quoteCount != null)
+                                  _createFooterTextButton(
+                                      Icons.repeat, numberFormat.format((tweet.retweetCount! + tweet.quoteCount!))),
                                 if (tweet.favoriteCount != null)
                                   _createFooterTextButton(
                                       Icons.favorite_border, numberFormat.format(tweet.favoriteCount)),
+                                const SizedBox(
+                                  width: 8.0,
+                                ),
+                                Consumer<SavedTweetModel>(builder: (context, model, child) {
+                                  var isSaved = model.isSaved(tweet.idStr!);
+                                  if (isSaved) {
+                                    return _createFooterIconButton(Icons.bookmark, null, 1, () async {
+                                      await model.deleteSavedTweet(tweet.idStr!);
+                                      setState(() {});
+                                    });
+                                  } else {
+                                    return _createFooterIconButton(Icons.bookmark_border, null, 0, () async {
+                                      await model.saveTweet(tweet.idStr!, tweet.user?.idStr, tweet.toJson());
+                                      setState(() {});
+                                    });
+                                  }
+                                }),
                                 _createFooterIconButton(
                                   Icons.share,
+                                  null,
                                   null,
                                   () async {
                                     createSheetButton(title, icon, onTap) => ListTile(
