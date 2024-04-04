@@ -131,7 +131,7 @@ class _HomeScreenState extends State<_HomeScreen> {
                           scrollController: scrollController,
                         );
                       case 'trending':
-                        return TrendsScreen(scrollController: scrollController);
+                        return TrendsScreen();
                       case 'saved':
                         return SavedScreen(scrollController: scrollController);
                       default:

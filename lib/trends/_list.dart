@@ -11,9 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TrendsList extends StatefulWidget {
-  final ScrollController scrollController;
-
-  const TrendsList({Key? key, required this.scrollController}) : super(key: key);
+  const TrendsList({super.key});
 
   @override
   State<TrendsList> createState() => _TrendsListState();
@@ -55,7 +53,6 @@ class _TrendsListState extends State<TrendsList> {
         var numberFormat = NumberFormat.compact();
 
         return ListView.builder(
-          controller: widget.scrollController,
           shrinkWrap: true,
           physics: const LessSensitiveScrollPhysics(),
           itemCount: trends.length,

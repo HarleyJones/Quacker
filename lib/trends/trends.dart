@@ -4,9 +4,7 @@ import 'package:quacker/trends/_settings.dart';
 import 'package:quacker/trends/_tabs.dart';
 
 class TrendsScreen extends StatefulWidget {
-  final ScrollController scrollController;
-
-  const TrendsScreen({Key? key, required this.scrollController}) : super(key: key);
+  const TrendsScreen({Key? key}) : super(key: key);
 
   @override
   State<TrendsScreen> createState() => _TrendsScreenState();
@@ -24,11 +22,11 @@ class _TrendsScreenState extends State<TrendsScreen> with AutomaticKeepAliveClie
       appBar: const TrendsTabBar(),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () async => showDialog(
+          onPressed: () async => showModalBottomSheet(
                 context: context,
                 builder: (context) => const TrendsSettings(),
               )),
-      body: TrendsList(scrollController: widget.scrollController),
+      body: TrendsList(),
     );
   }
 }

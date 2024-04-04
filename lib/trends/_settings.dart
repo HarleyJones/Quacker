@@ -31,8 +31,9 @@ class _TrendsSettingsState extends State<TrendsSettings> {
     var prefs = PrefService.of(context);
     var model = context.read<TrendLocationsModel>();
 
-    return AlertDialog(
-      content: ScopedBuilder<TrendLocationsModel, List<TrendLocation>>.transition(
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: ScopedBuilder<TrendLocationsModel, List<TrendLocation>>.transition(
         store: model,
         onError: (_, e) => FullPageErrorWidget(
           error: e,
@@ -51,13 +52,14 @@ class _TrendsSettingsState extends State<TrendsSettings> {
           createLocationTile(TrendLocation item) {
             var subtitle = item.parentid == 1 ? Text(L10n.of(context).country) : null;
 
-            return RadioListTile<int?>(
+            return ListTile(
                 title: Text(item.name!),
                 subtitle: subtitle,
-                value: item.woeid,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                selectedTileColor: Theme.of(context).colorScheme.secondary,
+                selectedColor: Theme.of(context).colorScheme.onSecondary,
                 selected: place.woeid == item.woeid,
-                groupValue: place.woeid,
-                onChanged: (value) async {
+                onTap: () async {
                   await context.read<UserTrendLocationModel>().set(item);
                   Navigator.pop(context);
                 });

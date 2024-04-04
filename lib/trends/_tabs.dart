@@ -73,6 +73,7 @@ class _TrendsTabBarState extends State<TrendsTabBar> with TickerProviderStateMix
               indicatorColor: Theme.of(context).appBarTheme.foregroundColor,
               controller: _tabController,
               isScrollable: true,
+              tabAlignment: TabAlignment.center,
               onTap: (index) async {
                 await model.change(state.locations[index]);
               },
