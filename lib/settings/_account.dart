@@ -142,7 +142,13 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                   },
                   child: Text(L10n.of(context).DeleteTwitterCookies))
             ],
-          )
+          ),
+          Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "⚠️ 2FA is currently not supported ⚠️",
+                textAlign: TextAlign.center,
+              )),
         ]),
       ),
     );
