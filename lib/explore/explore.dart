@@ -7,6 +7,7 @@ import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/forYou.dart';
 import 'package:quacker/generated/l10n.dart';
+import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/profile/profile.dart';
 import 'package:quacker/search/search.dart';
 import 'package:quacker/search/search_model.dart';
@@ -68,19 +69,10 @@ class _ExploreScreenState extends State<ExploreScreen> with SingleTickerProvider
     return Theme(
       data: searchTheme,
       child: Scaffold(
-        // Needed as we're nesting Scaffolds, which causes Flutter to calculate keyboard height incorrectly
-        resizeToAvoidBottomInset: false,
         appBar: AppBar(
-            automaticallyImplyLeading: false,
-            forceMaterialTransparency: true,
-            flexibleSpace: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 36, 8, 4),
-              child: SearchBar(
-                onTap: () =>
-                    Navigator.pushNamed(context, routeSearch, arguments: SearchArguments(0, focusInputOnOpen: true)),
-                leading: const Icon(Icons.search),
-              ),
-            )),
+          title: Text(L10n.current.explore),
+          actions: createCommonAppBarActions(context),
+        ),
         body: Column(
           children: [
             Material(

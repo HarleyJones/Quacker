@@ -11,6 +11,7 @@ import 'package:quacker/home/_groups.dart';
 import 'package:quacker/home/_missing.dart';
 import 'package:quacker/home/_saved.dart';
 import 'package:quacker/home/home_model.dart';
+import 'package:quacker/search/search.dart';
 import 'package:quacker/subscriptions/subscriptions.dart';
 import 'package:quacker/ui/errors.dart';
 import 'package:quacker/ui/physics.dart';
@@ -31,10 +32,12 @@ class NavigationPage {
 List<Widget> createCommonAppBarActions(BuildContext context) {
   return [
     IconButton(
+      icon: const Icon(Icons.search),
+      onPressed: () => Navigator.pushNamed(context, routeSearch, arguments: SearchArguments(0, focusInputOnOpen: true)),
+    ),
+    IconButton(
       icon: const Icon(Icons.settings),
-      onPressed: () {
-        Navigator.pushNamed(context, routeSettings);
-      },
+      onPressed: () => Navigator.pushNamed(context, routeSettings),
     )
   ];
 }

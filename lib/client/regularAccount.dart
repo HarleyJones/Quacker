@@ -340,7 +340,7 @@ class WebFlowAuthModel extends ChangeNotifier {
 
   Future<void> GetAuthTokenCsrf(Map<String, String> userAgentHeader) async {
     var body = {
-      "flow_token": flowToken2FA,
+      "flow_token": flowTokenPassword,
       "subtask_inputs": [
         {
           "subtask_id": "AccountDuplicationCheck",
