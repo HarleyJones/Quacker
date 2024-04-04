@@ -46,7 +46,7 @@ final List<NavigationPage> defaultHomePages = [
   NavigationPage('feed', (c) => L10n.of(c).feed, Icons.rss_feed),
   NavigationPage('subscriptions', (c) => L10n.of(c).subscriptions, Icons.subscriptions),
   NavigationPage('trending', (c) => L10n.of(c).trending, Icons.trending_up),
-  NavigationPage('saved', (c) => L10n.of(c).saved, Icons.bookmark_border),
+  NavigationPage('saved', (c) => L10n.of(c).saved, Icons.bookmark),
 ];
 
 class HomeScreen extends StatelessWidget {
