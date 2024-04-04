@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
-import 'package:quacker/client/authenticatedClient.dart';
+import 'package:quacker/client/client.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/generated/l10n.dart';

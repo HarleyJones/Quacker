@@ -40,7 +40,7 @@ import 'package:quacker/utils/urls.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:uni_links2/uni_links.dart';
-import 'client/authenticate.dart';
+import 'client/regularAccount.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 Future checkForUpdates() async {

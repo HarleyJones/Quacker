@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
+import 'package:quacker/ui/errors.dart';
 
 import '../constants.dart';
 
@@ -22,7 +23,14 @@ class WebFlowAuthModel extends ChangeNotifier {
   static var _tokenRemaining = -1;
   static var _expiresAt = -1;
 
-  static var gtToken, flowToken1, flowToken2, flowTokenUserName, flowTokenPassword, auth_token, csrf_token;
+  static var gtToken,
+      flowToken1,
+      flowToken2,
+      flowTokenUserName,
+      flowTokenPassword,
+      flowToken2FA,
+      auth_token,
+      csrf_token;
   static var kdt_Coookie;
 
   static Future<PrefServiceShared> GetSharedPrefs() async {
@@ -235,7 +243,7 @@ class WebFlowAuthModel extends ChangeNotifier {
             for (var error in parsedError["errors"]) {
               errors.writeln(error["message"] ?? "null");
             }
-            throw Exception(errors.toString());
+            throw Exception(errors);
           }
         } else
           throw Exception("Return Status is (${response.statusCode}), it should be 200");
@@ -248,7 +256,7 @@ class WebFlowAuthModel extends ChangeNotifier {
         for (var error in parsedError["errors"]) {
           errors.writeln(error["message"] ?? "null");
         }
-        throw Exception(errors.toString());
+        throw Exception(errors);
       }
     } else
       throw Exception("Return Status is (${response.statusCode}), it should be 200");
@@ -286,15 +294,53 @@ class WebFlowAuthModel extends ChangeNotifier {
         for (var error in parsedError["errors"]) {
           errors.writeln(error["message"] ?? "null");
         }
-        throw Exception(errors.toString());
+        throw Exception(errors);
       }
     } else
       throw Exception("Return Status is (${response.statusCode}), it should be 200");
   }
 
-  Future<void> GetAuthTokenCsrf(Map<String, String> userAgentHeader) async {
+  Future<void> Pass2FA(String authCode, Map<String, String> userAgentHeader) async {
     var body = {
       "flow_token": flowTokenPassword,
+      "subtask_inputs": [
+        {
+          "subtask_id": "LoginTwoFactorAuthChallenge",
+          "enter_text": {"text": authCode, "link": "next_link"}
+        }
+      ]
+    };
+    var request = http.Request("Post", Uri.parse('https://api.twitter.com/1.1/onboarding/task.json'));
+    request.headers.addAll(userAgentHeader);
+    request.headers.addAll({"content-type": "application/json"});
+    request.headers.addAll({"authorization": _bearerToken});
+    request.headers.addAll({"x-guest-token": gtToken});
+    request.headers.addAll({"Cookie": cookies.join(";")});
+    request.headers.addAll({"Host": "api.twitter.com"});
+    request.body = json.encode(body);
+    var response = await client.send(request);
+    if (response.statusCode == 200) {
+      final stringData = await response.stream.transform(utf8.decoder).join();
+      final exp = RegExp(r'flow_token":"(.+?)"');
+      RegExpMatch? match = exp.firstMatch(stringData);
+      flowToken2FA = match!.group(1).toString();
+    } else if (response.statusCode == 400) {
+      final stringData = await response.stream.transform(utf8.decoder).join();
+      if (stringData.contains("errors")) {
+        var parsedError = json.decode(stringData);
+        var errors = StringBuffer();
+        for (var error in parsedError["errors"]) {
+          errors.writeln(error["message"] ?? "null");
+        }
+        throw Exception(errors);
+      }
+    } else
+      throw Exception("2fa Return Status is (${response.statusCode}), it should be 200");
+  }
+
+  Future<void> GetAuthTokenCsrf(Map<String, String> userAgentHeader) async {
+    var body = {
+      "flow_token": flowToken2FA,
       "subtask_inputs": [
         {
           "subtask_id": "AccountDuplicationCheck",
@@ -411,7 +457,8 @@ class WebFlowAuthModel extends ChangeNotifier {
     await SetTokenExpires(_tokenLimit);
   }
 
-  Future<Map<dynamic, dynamic>> GetAuthHeader(Map<String, String> userAgentHeader) async {
+  Future<Map<dynamic, dynamic>> GetAuthHeader(Map<String, String> userAgentHeader,
+      {String? authCode, BuildContext? context}) async {
     try {
       if (_authHeader == null) await GetAuthTokenFromPref();
       if (!await IsTokenExpired()) return _authHeader!;
@@ -421,6 +468,7 @@ class WebFlowAuthModel extends ChangeNotifier {
       await GetFlowToken2(userAgentHeader);
       await PassUsername(await GetUserName(), userAgentHeader);
       await PassPassword(await GetPassword(), userAgentHeader);
+      if (authCode != null) await Pass2FA(authCode.toString(), userAgentHeader);
       await GetAuthTokenCsrf(userAgentHeader);
       await BuildAuthHeader();
     } on Exception catch (e) {

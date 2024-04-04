@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:quacker/client/authenticatedClient.dart';
+import 'package:quacker/client/client.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/ui/errors.dart';
 import 'package:quacker/user.dart';

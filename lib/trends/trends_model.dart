@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:quacker/client/authenticatedClient.dart';
+import 'package:quacker/client/client.dart';
 import 'package:quacker/constants.dart';
 import 'package:pref/pref.dart';
 

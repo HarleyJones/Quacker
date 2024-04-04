@@ -80,10 +80,11 @@ class _SubscriptionGroupsState extends State<SubscriptionGroups> {
       // TODO: Error
       onState: (_, state) {
         return GridView.builder(
+          shrinkWrap: true,
           controller: widget.scrollController,
           padding: const EdgeInsets.only(top: 4),
           gridDelegate:
-              const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 180, childAspectRatio: 200 / 150),
+              const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 100, childAspectRatio: 160 / 150),
           itemCount: state.length + 2,
           itemBuilder: (context, index) {
             var actualIndex = index - 1;
@@ -353,6 +354,7 @@ class _SubscriptionGroupEditDialogState extends State<SubscriptionGroupEditDialo
                           closeChild: Text(L10n.of(context).close),
                           searchHintText: L10n.of(context).search,
                           noResultsText: L10n.of(context).no_results_for);
+                      print(selectedIcon);
                       if (selectedIcon != null) {
                         setState(() {
                           icon = jsonEncode(serializeIcon(selectedIcon));

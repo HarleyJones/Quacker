@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/home/home_screen.dart';
+import 'package:quacker/subscriptions/_groups.dart';
 import 'package:quacker/subscriptions/_list.dart';
 import 'package:quacker/subscriptions/users_model.dart';
 import 'package:provider/provider.dart';
 
 class SubscriptionsScreen extends StatelessWidget {
-  const SubscriptionsScreen({Key? key}) : super(key: key);
+  final ScrollController scrollController;
+
+  const SubscriptionsScreen({Key? key, required this.scrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,15 @@ class SubscriptionsScreen extends StatelessWidget {
           ...createCommonAppBarActions(context)
         ],
       ),
-      body: const SubscriptionUsers(),
+      body: ListView(
+        shrinkWrap: true,
+        children: [
+          SubscriptionGroups(
+            scrollController: scrollController,
+          ),
+          SubscriptionUsers()
+        ],
+      ),
     );
   }
 }

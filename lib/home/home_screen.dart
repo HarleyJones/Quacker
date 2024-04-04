@@ -43,7 +43,6 @@ final List<NavigationPage> defaultHomePages = [
   NavigationPage('feed', (c) => L10n.of(c).feed, Icons.rss_feed),
   NavigationPage('explore', (c) => L10n.of(c).explore, Icons.explore),
   NavigationPage('subscriptions', (c) => L10n.of(c).subscriptions, Icons.subscriptions),
-  NavigationPage('groups', (c) => L10n.of(c).groups, Icons.group),
   NavigationPage('saved', (c) => L10n.of(c).saved, Icons.bookmark_border),
 ];
 
@@ -125,9 +124,7 @@ class _HomeScreenState extends State<_HomeScreen> {
                       case 'feed':
                         return FeedScreen(scrollController: scrollController, id: '-1', name: L10n.current.feed);
                       case 'subscriptions':
-                        return const SubscriptionsScreen();
-                      case 'groups':
-                        return GroupsScreen(scrollController: scrollController);
+                        return SubscriptionsScreen(scrollController: scrollController);
                       case 'explore':
                         return ExploreScreen(scrollController: scrollController);
                       case 'saved':

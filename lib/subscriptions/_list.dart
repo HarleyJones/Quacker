@@ -71,6 +71,7 @@ class SubscriptionUsersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
       padding: const EdgeInsets.symmetric(vertical: 8),
       itemCount: subscriptions.length,
       itemBuilder: (context, i) {
