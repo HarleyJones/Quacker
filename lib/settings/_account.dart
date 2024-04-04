@@ -100,23 +100,6 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
               ),
             ],
           ),
-          SelectableText('aG3FDMWVAcy6ccV1Zhz%'),
-          Flexible(
-            child: TextField(
-              controller: multiFactorController,
-              //style: const TextStyle(fontSize: 16,height:1),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(3, 0, 16, 3),
-                isDense: true,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(width: 1, color: Theme.of(context).colorScheme.primary),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(width: 1, color: Theme.of(context).colorScheme.primary),
-                ),
-              ),
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -130,7 +113,7 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                         // "Pragma": "no-cache",
                         "Cache-Control": "no-cache"
                         // "If-Modified-Since": "Sat, 1 Jan 2000 00:00:00 GMT",
-                      }, authCode: multiFactorController.text);
+                      }, authCode: null);
 
                       print(_authHeader);
                     } catch (e) {
