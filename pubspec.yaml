@@ -52,7 +52,7 @@ dependencies:
   file_picker: ^8.0.0+1
   flutter_colorpicker: ^1.0.3
   flutter_file_dialog: ^3.0.1
-  flutter_iconpicker: ^3.4.4
+  flutter_iconpicker_plus: ^3.2.3
   flutter_localized_locales: ^2.0.3
   flutter_triple: ^3.0.0
   flutter_windowmanager: ^0.2.0

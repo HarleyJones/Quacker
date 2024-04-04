@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:flutter_iconpicker_plus/IconPicker/Packs/Material.dart';
+import 'package:flutter_iconpicker_plus/flutter_iconpicker.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
@@ -213,6 +214,13 @@ class _SubscriptionGroupEditDialogState extends State<SubscriptionGroupEditDialo
       return const Center(child: CircularProgressIndicator());
     }
 
+    // Filter the Material icons to only the ones the app uses
+    var iconPack = icons.entries.where((value) =>
+        !value.key.endsWith('_sharp') &&
+        !value.key.endsWith('_rounded') &&
+        !value.key.endsWith('_outlined') &&
+        !value.key.endsWith('_outline'));
+
     List<Widget> buttonsLst1 = [
       TextButton(
         onPressed: () {
@@ -348,8 +356,9 @@ class _SubscriptionGroupEditDialogState extends State<SubscriptionGroupEditDialo
                   IconButton(
                     icon: Icon(deserializeIconData(icon)),
                     onPressed: () async {
-                      var selectedIcon = await showIconPicker(context,
-                          iconPackModes: [IconPack.material],
+                      var selectedIcon = await FlutterIconPicker.showIconPicker(context,
+                          iconPackModes: [IconPack.custom],
+                          customIconPack: Map.fromEntries(iconPack),
                           title: Text(L10n.of(context).pick_an_icon),
                           closeChild: Text(L10n.of(context).close),
                           searchHintText: L10n.of(context).search,
