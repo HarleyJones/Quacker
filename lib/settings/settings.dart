@@ -1,17 +1,16 @@
 import 'dart:async';
 
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:quacker/constants.dart';
+import 'package:pref/pref.dart';
 import 'package:quacker/generated/l10n.dart';
-import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/settings/_about.dart';
+import 'package:quacker/settings/_account.dart';
 import 'package:quacker/settings/_data.dart';
 import 'package:quacker/settings/_general.dart';
 import 'package:quacker/settings/_home.dart';
 import 'package:quacker/settings/_theme.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
-import '_account.dart';
 
 class SettingsScreen extends StatefulWidget {
   final String? initialPage;
@@ -44,51 +43,83 @@ class _SettingsScreenState extends State<SettingsScreen> {
     var appVersion = 'v${_packageInfo.version}+${_packageInfo.buildNumber}';
 
     return Scaffold(
-      appBar: AppBar(title: Text("Settings")),
-      body: ListView(children: [
-        ListTile(
-          title: Text(L10n.current.general),
-          leading: Icon(Icons.settings),
-          onTap: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext c) => SettingsGeneralFragment())),
-        ),
-        ListTile(
-          title: Text(L10n.current.home),
-          leading: const Icon(Icons.home),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext c) => SettingsHomeFragment())),
-        ),
-        ListTile(
-          title: Text(L10n.current.theme),
-          leading: Icon(Icons.format_paint),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext c) => SettingsThemeFragment())),
-        ),
-        ListTile(
-          title: Text(L10n.current.data),
-          leading: Icon(Icons.storage),
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext c) => SettingsDataFragment(
-                        legacyExportPath: '',
-                      ))),
-        ),
-        ListTile(
-          title: Text(L10n.current.account),
-          leading: Icon(Icons.account_circle),
-          onTap: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext c) => SettingsAccountFragment())),
-        ),
-        ListTile(
-          title: Text(L10n.current.about),
-          leading: Icon(Icons.info),
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext c) => SettingsAboutFragment(
-                        appVersion: appVersion,
-                      ))),
-        ),
-      ]),
+      appBar: AppBar(title: Text(L10n.of(context).settings)),
+      body: ListView(
+        padding: EdgeInsets.all(16.0),
+        children: [
+          ExpansionTile(
+              title: Text(
+                L10n.of(context).settings,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              initiallyExpanded: true,
+              dense: true,
+              trailing: SizedBox.shrink(),
+              enabled: false,
+              children: [
+                ListTile(
+                  title: Text(L10n.of(context).general),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingsGeneralFragment()),
+                  ),
+                ),
+                ListTile(
+                  title: Text(L10n.of(context).account),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsAccountFragment()),
+                  ),
+                ),
+                ListTile(
+                  title: Text(L10n.of(context).home),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingsHomeFragment()),
+                  ),
+                ),
+                ListTile(
+                  title: Text(L10n.of(context).theme),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingsThemeFragment()),
+                  ),
+                ),
+              ]),
+          ExpansionTile(
+              title: Text(
+                L10n.of(context).data,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              initiallyExpanded: true,
+              dense: true,
+              trailing: SizedBox.shrink(),
+              enabled: false,
+              children: [
+                SettingsDataFragment(
+                  legacyExportPath: _legacyExportPath,
+                )
+              ]),
+          ExpansionTile(
+              title: Text(
+                L10n.of(context).app_info,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              initiallyExpanded: true,
+              dense: true,
+              trailing: SizedBox.shrink(),
+              enabled: false,
+              children: [
+                SettingsAboutFragment(
+                  appVersion: appVersion,
+                )
+              ]),
+        ],
+      ),
     );
   }
 }

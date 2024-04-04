@@ -120,31 +120,24 @@ class SettingsDataFragment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(L10n.current.data)),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: ListView(children: [
-          PrefLabel(
-            leading: const Icon(Icons.import_export),
-            title: Text(L10n.of(context).import),
-            subtitle: Text(L10n.of(context).import_data_from_another_device),
-            onTap: () async {
-              
-                var path = await FlutterFileDialog.pickFile(params: const OpenFileDialogParams());
-                if (path != null) {
-                  await _importFromFile(context, File(path));
-                }
-            },
-          ),
-          PrefLabel(
-            leading: const Icon(Icons.save),
-            title: Text(L10n.of(context).export),
-            subtitle: Text(L10n.of(context).export_your_data),
-            onTap: () => Navigator.pushNamed(context, routeSettingsExport),
-          ),
-        ]),
+    return Column(children: [
+      PrefLabel(
+        leading: const Icon(Icons.import_export),
+        title: Text(L10n.of(context).import),
+        subtitle: Text(L10n.of(context).import_data_from_another_device),
+        onTap: () async {
+          var path = await FlutterFileDialog.pickFile(params: const OpenFileDialogParams());
+          if (path != null) {
+            await _importFromFile(context, File(path));
+          }
+        },
       ),
-    );
+      PrefLabel(
+        leading: const Icon(Icons.save),
+        title: Text(L10n.of(context).export),
+        subtitle: Text(L10n.of(context).export_your_data),
+        onTap: () => Navigator.pushNamed(context, routeSettingsExport),
+      ),
+    ]);
   }
 }

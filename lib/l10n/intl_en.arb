@@ -377,6 +377,7 @@
   "download_handling_type_directory": "Save to directory",
   "download_path": "Download path",
   "permission_not_granted": "Permission not granted. Please try again after granting!",
+  "settings": "Settings",
   "open_app_settings": "Open app settings",
   "open_in_browser": "Open in browser",
   "choose": "Choose",

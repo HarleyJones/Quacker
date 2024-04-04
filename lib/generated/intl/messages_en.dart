@@ -318,6 +318,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Selecting individual accounts to import, and assigning groups are both planned for the future already!"),
         "send": MessageLookupByLibrary.simpleMessage("Send"),
+        "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share_base_url":
             MessageLookupByLibrary.simpleMessage("Custom share URL"),
         "share_base_url_description": MessageLookupByLibrary.simpleMessage(

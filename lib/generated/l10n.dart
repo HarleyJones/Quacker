@@ -2076,6 +2076,16 @@ class L10n {
     );
   }
 
+  /// `Settings`
+  String get settings {
+    return Intl.message(
+      'Settings',
+      name: 'settings',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Open app settings`
   String get open_app_settings {
     return Intl.message(
