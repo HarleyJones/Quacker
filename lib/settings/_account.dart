@@ -13,6 +13,8 @@ class SettingsAccountFragment extends StatefulWidget {
 
 class _SettingsAccountFragment extends State<SettingsAccountFragment> {
   var multiFactorController = TextEditingController();
+  bool hidePassword = true;
+
   @override
   Widget build(BuildContext context) {
     var model = context.read<WebFlowAuthModel>();
@@ -56,7 +58,7 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
               ),
               Flexible(
                 child: PrefText(
-                  obscureText: true,
+                  obscureText: hidePassword,
                   label: '',
                   pref: optionPasswordTwitterAcc,
                   //style: const TextStyle(fontSize: 16,height:1),
@@ -68,6 +70,12 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(width: 1, color: Theme.of(context).colorScheme.primary),
+                    ),
+                    suffix: InkWell(
+                      onTap: () => setState(() => hidePassword = !hidePassword),
+                      child: Icon(
+                        hidePassword ? Icons.visibility : Icons.visibility_off,
+                      ),
                     ),
                   ),
                 ),
