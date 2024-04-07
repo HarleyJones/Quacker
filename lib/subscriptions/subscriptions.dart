@@ -61,7 +61,9 @@ class SubscriptionsScreen extends StatelessWidget {
           SubscriptionGroups(
             scrollController: scrollController,
           ),
-          SubscriptionUsers()
+          SubscriptionUsers(
+            scrollController: scrollController,
+          )
         ],
       ),
     );

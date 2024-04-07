@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:quacker/generated/l10n.dart';
 
 class SubscriptionUsers extends StatefulWidget {
-  const SubscriptionUsers({Key? key}) : super(key: key);
+  final ScrollController scrollController;
+  const SubscriptionUsers({super.key, required this.scrollController});
 
   @override
   State<SubscriptionUsers> createState() => _SubscriptionUsersState();
@@ -61,21 +62,27 @@ class _SubscriptionUsersState extends State<SubscriptionUsers> {
                   ]));
         }
 
-        return SubscriptionUsersList(subscriptions: state);
+        return SubscriptionUsersList(
+          subscriptions: state,
+          scrollController: widget.scrollController,
+        );
       },
     );
   }
 }
 
 class SubscriptionUsersList extends StatelessWidget {
+  final ScrollController scrollController;
   final List<Subscription> subscriptions;
 
-  const SubscriptionUsersList({Key? key, required this.subscriptions}) : super(key: key);
+  const SubscriptionUsersList({Key? key, required this.subscriptions, required this.scrollController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
+      controller: scrollController,
       padding: const EdgeInsets.symmetric(vertical: 8),
       itemCount: subscriptions.length,
       itemBuilder: (context, i) {
