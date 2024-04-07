@@ -1,3 +1,8 @@
+> [!WARNING]  
+> This app is currently prone to breakage and crashing
+>
+> USE AT YOUR OWN RISK
+
 <h1 align="center"> Quacker </h1> <br>
 <p align="center">
   <a href="https://github.com/thehcj/quacker">
