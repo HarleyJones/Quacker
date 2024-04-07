@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "DeleteTwitterCookies": MessageLookupByLibrary.simpleMessage(
             "Delete all cookies of the account"),
         "about": MessageLookupByLibrary.simpleMessage("About"),
+        "accessibility": MessageLookupByLibrary.simpleMessage("Accessibility"),
         "account": MessageLookupByLibrary.simpleMessage("Account"),
         "account_suspended":
             MessageLookupByLibrary.simpleMessage("Account suspended"),
@@ -138,6 +139,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Date Subscribed"),
         "default_tab": MessageLookupByLibrary.simpleMessage("Default tab"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "disable_animations":
+            MessageLookupByLibrary.simpleMessage("Disable animations?"),
+        "disable_animations_description": MessageLookupByLibrary.simpleMessage(
+            "Disables animations within the app"),
         "disable_screenshots":
             MessageLookupByLibrary.simpleMessage("Disable screenshots"),
         "disable_screenshots_hint": MessageLookupByLibrary.simpleMessage(
@@ -335,7 +340,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "should_check_for_updates_label":
             MessageLookupByLibrary.simpleMessage("Check for updates"),
         "show_navigation_labels":
-            MessageLookupByLibrary.simpleMessage(" Show navigation labels"),
+            MessageLookupByLibrary.simpleMessage("Show navigation labels?"),
         "small": MessageLookupByLibrary.simpleMessage("Small"),
         "something_broke_in_fritter":
             MessageLookupByLibrary.simpleMessage("Something broke in Quacker."),

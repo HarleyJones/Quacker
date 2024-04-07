@@ -2426,6 +2426,36 @@ class L10n {
     );
   }
 
+  /// `Accessibility`
+  String get accessibility {
+    return Intl.message(
+      'Accessibility',
+      name: 'accessibility',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disable animations?`
+  String get disable_animations {
+    return Intl.message(
+      'Disable animations?',
+      name: 'disable_animations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disables animations within the app`
+  String get disable_animations_description {
+    return Intl.message(
+      'Disables animations within the app',
+      name: 'disable_animations_description',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Browsing Posts`
   String get browsingTweets {
     return Intl.message(
@@ -2516,10 +2546,10 @@ class L10n {
     );
   }
 
-  /// ` Show navigation labels`
+  /// `Show navigation labels?`
   String get show_navigation_labels {
     return Intl.message(
-      ' Show navigation labels',
+      'Show navigation labels?',
       name: 'show_navigation_labels',
       desc: '',
       args: [],

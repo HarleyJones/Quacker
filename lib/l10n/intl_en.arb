@@ -412,6 +412,9 @@
   "functionality_unsupported": "This functionality is no longer supported by X!",
   "add_subscriptions": "Add subscriptions",
   "account": "Account",
+  "accessibility": "Accessibility",
+  "disable_animations": "Disable animations?",
+  "disable_animations_description": "Disables animations within the app",
   "browsingTweets": "Browsing Posts",
   "loginNameTwitterAcc": "Username",
   "passwordTwitterAcc": "Password",
@@ -421,7 +424,7 @@
   "DeleteTwitterCookies": "Delete all cookies of the account",
   "foryou": "For You",
   "clickToShowMore": " \nClick to show more..",
-  "show_navigation_labels": " Show navigation labels",
+  "show_navigation_labels": "Show navigation labels?",
   "top": "Top",
   "latest": "Latest",
   "people": "People"

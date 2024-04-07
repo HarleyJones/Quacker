@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pref/pref.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/settings/_about.dart';
+import 'package:quacker/settings/_accessibility.dart';
 import 'package:quacker/settings/_account.dart';
 import 'package:quacker/settings/_data.dart';
 import 'package:quacker/settings/_general.dart';
@@ -87,6 +88,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const SettingsThemeFragment()),
+                  ),
+                ),
+                ListTile(
+                  title: Text(L10n.of(context).accessibility),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingsAccessibilityFragment()),
                   ),
                 ),
               ]),
