@@ -1,7 +1,7 @@
 > [!WARNING]  
-> I ([@TheHCJ](https://github.com/TheHCJ)) will be implementing most of Quacker's features into [Squawker](https://github.com/j-fbriere/squawker/) as I am unable to fully maintain this project.
-> 
-> Going forward I reccommend you migrate your data to [Squawker](https://github.com/j-fbriere/squawker/) as future updates are unlikely 
+> This app is currently prone to breakage and crashing
+>
+> USE AT YOUR OWN RISK
 
 <h1 align="center"> Quacker </h1> <br>
 <p align="center">
