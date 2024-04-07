@@ -3,6 +3,7 @@ import 'package:flutter_triple/flutter_triple.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/search/search.dart';
+import 'package:quacker/subscriptions/_import.dart';
 import 'package:quacker/subscriptions/users_model.dart';
 import 'package:quacker/ui/errors.dart';
 import 'package:quacker/user.dart';
@@ -51,7 +52,10 @@ class _SubscriptionUsersState extends State<SubscriptionUsers> {
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       child: ElevatedButton(
                         child: Text(L10n.of(context).import_from_twitter),
-                        onPressed: () => Navigator.pushNamed(context, routeSubscriptionsImport),
+                        onPressed: () => showModalBottomSheet(
+                          context: context,
+                          builder: (context) => const SubscriptionImportScreen(),
+                        ),
                       ),
                     )
                   ]));

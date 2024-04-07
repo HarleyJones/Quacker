@@ -3,6 +3,7 @@ import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/subscriptions/_groups.dart';
+import 'package:quacker/subscriptions/_import.dart';
 import 'package:quacker/subscriptions/_list.dart';
 import 'package:quacker/subscriptions/users_model.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,10 @@ class SubscriptionsScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.cloud_download),
-            onPressed: () => Navigator.pushNamed(context, routeSubscriptionsImport),
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (context) => const SubscriptionImportScreen(),
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.refresh),

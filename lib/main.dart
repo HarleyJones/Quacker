@@ -422,7 +422,6 @@ class _FritterAppState extends State<FritterApp> {
           routeSettingsExport: (context) => const SettingsExportScreen(),
           routeSettingsHome: (context) => const SettingsHomeFragment(),
           routeStatus: (context) => const StatusScreen(),
-          routeSubscriptionsImport: (context) => const SubscriptionImportScreen()
         },
         builder: (context, child) {
           // Replace the default red screen of death with a slightly friendlier one
