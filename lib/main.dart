@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:device_preview/device_preview.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -146,6 +145,7 @@ Future<void> main() async {
   setTimeagoLocales();
 
   final prefService = await PrefServiceShared.init(prefix: 'pref_', defaults: {
+    optionDisableAnimations: false,
     optionDisableScreenshots: false,
     optionDownloadPath: '',
     optionDownloadType: optionDownloadTypeAsk,
@@ -232,10 +232,6 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (_) => VideoContextState(prefService.get(optionMediaDefaultMute))),
           ChangeNotifierProvider(create: (context) => webFlowAuthModel),
         ],
-        child: DevicePreview(
-          enabled: !kReleaseMode,
-          builder: (context) => const FritterApp(),
-        ),
       )));
 }
 
@@ -250,6 +246,7 @@ class _FritterAppState extends State<FritterApp> {
   static final log = Logger('_MyAppState');
 
   String _themeMode = 'system';
+  bool _disableAnimations = false;
   bool _trueBlack = false;
   Locale? _locale;
 
@@ -286,6 +283,7 @@ class _FritterAppState extends State<FritterApp> {
       setLocale(prefService.get<String>(optionLocale));
       _themeMode = prefService.get(optionThemeMode);
       _trueBlack = prefService.get(optionThemeTrueBlack);
+      _disableAnimations = prefService.get(optionDisableAnimations);
       setDisableScreenshots(prefService.get(optionDisableScreenshots));
     });
 
@@ -383,10 +381,18 @@ class _FritterAppState extends State<FritterApp> {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: L10n.delegate.supportedLocales,
-        locale: _locale ?? DevicePreview.locale(context),
+        locale: _locale,
         title: 'Quacker',
         theme: ThemeData(
           colorScheme: lightDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.light),
+          pageTransitionsTheme: _disableAnimations == false
+              ? PageTransitionsTheme(
+                  builders: {
+                    TargetPlatform.android: NoAnimationPageTransitionsBuilder(),
+                    TargetPlatform.iOS: NoAnimationPageTransitionsBuilder(),
+                  },
+                )
+              : null,
           useMaterial3: true,
         ),
         darkTheme: ThemeData(
@@ -417,7 +423,7 @@ class _FritterAppState extends State<FritterApp> {
                 prefix: L10n.of(context).something_broke_in_fritter,
               );
 
-          return DevicePreview.appBuilder(context, child ?? Container());
+          return child ?? Container();
         },
       );
     });
@@ -552,5 +558,19 @@ class _DefaultPageState extends State<DefaultPage> {
   void dispose() {
     super.dispose();
     _sub?.cancel();
+  }
+}
+
+class NoAnimationPageTransitionsBuilder extends PageTransitionsBuilder {
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    // No animation, simply return the child
+    return child;
   }
 }

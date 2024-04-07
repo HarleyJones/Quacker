@@ -1,3 +1,5 @@
+const optionDisableAnimations = 'accessibility.disable_animations';
+
 const optionWizardCompleted = 'option.wizard_completed';
 
 const optionDisableScreenshots = 'disable_screenshots';

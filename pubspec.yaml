@@ -42,7 +42,6 @@ dependencies:
   crypto: ^3.0.3
   dart_twitter_api: ^0.5.8
   device_info_plus: ^9.0.2
-  device_preview: ^1.1.0
   dotted_border: ^2.0.0+3
   extended_image: ^8.0.2
   extended_nested_scroll_view: ^6.0.0
