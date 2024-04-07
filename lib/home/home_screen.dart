@@ -226,6 +226,7 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
         labelBehavior: showNavigationLabels
             ? NavigationDestinationLabelBehavior.alwaysShow
             : NavigationDestinationLabelBehavior.alwaysHide,
+        animationDuration: PrefService.of(context).get(optionDisableAnimations) == true ? Duration.zero : null,
         destinations: [
           ..._pages.map((e) => NavigationDestination(icon: Icon(e.icon, size: 22), label: e.titleBuilder(context)))
         ],
