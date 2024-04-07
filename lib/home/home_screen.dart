@@ -210,6 +210,8 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
   @override
   Widget build(BuildContext context) {
     final showNavigationLabels = PrefService.of(context).get(optionShowNavigationLabels);
+    final _disableAnimations = PrefService.of(context).get(optionDisableAnimations);
+
     return Scaffold(
       body: PageView(
         controller: _pageController,
@@ -226,14 +228,16 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
         labelBehavior: showNavigationLabels
             ? NavigationDestinationLabelBehavior.alwaysShow
             : NavigationDestinationLabelBehavior.alwaysHide,
-        animationDuration: PrefService.of(context).get(optionDisableAnimations) == true ? Duration.zero : null,
+        animationDuration: _disableAnimations == true ? Duration.zero : null,
         destinations: [
           ..._pages.map((e) => NavigationDestination(icon: Icon(e.icon, size: 22), label: e.titleBuilder(context)))
         ],
         onDestinationSelected: (int value) {
           setState(() {
             currentPage = value;
-            _pageController?.jumpToPage(value);
+            _disableAnimations == true
+                ? _pageController?.jumpToPage(value)
+                : _pageController?.animateToPage(value, duration: Durations.medium1, curve: Curves.ease);
           });
         },
       ),
