@@ -385,7 +385,7 @@ class _FritterAppState extends State<FritterApp> {
         title: 'Quacker',
         theme: ThemeData(
           colorScheme: lightDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.light),
-          pageTransitionsTheme: _disableAnimations == false
+          pageTransitionsTheme: _disableAnimations == true
               ? PageTransitionsTheme(
                   builders: {
                     TargetPlatform.android: NoAnimationPageTransitionsBuilder(),
@@ -400,6 +400,14 @@ class _FritterAppState extends State<FritterApp> {
               ? (darkDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.dark))
                   .copyWith(background: Colors.black, surface: Colors.black)
               : (darkDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.dark))),
+          pageTransitionsTheme: _disableAnimations == true
+              ? PageTransitionsTheme(
+                  builders: {
+                    TargetPlatform.android: NoAnimationPageTransitionsBuilder(),
+                    TargetPlatform.iOS: NoAnimationPageTransitionsBuilder(),
+                  },
+                )
+              : null,
           useMaterial3: true,
         ),
         themeMode: themeMode,
