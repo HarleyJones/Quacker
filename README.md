@@ -1,8 +1,3 @@
-> [!WARNING]  
-> This app is currently prone to breakage and crashing
->
-> USE AT YOUR OWN RISK
-
 <h1 align="center"> Quacker </h1> <br>
 <p align="center">
   <a href="https://github.com/thehcj/quacker">
@@ -14,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="https://apt.izzysoft.de/fdroid/index/apk/com.thehcj.quacker">
-    <img alt="Get it on IzzyOnDroid" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="80"></a>
+  <a href="https://f-droid.org/en/packages/com.thehcj.quacker/">
+    <img alt="Get it on F-Droid" src="https://f-droid.org/badge/get-it-on.png" height="80"></a>
 </p>
 
 <p align="center">
@@ -24,9 +19,6 @@
 <a href="https://github.com/TheHCJ/Quacker/actions" alt="Build Status"><img src="https://github.com/TheHCJ/Quacker/workflows/ci/badge.svg"></a>
 <a href="https://hosted.weblate.org/engage/quacker/" alt="Translation Status"><img src="https://hosted.weblate.org/widgets/quacker/-/svg-badge.svg"></a>
 </p>
-
-## Issues
-* 2FA accounts cannot login
  
 ## Features:
 * Feed: View your `Following` or if you prefer your `For You` feed
