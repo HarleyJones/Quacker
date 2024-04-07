@@ -213,8 +213,6 @@ Future<void> main() async {
 
   var trendLocationModel = UserTrendLocationModel(prefService);
 
-  var webFlowAuthModel = WebFlowAuthModel(prefService);
-
   runApp(PrefService(
       service: prefService,
       child: MultiProvider(
@@ -230,8 +228,10 @@ Future<void> main() async {
           Provider(create: (context) => TrendLocationsModel()),
           Provider(create: (context) => TrendsModel(trendLocationModel)),
           ChangeNotifierProvider(create: (_) => VideoContextState(prefService.get(optionMediaDefaultMute))),
-          ChangeNotifierProvider(create: (context) => webFlowAuthModel),
+          ChangeNotifierProvider(create: (_) => WebFlowAuthModel(prefService)),
         ],
+        child: FritterApp(),
+        builder: (BuildContext _, Widget? w) => w ?? Container(),
       )));
 }
 
