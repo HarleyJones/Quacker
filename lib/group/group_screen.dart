@@ -1,6 +1,8 @@
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
+import 'package:pref/pref.dart';
+import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/group/group_model.dart';
@@ -123,7 +125,10 @@ class SubscriptionGroupScreen extends StatelessWidget {
                       icon: const Icon(Icons.arrow_upward),
                       onPressed: () async {
                         await scrollController.animateTo(0,
-                            duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                            duration: PrefService.of(context).get(optionDisableAnimations) == true
+                                ? Duration.zero
+                                : const Duration(seconds: 1),
+                            curve: Curves.easeInOut);
                       }),
                   IconButton(
                       icon: const Icon(Icons.refresh),

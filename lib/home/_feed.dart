@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
-import 'package:quacker/forYou.dart';
+import 'package:quacker/constants.dart';
+import 'package:quacker/home/_forYou.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/group/_settings.dart';
 import 'package:quacker/group/group_model.dart';
@@ -31,6 +32,7 @@ class _FeedScreenState extends State<FeedScreen>
   late TabController _tabController;
   int _tab = 0;
   dynamic _tabValue = L10n.current.following;
+  Duration animationDuration = Duration.zero;
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ class _FeedScreenState extends State<FeedScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final bool _disableAnimations = PrefService.of(context).get(optionDisableAnimations) == true;
 
     user.idStr = "1";
     user.possiblySensitive = false;
@@ -93,8 +96,12 @@ class _FeedScreenState extends State<FeedScreen>
                         IconButton(
                             icon: const Icon(Icons.arrow_upward),
                             onPressed: () async {
-                              await widget.scrollController
-                                  .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              if (_disableAnimations == false) {
+                                await widget.scrollController
+                                    .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              } else {
+                                widget.scrollController.jumpTo(0);
+                              }
                             }),
                         ...createCommonAppBarActions(context)
                       ]
@@ -104,8 +111,12 @@ class _FeedScreenState extends State<FeedScreen>
                         IconButton(
                             icon: const Icon(Icons.arrow_upward),
                             onPressed: () async {
-                              await widget.scrollController
-                                  .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              if (_disableAnimations == false) {
+                                await widget.scrollController
+                                    .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              } else {
+                                widget.scrollController.jumpTo(0);
+                              }
                             }),
                         IconButton(
                             icon: const Icon(Icons.refresh),
