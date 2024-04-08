@@ -41,6 +41,5 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# FVM
-.fvmrc
-.fvm/fvm_config.json
+# FVM Version Cache
+.fvm/

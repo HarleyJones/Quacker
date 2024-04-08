@@ -1,12 +1,13 @@
 {
-    "dart.lineLength": 120,
+  "dart.lineLength": 120,
+  "editor.rulers": [
+    120
+  ],
+  "[dart]": {
     "editor.rulers": [
-        120
+      120
     ],
-    "[dart]": {
-        "editor.rulers": [
-            120
-        ],
-        "editor.formatOnSave": true,
-    }
+    "editor.formatOnSave": true
+  },
+  "dart.flutterSdkPath": ".fvm/versions/stable"
 }
