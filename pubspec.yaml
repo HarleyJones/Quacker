@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
 # when release on F-Droid make this version code lower
-version: 3.3.0+300200101
+version: 3.3.1+300200102
 
 environment:
   sdk: ">=2.18.0 <3.0.0"

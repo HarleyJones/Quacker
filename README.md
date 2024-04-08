@@ -8,10 +8,10 @@
   A private and clean way to browse X
 </p>
 
-<p align="center">
+<!-- <p align="center">
   <a href="https://f-droid.org/en/packages/com.thehcj.quacker/">
     <img alt="Get it on F-Droid" src="https://f-droid.org/badge/get-it-on.png" height="80"></a>
-</p>
+</p> -->
 
 <p align="center">
 <a href="https://github.com/TheHCJ/Quacker/releases" alt="GitHub release"><img src="https://img.shields.io/github/release/TheHCJ/Quacker.svg" ></a>
