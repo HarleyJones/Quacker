@@ -37,7 +37,6 @@ class _FritterTwitterClient extends TwitterClient {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        print(response.reasonPhrase);
         return Future.error(HttpException(response.reasonPhrase ?? response.statusCode.toString()));
       }
     });
@@ -47,6 +46,7 @@ class _FritterTwitterClient extends TwitterClient {
     log.info('Fetching $uri');
 
     var prefs = await PrefServiceShared.init(prefix: 'pref_');
+
     WebFlowAuthModel webFlowAuthModel = WebFlowAuthModel(prefs);
     var authHeader = await webFlowAuthModel.GetAuthHeader(userAgentHeader);
     var response = await http.get(uri, headers: {
@@ -249,11 +249,12 @@ class Twitter {
     for (var entry in addEntries) {
       var entryId = entry['entryId'] as String;
       if (entryId.startsWith('tweet-')) {
-        var result;
-        if (entry['content']['itemContent']['tweet_results']['result']["__typename"] == "TweetWithVisibilityResults")
+        dynamic result;
+        if (entry['content']['itemContent']['tweet_results']['result']["__typename"] == "TweetWithVisibilityResults") {
           result = entry['content']['itemContent']['tweet_results']['result']['tweet'];
-        else
+        } else {
           result = entry['content']['itemContent']['tweet_results']['result'];
+        }
 
         if (result != null) {
           replies
@@ -375,7 +376,7 @@ class Twitter {
     var rootTweet = chains.first;
     chains.remove(rootTweet);
     chains.sort((a, b) {
-      return b.id!.compareTo(a.id!);
+      return b.id.compareTo(a.id);
     });
     chains.insert(0, rootTweet);
 
@@ -397,7 +398,7 @@ class Twitter {
       "withReactionsPerspective": false
     };
 
-    var _features = {
+    var features = {
       "responsive_web_graphql_exclude_directive_enabled": true,
       "verified_phone_label_enabled": false,
       "creator_subscriptions_tweet_preview_api_enabled": true,
@@ -425,7 +426,7 @@ class Twitter {
     }
 
     var uri = Uri.https('twitter.com', '/i/api/graphql/flaR-PUMshxFWZWPNpq4zA/SearchTimeline',
-        {'variables': jsonEncode(variables), 'features': jsonEncode(_features)});
+        {'variables': jsonEncode(variables), 'features': jsonEncode(features)});
 
     var response = await _twitterApi.client.get(uri);
     var result = json.decode(response.body);
@@ -542,12 +543,6 @@ class Twitter {
     required void Function() incrementTweetsCounter,
   }) async {
     bool showPinnedTweet = true;
-    var query = {
-      ...defaultParams,
-      'include_tweet_replies': includeReplies ? '1' : '0',
-      'include_want_retweets': includeRetweets ? '1' : '0', // This may not actually do anything
-      'count': count.toString(),
-    };
     Map<String, Object> defaultUserTweetsParam = {
       "variables":
           "{\"userId\":\"160534877\",\"count\":20,\"includePromotedContent\":true,\"withQuickPromoteEligibilityTweetFields\":true,\"withVoice\":true,\"withV2Timeline\":true}",
@@ -759,7 +754,7 @@ class Twitter {
     // Order all the conversations by newest first (assuming the ID is an incrementing key),
     // and create a chain from them
     chains.sort((a, b) {
-      return b.id!.compareTo(a.id!);
+      return b.id.compareTo(a.id);
     });
 
     //If we want to show pinned tweets, add them before the others that we already have
@@ -810,7 +805,7 @@ class Twitter {
     // Order all the conversations by newest first (assuming the ID is an incrementing key),
     // and create a chain from them
     chains.sort((a, b) {
-      return b.id!.compareTo(a.id!);
+      return b.id.compareTo(a.id);
     });
 
     //If we want to show pinned tweets, add them before the others that we already have

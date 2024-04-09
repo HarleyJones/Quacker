@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
-import 'package:quacker/ui/errors.dart';
 
 import '../constants.dart';
 
@@ -64,7 +63,6 @@ class WebFlowAuthModel extends ChangeNotifier {
   }
 
   Future<String?> GetGT(Map<String, String> userAgentHeader) async {
-    Map<String, String> result = new Map<String, String>();
     var request = http.Request("Get", Uri.parse('https://twitter.com/i/flow/login'))..followRedirects = false;
     request.headers.addAll(userAgentHeader);
     request.headers.addAll({"Host": "twitter.com"});
@@ -363,18 +361,17 @@ class WebFlowAuthModel extends ChangeNotifier {
     var response = await client.send(request);
 
     if (response.statusCode == 200) {
-      final stringData = await response.stream.transform(utf8.decoder).join();
       var responseHeader = response.headers.toString();
       final expAuthToken = RegExp(r'(auth_token=(.+?));');
       RegExpMatch? matchAuthToken = expAuthToken.firstMatch(responseHeader);
       auth_token = matchAuthToken!.group(2).toString();
-      var auth_token_Coookie = matchAuthToken!.group(1).toString();
+      var auth_token_Coookie = matchAuthToken.group(1).toString();
       cookies.add(auth_token_Coookie);
       GetAuthTokenLimits(responseHeader);
       final expCt0 = RegExp(r'(ct0=(.+?));');
       RegExpMatch? matchCt0 = expCt0.firstMatch(responseHeader);
       csrf_token = matchCt0!.group(2).toString();
-      var csrf_token_Coookie = matchCt0!.group(1).toString();
+      var csrf_token_Coookie = matchCt0.group(1).toString();
       cookies.add(csrf_token_Coookie);
 
       if (kdt_Coookie == null) {
@@ -426,7 +423,7 @@ class WebFlowAuthModel extends ChangeNotifier {
     //log.info('Refreshing the Twitter token');
   }
 
-  Future<void> GetAuthTokenFromPref() async {
+  Future<void> getAuthTokenFromPref() async {
     if (_expiresAt == -1) _expiresAt = await GetTokenExpires();
     if (_tokenRemaining == -1) _tokenRemaining = await GetTokenRemaining();
     if (_tokenLimit == -1) _tokenLimit = await GetTokenLimit();
@@ -463,7 +460,7 @@ class WebFlowAuthModel extends ChangeNotifier {
   Future<Map<dynamic, dynamic>> GetAuthHeader(Map<String, String> userAgentHeader,
       {String? authCode, BuildContext? context}) async {
     try {
-      if (_authHeader == null) await GetAuthTokenFromPref();
+      if (_authHeader == null) await getAuthTokenFromPref();
       if (!await IsTokenExpired()) return _authHeader!;
       await GetGuestId(userAgentHeader);
       await GetGT(userAgentHeader);
@@ -527,7 +524,6 @@ class WebFlowAuthModel extends ChangeNotifier {
 
   Future<int> GetTokenExpires() async {
     return prefs.get("auth_expiresAt") ?? -1;
-    ;
   }
 
   Future DeleteTokenExpires() async {
@@ -540,7 +536,6 @@ class WebFlowAuthModel extends ChangeNotifier {
 
   Future<int> GetTokenRemaining() async {
     return prefs.get("auth_tokenRemaining") ?? -1;
-    ;
   }
 
   Future DeleteTokenRemaining() async {
@@ -553,7 +548,6 @@ class WebFlowAuthModel extends ChangeNotifier {
 
   Future<int> GetTokenLimit() async {
     return prefs.get("auth_tokenLimit") ?? -1;
-    ;
   }
 
   Future DeleteTokenLimit() async {

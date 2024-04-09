@@ -110,12 +110,14 @@ class SettingsDataFragment extends StatelessWidget {
 
     await importModel.importData(dataToImport);
     await groupModel.reloadGroups();
-    await context.read<SubscriptionsModel>().reloadSubscriptions();
-    await context.read<SubscriptionsModel>().refreshSubscriptionData();
+    context.mounted ? await context.read<SubscriptionsModel>().reloadSubscriptions() : null;
+    context.mounted ? await context.read<SubscriptionsModel>().refreshSubscriptionData() : null;
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(L10n.of(context).data_imported_successfully),
-    ));
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(L10n.of(context).data_imported_successfully),
+      ));
+    }
   }
 
   @override
@@ -127,7 +129,7 @@ class SettingsDataFragment extends StatelessWidget {
         subtitle: Text(L10n.of(context).import_data_from_another_device),
         onTap: () async {
           var path = await FlutterFileDialog.pickFile(params: const OpenFileDialogParams());
-          if (path != null) {
+          if (path != null && context.mounted) {
             await _importFromFile(context, File(path));
           }
         },

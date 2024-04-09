@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:pref/pref.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/group/group_model.dart';
@@ -9,8 +8,6 @@ void showFeedSettings(BuildContext context, GroupModel model) {
   showModalBottomSheet(
       context: context,
       builder: (context) {
-        var theme = Theme.of(context);
-
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -45,7 +42,7 @@ void showFeedSettings(BuildContext context, GroupModel model) {
                         ),
                         value: model.state.includeReplies,
                         onChanged: (value) async {
-                          await model.toggleSubscriptionGroupIncludeReplies(value ?? false);
+                          await model.toggleSubscriptionGroupIncludeReplies(value);
                         }),
                     SwitchListTile(
                         title: Text(
@@ -53,7 +50,7 @@ void showFeedSettings(BuildContext context, GroupModel model) {
                         ),
                         value: model.state.includeRetweets,
                         onChanged: (value) async {
-                          await model.toggleSubscriptionGroupIncludeRetweets(value ?? false);
+                          await model.toggleSubscriptionGroupIncludeRetweets(value);
                         }),
                   ],
                 );

@@ -86,20 +86,17 @@ class EmojiErrorWidget extends FritterErrorWidget {
   final String message;
   final String errorMessage;
   final Function? onRetry;
-  String retryText = '';
+  final String? retryText;
   final bool showBackButton;
 
-  EmojiErrorWidget(
-      {Key? key,
+  const EmojiErrorWidget(
+      {super.key,
       required this.emoji,
       required this.message,
       required this.errorMessage,
       this.onRetry,
-      String? retryText,
-      this.showBackButton = true})
-      : super(key: key) {
-    this.retryText = retryText ?? L10n.current.retry;
-  }
+      this.retryText,
+      this.showBackButton = true});
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +152,7 @@ class EmojiErrorWidget extends FritterErrorWidget {
                       child: child,
                     );
                   },
-                  child: Text(retryText),
+                  child: Text(retryText ?? L10n.current.retry),
                   onPressed: () => onRetry(),
                 ),
               )

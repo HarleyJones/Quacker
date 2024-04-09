@@ -20,8 +20,6 @@ import 'package:measure_size/measure_size.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 
-import '../settings/_account.dart';
-
 class ProfileScreenArguments {
   final String? id;
   final String? screenName;

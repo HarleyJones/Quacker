@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
-import 'package:quacker/utils/iterables.dart';
 import 'package:pref/pref.dart';
 
 class SettingsThemeFragment extends StatelessWidget {

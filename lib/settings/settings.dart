@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:pref/pref.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/settings/_about.dart';
 import 'package:quacker/settings/_accessibility.dart';

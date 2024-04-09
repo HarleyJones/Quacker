@@ -1,8 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
@@ -10,9 +5,7 @@ import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/utils/iterables.dart';
-import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pref/pref.dart';
 
@@ -47,7 +40,10 @@ class SettingsGeneralFragment extends StatelessWidget {
           TextButton(
               onPressed: () async {
                 await prefService.set(optionShareBaseUrl, controller.text);
+
+                if (context.mounted) {
                 Navigator.pop(context);
+                }
               },
               child: Text(L10n.of(context).save))
         ],
@@ -202,7 +198,7 @@ class DownloadTypeSettingState extends State<DownloadTypeSetting> {
                 });
               } else if (storagePermission.isPermanentlyDenied) {
                 await openAppSettings();
-              } else {
+              } else if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(L10n.current.permission_not_granted),
                     action: SnackBarAction(

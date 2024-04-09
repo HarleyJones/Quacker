@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/subscriptions/_groups.dart';

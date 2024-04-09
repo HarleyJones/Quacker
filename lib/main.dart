@@ -27,7 +27,6 @@ import 'package:quacker/settings/_home.dart';
 import 'package:quacker/settings/settings.dart';
 import 'package:quacker/settings/settings_export_screen.dart';
 import 'package:quacker/status.dart';
-import 'package:quacker/subscriptions/_import.dart';
 import 'package:quacker/subscriptions/users_model.dart';
 import 'package:quacker/trends/trends_model.dart';
 import 'package:quacker/tweet/_video.dart';
@@ -515,6 +514,7 @@ class _DefaultPageState extends State<DefaultPage> {
         _migrationError = e;
         _migrationStackTrace = s;
       });
+      return e;
     });
 
     getInitialUri().then((link) {

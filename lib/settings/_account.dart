@@ -125,7 +125,9 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
 
                       print(_authHeader);
                     } catch (e) {
-                      showSnackBar(context, icon: '', message: e.toString());
+                      if (context.mounted) {
+                        showSnackBar(context, icon: '', message: e.toString());
+                      }
                     }
                   },
                   child: Text(L10n.of(context).login)),
@@ -138,15 +140,17 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                     model.prefs.set(optionLoginNameTwitterAcc, "");
                     model.prefs.set(optionPasswordTwitterAcc, "");
                     model.prefs.set(optionEmailTwitterAcc, "");
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          L10n.of(context).twitterCookiesDeleted,
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            L10n.of(context).twitterCookiesDeleted,
+                          ),
                         ),
-                      ),
-                    );
+                      );
 
-                    Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
                   },
                   child: Text(L10n.of(context).DeleteTwitterCookies))
             ],

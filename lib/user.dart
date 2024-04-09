@@ -176,13 +176,15 @@ class FollowButton extends StatelessWidget {
             switch (value) {
               case 'add_to_group':
                 var groups = await context.read<GroupsModel>().listGroupsForUser(user.id);
-                showDialog(
-                    context: context,
-                    builder: (_) => FollowButtonSelectGroupDialog(
-                          user: user,
-                          followed: followed,
-                          groupsForUser: groups,
-                        ));
+                if (context.mounted) {
+                  showDialog(
+                      context: context,
+                      builder: (_) => FollowButtonSelectGroupDialog(
+                            user: user,
+                            followed: followed,
+                            groupsForUser: groups,
+                          ));
+                }
                 break;
               case 'toggle_subscribe':
                 await model.toggleSubscribe(user, followed);

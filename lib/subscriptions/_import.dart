@@ -10,7 +10,6 @@ import 'package:quacker/group/group_model.dart';
 import 'package:quacker/import_data_model.dart';
 import 'package:quacker/subscriptions/users_model.dart';
 import 'package:quacker/ui/errors.dart';
-import 'package:quacker/utils/urls.dart';
 import 'package:provider/provider.dart';
 import 'package:quacker/generated/l10n.dart';
 

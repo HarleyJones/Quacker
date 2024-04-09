@@ -17,55 +17,64 @@ class SettingsAboutFragment extends StatelessWidget {
   Future<void> _appInfo(BuildContext context) async {
     var deviceInfo = DeviceInfoPlugin();
     var packageInfo = await PackageInfo.fromPlatform();
-    var prefService = PrefService.of(context);
-    Map<String, Object> metadata;
+    Map<String, Object>? metadata;
 
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid && context.mounted) {
       var info = await deviceInfo.androidInfo;
 
-      metadata = {
-        'abis': info.supportedAbis,
-        'device': info.device,
-        'flavor': String.fromEnvironment('app.flavor') != '' ? String.fromEnvironment('app.flavor') : 'fdroid',
-        'locale': Localizations.localeOf(context).languageCode,
-        'os': 'android',
-        'system': info.version.sdkInt.toString(),
-        'version': packageInfo.buildNumber,
-      };
+      if (context.mounted) {
+        metadata = {
+          'abis': info.supportedAbis,
+          'device': info.device,
+          'flavor':
+              const String.fromEnvironment('app.flavor') != '' ? const String.fromEnvironment('app.flavor') : 'fdroid',
+          'locale': Localizations.localeOf(context).languageCode,
+          'os': 'android',
+          'system': info.version.sdkInt.toString(),
+          'version': packageInfo.buildNumber,
+        };
+      }
     } else {
       var info = await deviceInfo.iosInfo;
 
-      metadata = {
-        'abis': [],
-        'device': info.utsname.machine,
-        'flavor': String.fromEnvironment('app.flavor') != '' ? String.fromEnvironment('app.flavor') : 'fdroid',
-        'locale': Localizations.localeOf(context).languageCode,
-        'os': 'ios',
-        'system': info.systemVersion,
-        'version': packageInfo.buildNumber,
-      };
+      if (context.mounted) {
+        metadata = {
+          'abis': [],
+          'device': info.utsname.machine,
+          'flavor': String.fromEnvironment('app.flavor') != '' ? String.fromEnvironment('app.flavor') : 'fdroid',
+          'locale': Localizations.localeOf(context).languageCode,
+          'os': 'ios',
+          'system': info.systemVersion,
+          'version': packageInfo.buildNumber,
+        };
+      }
+
+      if (context.mounted) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              var content = JsonEncoder.withIndent(' ' * 2).convert(metadata);
+
+              return AlertDialog(
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(L10n.of(context).ok)),
+                  ],
+                  title: Text(L10n.of(context).app_info),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      Text(content, style: const TextStyle(fontFamily: 'monospace'))
+                    ],
+                  ));
+            });
+      }
     }
-
-    showDialog(
-        context: context,
-        builder: (context) {
-          var content = JsonEncoder.withIndent(' ' * 2).convert(metadata);
-
-          return AlertDialog(
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(L10n.of(context).ok)),
-              ],
-              title: Text(L10n.of(context).app_info),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [const SizedBox(height: 16), Text(content, style: const TextStyle(fontFamily: 'monospace'))],
-              ));
-        });
   }
 
   @override
@@ -80,9 +89,11 @@ class SettingsAboutFragment extends StatelessWidget {
             onTap: () async {
               await Clipboard.setData(ClipboardData(text: appVersion));
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(L10n.of(context).copied_version_to_clipboard),
-              ));
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(L10n.of(context).copied_version_to_clipboard),
+                ));
+              }
             },
           )),
       PrefLabel(
