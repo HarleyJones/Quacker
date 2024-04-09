@@ -37,6 +37,7 @@ class _FritterTwitterClient extends TwitterClient {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
+        print(response.reasonPhrase);
         return Future.error(HttpException(response.reasonPhrase ?? response.statusCode.toString()));
       }
     });
@@ -49,21 +50,14 @@ class _FritterTwitterClient extends TwitterClient {
     WebFlowAuthModel webFlowAuthModel = WebFlowAuthModel(prefs);
     var authHeader = await webFlowAuthModel.GetAuthHeader(userAgentHeader);
     var response = await http.get(uri, headers: {
-      ...?headers, ...authHeader, ...userAgentHeader,
-      //'authorization': _bearerToken,
-      //'x-guest-token': (await getToken()).toString(),
+      ...?headers,
+      ...authHeader,
+      ...userAgentHeader,
+      'authorization': bearerToken,
+      'x-guest-token': (await webFlowAuthModel.GetGT(userAgentHeader)).toString(),
       'x-twitter-active-user': 'yes',
       'user-agent': userAgentHeader.toString()
     });
-
-    var headerRateLimitReset = response.headers['x-rate-limit-reset'];
-    var headerRateLimitRemaining = response.headers['x-rate-limit-remaining'];
-    var headerRateLimitLimit = response.headers['x-rate-limit-limit'];
-
-    if (headerRateLimitReset == null || headerRateLimitRemaining == null || headerRateLimitLimit == null) {
-      // If the rate limit headers are missing, the endpoint probably doesn't send them back
-      return response;
-    }
 
     return response;
   }

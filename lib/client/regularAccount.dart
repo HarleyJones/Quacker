@@ -7,13 +7,15 @@ import 'package:quacker/ui/errors.dart';
 
 import '../constants.dart';
 
+const String bearerToken =
+    "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
+
 class WebFlowAuthModel extends ChangeNotifier {
   static final log = Logger('WebFlowAuthModel');
 
   WebFlowAuthModel(this.prefs) : super();
   final BasePrefService prefs;
-  static String _bearerToken =
-      "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
+
   static http.Client client = http.Client();
   //static webFlowAuthModel =WebFlowAuthModel();
   static List<String> cookies = [];
@@ -61,7 +63,7 @@ class WebFlowAuthModel extends ChangeNotifier {
     }
   }
 
-  Future<void> GetGT(Map<String, String> userAgentHeader) async {
+  Future<String?> GetGT(Map<String, String> userAgentHeader) async {
     Map<String, String> result = new Map<String, String>();
     var request = http.Request("Get", Uri.parse('https://twitter.com/i/flow/login'))..followRedirects = false;
     request.headers.addAll(userAgentHeader);
@@ -74,6 +76,7 @@ class WebFlowAuthModel extends ChangeNotifier {
       gtToken = match?.group(2).toString();
       var gtToken_cookie = match!.group(1).toString();
       cookies.add(gtToken_cookie);
+      return gtToken_cookie;
     } else
       throw Exception("Return Status is (${response.statusCode}), it should be 200");
   }
@@ -134,7 +137,7 @@ class WebFlowAuthModel extends ChangeNotifier {
     var request = http.Request("Post", Uri.parse('https://api.twitter.com/1.1/onboarding/task.json?flow_name=login'));
     request.headers.addAll(userAgentHeader);
     request.headers.addAll({"content-type": "application/json"});
-    request.headers.addAll({"authorization": _bearerToken});
+    request.headers.addAll({"authorization": bearerToken});
     request.headers.addAll({"x-guest-token": gtToken});
     request.headers.addAll({"Cookie": cookies.join(";")});
     request.headers.addAll({"Host": "api.twitter.com"});
@@ -161,7 +164,7 @@ class WebFlowAuthModel extends ChangeNotifier {
     var request = http.Request("Post", Uri.parse('https://api.twitter.com/1.1/onboarding/task.json'));
     request.headers.addAll(userAgentHeader);
     request.headers.addAll({"content-type": "application/json"});
-    request.headers.addAll({"authorization": _bearerToken});
+    request.headers.addAll({"authorization": bearerToken});
     request.headers.addAll({"x-guest-token": gtToken});
     request.headers.addAll({"Cookie": cookies.join(";")});
     request.headers.addAll({"Host": "api.twitter.com"});
@@ -200,7 +203,7 @@ class WebFlowAuthModel extends ChangeNotifier {
     var request = http.Request("Post", Uri.parse('https://api.twitter.com/1.1/onboarding/task.json'));
     request.headers.addAll(userAgentHeader);
     request.headers.addAll({"content-type": "application/json"});
-    request.headers.addAll({"authorization": _bearerToken});
+    request.headers.addAll({"authorization": bearerToken});
     request.headers.addAll({"x-guest-token": gtToken});
     request.headers.addAll({"Cookie": cookies.join(";")});
     request.headers.addAll({"Host": "api.twitter.com"});
@@ -224,7 +227,7 @@ class WebFlowAuthModel extends ChangeNotifier {
         };
         request.headers.addAll(userAgentHeader);
         request.headers.addAll({"content-type": "application/json"});
-        request.headers.addAll({"authorization": _bearerToken});
+        request.headers.addAll({"authorization": bearerToken});
         request.headers.addAll({"x-guest-token": gtToken});
         request.headers.addAll({"Cookie": cookies.join(";")});
         request.headers.addAll({"Host": "api.twitter.com"});
@@ -275,7 +278,7 @@ class WebFlowAuthModel extends ChangeNotifier {
     var request = http.Request("Post", Uri.parse('https://api.twitter.com/1.1/onboarding/task.json'));
     request.headers.addAll(userAgentHeader);
     request.headers.addAll({"content-type": "application/json"});
-    request.headers.addAll({"authorization": _bearerToken});
+    request.headers.addAll({"authorization": bearerToken});
     request.headers.addAll({"x-guest-token": gtToken});
     request.headers.addAll({"Cookie": cookies.join(";")});
     request.headers.addAll({"Host": "api.twitter.com"});
@@ -313,7 +316,7 @@ class WebFlowAuthModel extends ChangeNotifier {
     var request = http.Request("Post", Uri.parse('https://api.twitter.com/1.1/onboarding/task.json'));
     request.headers.addAll(userAgentHeader);
     request.headers.addAll({"content-type": "application/json"});
-    request.headers.addAll({"authorization": _bearerToken});
+    request.headers.addAll({"authorization": bearerToken});
     request.headers.addAll({"x-guest-token": gtToken});
     request.headers.addAll({"Cookie": cookies.join(";")});
     request.headers.addAll({"Host": "api.twitter.com"});
@@ -351,7 +354,7 @@ class WebFlowAuthModel extends ChangeNotifier {
     var request = http.Request("Post", Uri.parse('https://api.twitter.com/1.1/onboarding/task.json'));
     request.headers.addAll(userAgentHeader);
     request.headers.addAll({"content-type": "application/json"});
-    request.headers.addAll({"authorization": _bearerToken});
+    request.headers.addAll({"authorization": bearerToken});
     request.headers.addAll({"x-guest-token": gtToken});
     request.headers.addAll({"Cookie": cookies.join(";")});
     request.headers.addAll({"Host": "api.twitter.com"});
@@ -393,7 +396,7 @@ class WebFlowAuthModel extends ChangeNotifier {
   Future<void> BuildAuthHeader() async {
     _authHeader = Map<String, String>();
     _authHeader!.addAll({"Cookie": cookies.join(";")});
-    _authHeader!.addAll({"authorization": _bearerToken});
+    _authHeader!.addAll({"authorization": bearerToken});
     _authHeader!.addAll({"x-csrf-token": csrf_token});
     await SetAuthHeader(_authHeader);
     //_authHeader!.addAll(userAgentHeader);
