@@ -326,7 +326,7 @@ class WebFlowAuthModel extends ChangeNotifier {
       final stringData = await response.stream.transform(utf8.decoder).join();
       final exp = RegExp(r'flow_token":"(.+?)"');
       RegExpMatch? match = exp.firstMatch(stringData);
-      flowToken2FA = match!.group(1).toString();
+      flowToken2FA = match?.group(1).toString();
     } else if (response.statusCode == 400) {
       final stringData = await response.stream.transform(utf8.decoder).join();
       if (stringData.contains("errors")) {
@@ -366,23 +366,29 @@ class WebFlowAuthModel extends ChangeNotifier {
       var responseHeader = response.headers.toString();
       final expAuthToken = RegExp(r'(auth_token=(.+?));');
       RegExpMatch? matchAuthToken = expAuthToken.firstMatch(responseHeader);
-      auth_token = matchAuthToken!.group(2).toString();
-      var auth_token_Coookie = matchAuthToken.group(1).toString();
-      cookies.add(auth_token_Coookie);
+      final String? auth_token = matchAuthToken?.group(2).toString();
+      if (auth_token != null) {
+        var auth_token_Coookie = matchAuthToken!.group(1).toString();
+        cookies.add(auth_token_Coookie);
+      }
       GetAuthTokenLimits(responseHeader);
       final expCt0 = RegExp(r'(ct0=(.+?));');
       RegExpMatch? matchCt0 = expCt0.firstMatch(responseHeader);
-      csrf_token = matchCt0!.group(2).toString();
-      var csrf_token_Coookie = matchCt0.group(1).toString();
-      cookies.add(csrf_token_Coookie);
+      csrf_token = matchCt0?.group(2).toString();
+      if (csrf_token != null) {
+        var csrf_token_Coookie = matchCt0!.group(1).toString();
+        cookies.add(csrf_token_Coookie);
+      }
 
       if (kdt_Coookie == null) {
         //extract KDT cookie to authenticate unknown device and prevent twitter
         // from sending email about New Login.
         final expKdt = RegExp(r'(kdt=(.+?));');
         RegExpMatch? matchKdt = expKdt.firstMatch(responseHeader);
-        kdt_Coookie = matchKdt!.group(1).toString();
-        await SetKdtCookie(kdt_Coookie);
+        kdt_Coookie = matchKdt?.group(1).toString();
+        if (kdt_Coookie != null) {
+          await SetKdtCookie(kdt_Coookie);
+        }
       }
       // final exptwid = RegExp(r'(twid="(.+?))"');
       // RegExpMatch? matchtwid = exptwid.firstMatch(responseHeader);
@@ -394,9 +400,9 @@ class WebFlowAuthModel extends ChangeNotifier {
 
   Future<void> BuildAuthHeader() async {
     _authHeader = Map<String, String>();
-    _authHeader!.addAll({"Cookie": cookies.join(";")});
-    _authHeader!.addAll({"authorization": bearerToken});
-    _authHeader!.addAll({"x-csrf-token": csrf_token});
+    _authHeader?.addAll({"Cookie": cookies.join(";")});
+    _authHeader?.addAll({"authorization": bearerToken});
+    _authHeader?.addAll({"x-csrf-token": csrf_token});
     await SetAuthHeader(_authHeader);
     //_authHeader!.addAll(userAgentHeader);
     //authHeader.addAll({"Host": "api.twitter.com"});
@@ -440,23 +446,25 @@ class WebFlowAuthModel extends ChangeNotifier {
     // Update our token's rate limit counters
     final expAuthTokenLimitReset = RegExp(r'(x-rate-limit-reset:(.+?)),');
     RegExpMatch? matchAuthTokenLimitReset = expAuthTokenLimitReset.firstMatch(responseHeader);
-    var limitReset = matchAuthTokenLimitReset!.group(2).toString();
+    var limitReset = matchAuthTokenLimitReset?.group(2).toString();
 
     final expAuthTokenLimitRemaining = RegExp(r'(x-rate-limit-remaining:(.+?)),');
     RegExpMatch? matchAuthTokenLimitRemaining = expAuthTokenLimitRemaining.firstMatch(responseHeader);
-    var limitRemaining = matchAuthTokenLimitRemaining!.group(2).toString();
+    var limitRemaining = matchAuthTokenLimitRemaining?.group(2).toString();
 
     final expAuthTokenLimitLimit = RegExp(r'(x-rate-limit-limit:(.+?)),');
     RegExpMatch? matchAuthTokenLimitLimit = expAuthTokenLimitLimit.firstMatch(responseHeader);
-    var limitLimit = matchAuthTokenLimitLimit!.group(2).toString();
+    var limitLimit = matchAuthTokenLimitLimit?.group(2).toString();
 
-    _expiresAt = int.parse(limitReset) * 1000;
-    _tokenRemaining = int.parse(limitRemaining);
-    _tokenLimit = int.parse(limitLimit);
+    if (limitReset != null && limitRemaining != null && _tokenLimit != null) {
+      _expiresAt = int.parse(limitReset) * 1000;
+      _tokenRemaining = int.parse(limitRemaining);
+      _tokenLimit = int.parse(limitLimit!);
 
-    await SetTokenExpires(_expiresAt);
-    await SetTokenExpires(_tokenRemaining);
-    await SetTokenExpires(_tokenLimit);
+      await SetTokenExpires(_expiresAt);
+      await SetTokenExpires(_tokenRemaining);
+      await SetTokenExpires(_tokenLimit);
+    }
   }
 
   Future<Map<dynamic, dynamic>?> GetAuthHeader(Map<String, String> userAgentHeader,

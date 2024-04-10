@@ -66,6 +66,7 @@ class _FritterTwitterClient extends TwitterClient {
 
       return response;
     }
+    return null;
   }
 }
 
