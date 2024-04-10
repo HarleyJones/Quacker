@@ -37,6 +37,8 @@ class _FritterTwitterClient extends TwitterClient {
     return fetch(uri, headers: headers).timeout(timeout ?? _defaultTimeout).then((response) {
       if (response?.statusCode != null && response!.statusCode >= 200 && response.statusCode < 300) {
         return response;
+      } else if (response?.statusCode != null && response!.statusCode == 429) {
+        return Future.error(jsonDecode(response.body)['errors'][0]['message'].toString().replaceAll('.', ''));
       } else {
         return Future.error(
             HttpException(response?.reasonPhrase ?? response?.statusCode.toString() ?? "unknown error"));
