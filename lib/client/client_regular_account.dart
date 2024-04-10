@@ -72,9 +72,11 @@ class WebFlowAuthModel extends ChangeNotifier {
       final stringData = await response.stream.transform(utf8.decoder).join();
       RegExpMatch? match = RegExp(r'(gt=(.+?));').firstMatch(stringData);
       gtToken = match?.group(2).toString();
-      var gtToken_cookie = match!.group(1).toString();
-      cookies.add(gtToken_cookie);
-      return gtToken_cookie;
+      var gtToken_cookie = match?.group(1).toString();
+      if (gtToken_cookie != null) {
+        cookies.add(gtToken_cookie);
+        return gtToken_cookie;
+      }
     } else
       throw Exception("Return Status is (${response.statusCode}), it should be 200");
   }
@@ -457,11 +459,11 @@ class WebFlowAuthModel extends ChangeNotifier {
     await SetTokenExpires(_tokenLimit);
   }
 
-  Future<Map<dynamic, dynamic>> GetAuthHeader(Map<String, String> userAgentHeader,
+  Future<Map<dynamic, dynamic>?> GetAuthHeader(Map<String, String> userAgentHeader,
       {String? authCode, BuildContext? context}) async {
     try {
       if (_authHeader == null) await getAuthTokenFromPref();
-      if (!await IsTokenExpired()) return _authHeader!;
+      if (!await IsTokenExpired() && _authHeader != null) return _authHeader!;
       await GetGuestId(userAgentHeader);
       await GetGT(userAgentHeader);
       await GetFlowToken1(userAgentHeader);
@@ -475,7 +477,10 @@ class WebFlowAuthModel extends ChangeNotifier {
       this.DeleteAllCookies();
       throw Exception(e);
     }
-    return _authHeader!;
+
+    if (_authHeader != null) {
+      return _authHeader!;
+    }
   }
 
   Future DeleteAllCookies() async {

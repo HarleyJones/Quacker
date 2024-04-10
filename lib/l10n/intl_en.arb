@@ -420,6 +420,7 @@
   "passwordTwitterAcc": "Password",
   "emailTwitterAcc": "Email",
   "login": "Login",
+  "login_success": "Login success!",
   "twitterCookiesDeleted": "All cookies of the account are deleted",
   "DeleteTwitterCookies": "Delete all cookies of the account",
   "foryou": "For You",

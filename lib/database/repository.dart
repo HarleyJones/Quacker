@@ -216,11 +216,16 @@ class Repository {
           await db.update(tableSubscriptionGroup, {'icon': defaultGroupIcon},
               where: "icon IS NULL OR icon = '' OR icon = ?", whereArgs: ['rss']);
         }))
+      ],
+      21: [
+        // create table for storing twitter accounts
+        SqlMigration(
+            'CREATE TABLE accounts (id VARCHAR PRIMARY KEY, screen_name VARCHAR, password VARCHAR, email VARCHAR, kdt_cookie VARCHAR, auth_header VARCHAR)'),
       ]
     });
     await openDatabase(
       databaseName,
-      version: 20,
+      version: 21,
       onUpgrade: myMigrationPlan,
       onCreate: myMigrationPlan,
       onDowngrade: myMigrationPlan,

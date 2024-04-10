@@ -14,52 +14,56 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
 import 'package:quiver/iterables.dart';
-import 'regularAccount.dart';
+import 'client_regular_account.dart';
 
 const Duration _defaultTimeout = Duration(seconds: 30);
 
+final Map<String, String> userAgentHeader = {
+  'user-agent':
+      "TwitterAndroid/10.10.0 (29950000-r-0) ONEPLUS+A3010/9 (OnePlus;ONEPLUS+A3010;OnePlus;OnePlus3;0;;1;2016)",
+  'X-Twitter-Client': 'Quacker',
+  "Pragma": "no-cache",
+  "Cache-Control": "no-cache"
+  // "If-Modified-Since": "Sat, 1 Jan 2000 00:00:00 GMT",
+};
+
 class _FritterTwitterClient extends TwitterClient {
   static final log = Logger('_FritterTwitterClient');
-
-  static var userAgentHeader = {
-    'user-agent':
-        "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.3",
-    // "Pragma": "no-cache",
-    "Cache-Control": "no-cache"
-    // "If-Modified-Since": "Sat, 1 Jan 2000 00:00:00 GMT",
-  };
 
   _FritterTwitterClient() : super(consumerKey: '', consumerSecret: '', token: '', secret: '');
 
   @override
   Future<http.Response> get(Uri uri, {Map<String, String>? headers, Duration? timeout}) {
     return fetch(uri, headers: headers).timeout(timeout ?? _defaultTimeout).then((response) {
-      if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (response?.statusCode != null && response!.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        return Future.error(HttpException(response.reasonPhrase ?? response.statusCode.toString()));
+        return Future.error(
+            HttpException(response?.reasonPhrase ?? response?.statusCode.toString() ?? "unknown error"));
       }
     });
   }
 
-  static Future<http.Response> fetch(Uri uri, {Map<String, String>? headers}) async {
+  static Future<http.Response?> fetch(Uri uri, {Map<String, String>? headers}) async {
     log.info('Fetching $uri');
 
     var prefs = await PrefServiceShared.init(prefix: 'pref_');
 
     WebFlowAuthModel webFlowAuthModel = WebFlowAuthModel(prefs);
     var authHeader = await webFlowAuthModel.GetAuthHeader(userAgentHeader);
-    var response = await http.get(uri, headers: {
-      ...?headers,
-      ...authHeader,
-      ...userAgentHeader,
-      'authorization': bearerToken,
-      'x-guest-token': (await webFlowAuthModel.GetGT(userAgentHeader)).toString(),
-      'x-twitter-active-user': 'yes',
-      'user-agent': userAgentHeader.toString()
-    });
+    if (authHeader != null) {
+      var response = await http.get(uri, headers: {
+        ...?headers,
+        ...authHeader,
+        ...userAgentHeader,
+        'authorization': bearerToken,
+        'x-guest-token': (await webFlowAuthModel.GetGT(userAgentHeader)).toString(),
+        'x-twitter-active-user': 'yes',
+        'user-agent': userAgentHeader.toString()
+      });
 
-    return response;
+      return response;
+    }
   }
 }
 

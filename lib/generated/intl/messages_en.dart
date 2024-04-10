@@ -235,6 +235,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "logging": MessageLookupByLibrary.simpleMessage("Logging"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginNameTwitterAcc": MessageLookupByLibrary.simpleMessage("Username"),
+        "login_success": MessageLookupByLibrary.simpleMessage("Login success!"),
         "media": MessageLookupByLibrary.simpleMessage("Media"),
         "media_size": MessageLookupByLibrary.simpleMessage("Media size"),
         "medium": MessageLookupByLibrary.simpleMessage("Medium"),

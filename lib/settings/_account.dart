@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:quacker/client/client.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:pref/pref.dart';
 import 'package:quacker/ui/errors.dart';
 
-import '../client/regularAccount.dart';
+import '../client/client_regular_account.dart';
 
 class SettingsAccountFragment extends StatefulWidget {
   State<SettingsAccountFragment> createState() => _SettingsAccountFragment();
@@ -113,20 +114,15 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
             children: [
               FilledButton(
                   onPressed: () async {
-                    await model.DeleteAllCookies();
                     try {
-                      final _authHeader = await model.GetAuthHeader({
-                        'user-agent':
-                            "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.3",
-                        // "Pragma": "no-cache",
-                        "Cache-Control": "no-cache"
-                        // "If-Modified-Since": "Sat, 1 Jan 2000 00:00:00 GMT",
-                      }, authCode: null);
+                      final _authHeader = await model.GetAuthHeader(userAgentHeader);
 
-                      print(_authHeader);
+                      if (context.mounted) {
+                        showSnackBar(context, icon: '✅', message: L10n.of(context).login_success);
+                      }
                     } catch (e) {
                       if (context.mounted) {
-                        showSnackBar(context, icon: '', message: e.toString());
+                        showSnackBar(context, icon: '🙅', message: e.toString().substring(22).replaceAll('\n', ''));
                       }
                     }
                   },
@@ -137,19 +133,8 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
               OutlinedButton(
                   onPressed: () async {
                     await model.DeleteAllCookies();
-                    model.prefs.set(optionLoginNameTwitterAcc, "");
-                    model.prefs.set(optionPasswordTwitterAcc, "");
-                    model.prefs.set(optionEmailTwitterAcc, "");
                     if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            L10n.of(context).twitterCookiesDeleted,
-                          ),
-                        ),
-                      );
-
-                      Navigator.pop(context);
+                      showSnackBar(context, icon: '🍪', message: L10n.current.twitterCookiesDeleted);
                     }
                   },
                   child: Text(L10n.of(context).DeleteTwitterCookies))

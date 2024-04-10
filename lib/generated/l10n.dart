@@ -2506,6 +2506,16 @@ class L10n {
     );
   }
 
+  /// `Login success!`
+  String get login_success {
+    return Intl.message(
+      'Login success!',
+      name: 'login_success',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `All cookies of the account are deleted`
   String get twitterCookiesDeleted {
     return Intl.message(
