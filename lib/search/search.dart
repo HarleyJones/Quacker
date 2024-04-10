@@ -140,10 +140,16 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
               color: Theme.of(context).appBarTheme.backgroundColor,
               child: TabBar(
                 controller: _tabController,
-                tabs: [
-                  Tab(text: L10n.of(context).top),
-                  Tab(text: L10n.of(context).latest),
-                  Tab(text: L10n.of(context).people),
+                tabs: const [
+                  Tab(
+                    icon: Icon(Icons.trending_up),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.search),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.person_search),
+                  ),
                 ],
                 labelColor: Theme.of(context).appBarTheme.foregroundColor,
                 indicatorColor: Theme.of(context).appBarTheme.foregroundColor,

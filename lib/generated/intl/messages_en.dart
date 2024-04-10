@@ -223,7 +223,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "language_subtitle":
             MessageLookupByLibrary.simpleMessage("Requires a restart"),
         "large": MessageLookupByLibrary.simpleMessage("Large"),
-        "latest": MessageLookupByLibrary.simpleMessage("Latest"),
         "legacy_android_import":
             MessageLookupByLibrary.simpleMessage("Legacy Android Import"),
         "let_the_developers_know_if_something_is_broken":
@@ -274,7 +273,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_not_found": MessageLookupByLibrary.simpleMessage(
             "X says the page does not exist, but that may not be true"),
         "passwordTwitterAcc": MessageLookupByLibrary.simpleMessage("Password"),
-        "people": MessageLookupByLibrary.simpleMessage("People"),
         "permission_not_granted": MessageLookupByLibrary.simpleMessage(
             "Permission not granted. Please try again after granting!"),
         "pick_a_color": MessageLookupByLibrary.simpleMessage("Pick a color!"),
@@ -392,7 +390,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "To import subscriptions from an existing X account, enter your username below."),
         "toggle_all": MessageLookupByLibrary.simpleMessage("Toggle All"),
-        "top": MessageLookupByLibrary.simpleMessage("Top"),
         "trending": MessageLookupByLibrary.simpleMessage("Trending"),
         "trends": MessageLookupByLibrary.simpleMessage("Trends"),
         "true_black": MessageLookupByLibrary.simpleMessage("True Black?"),

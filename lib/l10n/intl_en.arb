@@ -425,8 +425,5 @@
   "DeleteTwitterCookies": "Delete all cookies of the account",
   "foryou": "For You",
   "clickToShowMore": " \nClick to show more..",
-  "show_navigation_labels": "Show navigation labels?",
-  "top": "Top",
-  "latest": "Latest",
-  "people": "People"
+  "show_navigation_labels": "Show navigation labels?"
 }

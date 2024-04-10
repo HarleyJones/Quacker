@@ -2565,36 +2565,6 @@ class L10n {
       args: [],
     );
   }
-
-  /// `Top`
-  String get top {
-    return Intl.message(
-      'Top',
-      name: 'top',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Latest`
-  String get latest {
-    return Intl.message(
-      'Latest',
-      name: 'latest',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `People`
-  String get people {
-    return Intl.message(
-      'People',
-      name: 'people',
-      desc: '',
-      args: [],
-    );
-  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
