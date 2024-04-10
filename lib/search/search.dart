@@ -136,24 +136,21 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
             )),
         body: Column(
           children: [
-            Material(
-              color: Theme.of(context).appBarTheme.backgroundColor,
-              child: TabBar(
-                controller: _tabController,
-                tabs: const [
-                  Tab(
-                    icon: Icon(Icons.trending_up),
-                  ),
-                  Tab(
-                    icon: Icon(Icons.search),
-                  ),
-                  Tab(
-                    icon: Icon(Icons.person_search),
-                  ),
-                ],
-                labelColor: Theme.of(context).appBarTheme.foregroundColor,
-                indicatorColor: Theme.of(context).appBarTheme.foregroundColor,
-              ),
+            TabBar(
+              controller: _tabController,
+              tabs: const [
+                Tab(
+                  icon: Icon(Icons.trending_up),
+                ),
+                Tab(
+                  icon: Icon(Icons.search),
+                ),
+                Tab(
+                  icon: Icon(Icons.person_search),
+                ),
+              ],
+              labelColor: Theme.of(context).appBarTheme.foregroundColor,
+              indicatorColor: Theme.of(context).appBarTheme.foregroundColor,
             ),
             MultiProvider(
               providers: [
