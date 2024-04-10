@@ -55,9 +55,8 @@ class _TrendsSettingsState extends State<TrendsSettings> {
             return ListTile(
                 title: Text(item.name!),
                 subtitle: subtitle,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-                selectedTileColor: Theme.of(context).colorScheme.secondary,
-                selectedColor: Theme.of(context).colorScheme.onSecondary,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(64)),
+                selectedTileColor: Theme.of(context).primaryColor,
                 selected: place.woeid == item.woeid,
                 onTap: () async {
                   await context.read<UserTrendLocationModel>().set(item);
