@@ -86,13 +86,10 @@ class _SubscriptionImportScreenState extends State<SubscriptionImportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return AlertDialog(
         title: Text(L10n.of(context).import_subscriptions),
-      ),
-      body: Container(
-        margin: const EdgeInsets.all(16),
-        child: Column(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
@@ -112,7 +109,7 @@ class _SubscriptionImportScreenState extends State<SubscriptionImportScreen> {
               padding: const EdgeInsets.only(bottom: 16),
               child: TextFormField(
                 decoration: InputDecoration(
-                  border: const UnderlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   hintText: L10n.of(context).enter_your_twitter_username,
                   helperText: L10n.of(context).your_profile_must_be_public_otherwise_the_import_will_not_work,
                   prefixText: '@',
@@ -127,66 +124,64 @@ class _SubscriptionImportScreenState extends State<SubscriptionImportScreen> {
                 },
               ),
             ),
-            Expanded(
-              child: Center(
-                child: StreamBuilder(
-                  stream: _streamController?.stream,
-                  builder: (context, snapshot) {
-                    var error = snapshot.error;
-                    if (error != null) {
-                      return FullPageErrorWidget(
-                        error: snapshot.error,
-                        stackTrace: snapshot.stackTrace,
-                        prefix: L10n.of(context).unable_to_import,
-                      );
-                    }
+            Center(
+              child: StreamBuilder(
+                stream: _streamController?.stream,
+                builder: (context, snapshot) {
+                  var error = snapshot.error;
+                  if (error != null) {
+                    return FullPageErrorWidget(
+                      error: snapshot.error,
+                      stackTrace: snapshot.stackTrace,
+                      prefix: L10n.of(context).unable_to_import,
+                    );
+                  }
 
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.waiting:
-                        return Container();
-                      case ConnectionState.active:
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(16),
-                              child: CircularProgressIndicator(),
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return Container();
+                    case ConnectionState.active:
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: CircularProgressIndicator(),
+                          ),
+                          Text(
+                            L10n.of(context).imported_snapshot_data_users_so_far(
+                              snapshot.data.toString(),
                             ),
-                            Text(
-                              L10n.of(context).imported_snapshot_data_users_so_far(
-                                snapshot.data.toString(),
-                              ),
-                            )
-                          ],
-                        );
-                      default:
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Icon(Icons.check_circle, size: 36, color: Colors.green),
+                          )
+                        ],
+                      );
+                    default:
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Icon(Icons.check_circle, size: 36, color: Colors.green),
+                          ),
+                          Text(
+                            L10n.of(context).finished_with_snapshotData_users(
+                              snapshot.data.toString(),
                             ),
-                            Text(
-                              L10n.of(context).finished_with_snapshotData_users(
-                                snapshot.data.toString(),
-                              ),
-                            )
-                          ],
-                        );
-                    }
-                  },
-                ),
+                          )
+                        ],
+                      );
+                  }
+                },
               ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.cloud_download),
-        onPressed: () async => await importSubscriptions(),
-      ),
-    );
+        actions: [
+          TextButton(
+            child: Text(L10n.of(context).import_from_twitter),
+            onPressed: () async => await importSubscriptions(),
+          ),
+        ]);
   }
 }

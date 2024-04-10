@@ -49,16 +49,6 @@ class _SubscriptionUsersState extends State<SubscriptionUsers> {
                             color: Theme.of(context).hintColor,
                           )),
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: ElevatedButton(
-                        child: Text(L10n.of(context).import_from_twitter),
-                        onPressed: () => showModalBottomSheet(
-                          context: context,
-                          builder: (context) => const SubscriptionImportScreen(),
-                        ),
-                      ),
-                    )
                   ]));
         }
 

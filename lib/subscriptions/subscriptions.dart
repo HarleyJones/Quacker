@@ -19,13 +19,6 @@ class SubscriptionsScreen extends StatelessWidget {
         title: Text(L10n.current.subscriptions),
         actions: [
           IconButton(
-            icon: const Icon(Icons.cloud_download),
-            onPressed: () => showModalBottomSheet(
-              context: context,
-              builder: (context) => const SubscriptionImportScreen(),
-            ),
-          ),
-          IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () => context.read<SubscriptionsModel>().refreshSubscriptionData(),
           ),
@@ -64,6 +57,13 @@ class SubscriptionsScreen extends StatelessWidget {
             scrollController: scrollController,
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.cloud_download),
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => const SubscriptionImportScreen(),
+        ),
       ),
     );
   }
