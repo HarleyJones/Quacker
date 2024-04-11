@@ -5,9 +5,7 @@ import 'package:chewie/src/chewie_player.dart';
 import 'package:chewie/src/chewie_progress_colors.dart';
 import 'package:chewie/src/helpers/utils.dart';
 import 'package:chewie/src/material/material_progress_bar.dart';
-import 'package:chewie/src/material/widgets/options_dialog.dart';
 import 'package:chewie/src/material/widgets/playback_speed_dialog.dart';
-import 'package:chewie/src/models/option_item.dart';
 import 'package:chewie/src/models/subtitle_model.dart';
 import 'package:chewie/src/notifiers/index.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +91,6 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
                 )
               else
                 _buildHitArea(),
-              _buildActionBar(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
@@ -140,33 +137,6 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
     }
 
     super.didChangeDependencies();
-  }
-
-  Widget _buildActionBar() {
-    return Positioned(
-      right: 0,
-      // NOTE: Removed SafeArea so the options button appears correctly at the top right
-      child: AnimatedOpacity(
-        opacity: notifier.hideStuff ? 0.0 : 1.0,
-        duration: const Duration(milliseconds: 250),
-        child: Row(
-          children: [
-            _buildSubtitleToggle(),
-            const SizedBox(
-              width: 8.0,
-            ),
-            if (chewieController.allowPlaybackSpeedChanging) _buildPlaybackSpeedButton(controller),
-            const SizedBox(
-              width: 8.0,
-            ),
-            _buildDownloadButton(controller),
-            const SizedBox(
-              width: 16,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildSubtitles(BuildContext context, Subtitles subtitles) {
@@ -233,6 +203,18 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
                     _buildPosition(iconColor),
                   if (chewieController.allowMuting) _buildMuteButton(controller),
                   const Spacer(),
+                  _buildSubtitleToggle(),
+                  const SizedBox(
+                    width: 8.0,
+                  ),
+                  if (chewieController.allowPlaybackSpeedChanging) _buildPlaybackSpeedButton(controller),
+                  const SizedBox(
+                    width: 8.0,
+                  ),
+                  _buildDownloadButton(controller),
+                  const SizedBox(
+                    width: 16,
+                  ),
                   if (chewieController.allowFullScreen) _buildExpandButton(),
                 ],
               ),
