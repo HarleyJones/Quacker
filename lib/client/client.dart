@@ -96,7 +96,7 @@ class UnknownProfileUnavailableReason implements Exception {
 }
 
 class Twitter {
-  static final TwitterApi _twitterApi = TwitterApi(client: _FritterTwitterClient());
+  static final TwitterApi _twitterApi = TwitterApi(client: AuthenticatedTwitterClient());
   static final TwitterApi _unAuthenticatedTwitterApi = TwitterApi(client: UnauthenticatedTwitterClient());
 
   static final FFCache _cache = FFCache();
