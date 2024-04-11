@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:dart_twitter_api/src/utils/date_utils.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:ffcache/ffcache.dart';
+import 'package:quacker/client/client_unauthenticated.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile_model.dart';
 import 'package:quacker/user.dart';
@@ -96,6 +97,7 @@ class UnknownProfileUnavailableReason implements Exception {
 
 class Twitter {
   static final TwitterApi _twitterApi = TwitterApi(client: _FritterTwitterClient());
+  static final TwitterApi _unAuthenticatedTwitterApi = TwitterApi(client: UnauthenticatedTwitterClient());
 
   static final FFCache _cache = FFCache();
 
@@ -519,7 +521,7 @@ class Twitter {
 
   static Future<List<TrendLocation>> getTrendLocations() async {
     var result = await _cache.getOrCreateAsJSON('trends.locations', const Duration(days: 2), () async {
-      var locations = await _twitterApi.trendsService.available();
+      var locations = await _unAuthenticatedTwitterApi.trendsService.available();
 
       return jsonEncode(locations.map((e) => e.toJson()).toList());
     });
@@ -529,7 +531,7 @@ class Twitter {
 
   static Future<List<Trends>> getTrends(int location) async {
     var result = await _cache.getOrCreateAsJSON('trends.$location', const Duration(minutes: 2), () async {
-      var trends = await _twitterApi.trendsService.place(id: location);
+      var trends = await _unAuthenticatedTwitterApi.trendsService.place(id: location);
 
       return jsonEncode(trends.map((e) => e.toJson()).toList());
     });

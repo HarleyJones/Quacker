@@ -19,10 +19,10 @@ const Duration _defaultTimeout = Duration(seconds: 30);
 const String _accessToken =
     'AAAAAAAAAAAAAAAAAAAAAGHtAgAAAAAA%2Bx7ILXNILCqkSGIzy6faIHZ9s3Q%3DQy97w6SIrzE7lQwPJEYQBsArEE2fC25caFwRBvAGi456G09vGR';
 
-class _UnauthenticatedTwitterClient extends TwitterClient {
+class UnauthenticatedTwitterClient extends TwitterClient {
   static final log = Logger('_UnauthenticatedTwitterClient');
 
-  _UnauthenticatedTwitterClient() : super(consumerKey: '', consumerSecret: '', token: '', secret: '');
+  UnauthenticatedTwitterClient() : super(consumerKey: '', consumerSecret: '', token: '', secret: '');
 
   static String? _guestToken;
   static int _expiresAt = -1;
@@ -138,7 +138,7 @@ class UnknownProfileUnavailableReason implements Exception {
 }
 
 class Twitter {
-  static final TwitterApi _twitterApi = TwitterApi(client: _UnauthenticatedTwitterClient());
+  static final TwitterApi _twitterApi = TwitterApi(client: UnauthenticatedTwitterClient());
 
   static final FFCache _cache = FFCache();
 
@@ -406,46 +406,6 @@ class Twitter {
     }
 
     return result.map((e) => UserWithExtra.fromJson(e)).toList();
-  }
-
-  static Future<List<TrendLocation>> getTrendLocations() async {
-    var result = await _cache.getOrCreateAsJSON('trends.locations', const Duration(days: 2), () async {
-      var locations = await _twitterApi.trendsService.available();
-
-      return jsonEncode(locations.map((e) => e.toJson()).toList());
-    });
-
-    return List.from(jsonDecode(result)).map((e) => TrendLocation.fromJson(e)).toList(growable: false);
-  }
-
-  static Future<List<Trends>> getTrends(int location) async {
-    var result = await _cache.getOrCreateAsJSON('trends.$location', const Duration(minutes: 2), () async {
-      var trends = await _twitterApi.trendsService.place(id: location);
-
-      return jsonEncode(trends.map((e) => e.toJson()).toList());
-    });
-
-    return List.from(jsonDecode(result)).map((e) => Trends.fromJson(e)).toList(growable: false);
-  }
-
-  static Future<TweetStatus> getTweets(String id, String type, List<String> pinnedTweets,
-      {int count = 10, String? cursor, bool includeReplies = true, bool includeRetweets = true}) async {
-    var query = {
-      ...defaultParams,
-      'include_tweet_replies': includeReplies ? '1' : '0',
-      'include_want_retweets': includeRetweets ? '1' : '0', // This may not actually do anything
-      'count': count.toString(),
-    };
-
-    if (cursor != null) {
-      query['cursor'] = cursor;
-    }
-
-    var response = await _twitterApi.client.get(Uri.https('api.twitter.com', '/2/timeline/$type/$id.json', query));
-
-    var result = json.decode(response.body);
-
-    return createUnconversationedChains(result, 'tweet', pinnedTweets, includeReplies == false, includeReplies);
   }
 
   static String? getCursor(List<dynamic> addEntries, List<dynamic> repEntries, String legacyType, String type) {
