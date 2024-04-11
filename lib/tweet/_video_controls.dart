@@ -144,7 +144,6 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
 
   Widget _buildActionBar() {
     return Positioned(
-      top: 0,
       right: 0,
       // NOTE: Removed SafeArea so the options button appears correctly at the top right
       child: AnimatedOpacity(
@@ -153,57 +152,18 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
         child: Row(
           children: [
             _buildSubtitleToggle(),
-            if (chewieController.showOptions) _buildOptionsButton(),
+            const SizedBox(
+              width: 8.0,
+            ),
+            if (chewieController.allowPlaybackSpeedChanging) _buildPlaybackSpeedButton(controller),
+            const SizedBox(
+              width: 8.0,
+            ),
+            _buildDownloadButton(controller),
+            const SizedBox(
+              width: 16,
+            ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOptionsButton() {
-    final options = <OptionItem>[
-      OptionItem(
-        onTap: () async {
-          Navigator.pop(context);
-          _onSpeedButtonTap();
-        },
-        iconData: Icons.speed,
-        title: L10n.of(context).playback_speed,
-      )
-    ];
-
-    if (chewieController.additionalOptions != null && chewieController.additionalOptions!(context).isNotEmpty) {
-      options.addAll(chewieController.additionalOptions!(context));
-    }
-
-    return AnimatedOpacity(
-      opacity: notifier.hideStuff ? 0.0 : 1.0,
-      duration: const Duration(milliseconds: 250),
-      child: IconButton(
-        onPressed: () async {
-          _hideTimer?.cancel();
-
-          if (chewieController.optionsBuilder != null) {
-            await chewieController.optionsBuilder!(context, options);
-          } else {
-            await showModalBottomSheet<OptionItem>(
-              context: context,
-              isScrollControlled: true,
-              useRootNavigator: chewieController.useRootNavigator,
-              builder: (context) => OptionsDialog(
-                options: options,
-                cancelButtonText: L10n.of(context).cancel,
-              ),
-            );
-          }
-
-          if (_latestValue.isPlaying) {
-            _startHideTimer();
-          }
-        },
-        icon: const Icon(
-          Icons.more_vert,
-          color: Colors.white,
         ),
       ),
     );
@@ -322,6 +282,54 @@ class _MaterialControlsState extends State<FritterMaterialControls> with SingleT
             ),
             child: Icon(
               _latestValue.volume > 0 ? Icons.volume_up : Icons.volume_off,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _buildPlaybackSpeedButton(
+    VideoPlayerController controller,
+  ) {
+    return GestureDetector(
+      onTap: _onSpeedButtonTap,
+      child: AnimatedOpacity(
+        opacity: notifier.hideStuff ? 0.0 : 1.0,
+        duration: const Duration(milliseconds: 300),
+        child: ClipRect(
+          child: Container(
+            height: barHeight,
+            padding: const EdgeInsets.only(
+              left: 6.0,
+            ),
+            child: Icon(
+              Icons.speed,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _buildDownloadButton(
+    VideoPlayerController controller,
+  ) {
+    return GestureDetector(
+      onTap: chewieController.additionalOptions!(context)[0].onTap,
+      child: AnimatedOpacity(
+        opacity: notifier.hideStuff ? 0.0 : 1.0,
+        duration: const Duration(milliseconds: 300),
+        child: ClipRect(
+          child: Container(
+            height: barHeight,
+            padding: const EdgeInsets.only(
+              left: 6.0,
+            ),
+            child: Icon(
+              chewieController.additionalOptions!(context)[0].iconData,
               color: Colors.white,
             ),
           ),
