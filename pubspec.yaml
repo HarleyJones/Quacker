@@ -88,7 +88,7 @@ dev_dependencies:
   intl_utils: ^2.8.1
   sqflite_common_ffi: ^2.2.0+1
 
-flutter_MaterialSymbols:
+flutter_icons:
   android: "launcher_icon"
   ios: true
 
@@ -97,9 +97,9 @@ flutter_MaterialSymbols:
 # The following section is specific to Flutter.
 flutter:
 
-  # The following line ensures that the Material MaterialSymbols font is
-  # included with your application, so that you can use the MaterialSymbols in
-  # the material MaterialSymbols class.
+  # The following line ensures that the Material icons font is
+  # included with your application, so that you can use the icons in
+  # the material icons class.
   uses-material-design: true
 
   assets:
