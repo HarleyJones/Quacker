@@ -20,8 +20,7 @@ const Duration _defaultTimeout = Duration(seconds: 30);
 
 final Map<String, String> userAgentHeader = {
   'user-agent':
-      "TwitterAndroid/10.10.0 (29950000-r-0) ONEPLUS+A3010/9 (OnePlus;ONEPLUS+A3010;OnePlus;OnePlus3;0;;1;2016)",
-  'X-Twitter-Client': 'Quacker',
+      "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.3",
   "Pragma": "no-cache",
   "Cache-Control": "no-cache"
   // "If-Modified-Since": "Sat, 1 Jan 2000 00:00:00 GMT",
