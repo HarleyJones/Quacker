@@ -223,7 +223,7 @@ class Repository {
       21: [
         // create table for storing twitter accounts
         SqlMigration(
-            'CREATE TABLE accounts (screen_name TEXT PRIMARY KEY, password TEXT, email TEXT, auth_header VARCHAR)'),
+            'CREATE TABLE IF NOT EXISTS $tableAccounts (id TEXT PRIMARY KEY, password TEXT, email TEXT, auth_header VARCHAR)'),
       ]
     });
     await openDatabase(

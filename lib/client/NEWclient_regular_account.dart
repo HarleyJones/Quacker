@@ -15,8 +15,8 @@ Future<String> addAccount(BasePrefService prefs, String username, String passwor
     final authHeader = await model.GetAuthHeader(username: username, password: password, email: email);
 
     if (authHeader != null) {
-      database.insert(tableAccounts,
-          {"screenName": username, "password": password, "email": email, "authHeader": json.encode(authHeader)});
+      database.insert(
+          tableAccounts, {"id": username, "password": password, "email": email, "authHeader": json.encode(authHeader)});
 
       return L10n.current.login_success;
     } else {
@@ -46,7 +46,7 @@ Future<Map<dynamic, dynamic>?> getAuthHeader(BasePrefService prefs) async {
     Map<String, Object?> account = accounts[Random().nextInt(accounts.length)];
 
     return await model.GetAuthHeader(
-        username: account['screen_name'].toString(),
+        username: account['id'].toString(),
         password: account['password'].toString(),
         email: account['email'].toString());
   }
