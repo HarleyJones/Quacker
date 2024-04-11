@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 const optionDisableAnimations = 'accessibility.disable_animations';
 
 const optionWizardCompleted = 'option.wizard_completed';
@@ -32,8 +34,19 @@ const optionSubscriptionOrderByAscending = 'subscription.order_by.ascending';
 const optionSubscriptionOrderByField = 'subscription.order_by.field';
 
 const optionThemeMode = 'theme.mode';
+const optionThemeColor = 'theme.color';
 const optionThemeTrueBlack = 'theme.true_black';
 const optionShowNavigationLabels = 'theme.show_navigation_labels';
+
+const themeColors = {
+  'red': Colors.red,
+  'orange': Colors.orange,
+  'yellow': Colors.yellow,
+  'green': Colors.green,
+  'blue': Colors.blue,
+  'indigo': Colors.indigo,
+  'violet': Color.fromARGB(255, 128, 0, 255),
+};
 
 const optionTweetsHideSensitive = 'tweets.hide_sensitive';
 

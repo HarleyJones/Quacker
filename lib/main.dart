@@ -161,6 +161,7 @@ Future<void> main() async {
     optionSubscriptionOrderByAscending: true,
     optionSubscriptionOrderByField: 'name',
     optionThemeMode: 'system',
+    optionThemeColor: 'orange',
     optionThemeTrueBlack: false,
     optionShowNavigationLabels: true,
     optionTweetsHideSensitive: true,
@@ -246,6 +247,7 @@ class _FritterAppState extends State<FritterApp> {
   static final log = Logger('_MyAppState');
 
   String _themeMode = 'system';
+  String _themeColor = 'orange';
   bool _disableAnimations = false;
   bool _trueBlack = false;
   Locale? _locale;
@@ -282,6 +284,7 @@ class _FritterAppState extends State<FritterApp> {
     setState(() {
       setLocale(prefService.get<String>(optionLocale));
       _themeMode = prefService.get(optionThemeMode);
+      _themeColor = prefService.get(optionThemeColor);
       _trueBlack = prefService.get(optionThemeTrueBlack);
       _disableAnimations = prefService.get(optionDisableAnimations);
       setDisableScreenshots(prefService.get(optionDisableScreenshots));
@@ -307,6 +310,12 @@ class _FritterAppState extends State<FritterApp> {
     prefService.addKeyListener(optionThemeMode, () {
       setState(() {
         _themeMode = prefService.get(optionThemeMode);
+      });
+    });
+
+    prefService.addKeyListener(optionThemeColor, () {
+      setState(() {
+        _themeColor = prefService.get(optionThemeColor);
       });
     });
 
@@ -384,7 +393,9 @@ class _FritterAppState extends State<FritterApp> {
         locale: _locale,
         title: 'Quacker',
         theme: ThemeData(
-          colorScheme: lightDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.light),
+          colorScheme: _themeColor == 'accent'
+              ? lightDynamic
+              : ColorScheme.fromSeed(seedColor: themeColors[_themeColor]!, brightness: Brightness.light),
           pageTransitionsTheme: _disableAnimations == true
               ? PageTransitionsTheme(
                   builders: {
@@ -397,9 +408,13 @@ class _FritterAppState extends State<FritterApp> {
         ),
         darkTheme: ThemeData(
           colorScheme: (_trueBlack == true
-              ? (darkDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.dark))
-                  .copyWith(background: Colors.black, surface: Colors.black)
-              : (darkDynamic ?? ColorScheme.fromSeed(seedColor: Color(0xFFFEC031), brightness: Brightness.dark))),
+              ? (_themeColor == 'accent'
+                      ? darkDynamic
+                      : ColorScheme.fromSeed(seedColor: themeColors[_themeColor]!, brightness: Brightness.dark))
+                  ?.copyWith(background: Colors.black, surface: Colors.black)
+              : (_themeColor == 'accent'
+                  ? darkDynamic
+                  : ColorScheme.fromSeed(seedColor: themeColors[_themeColor]!, brightness: Brightness.dark))),
           pageTransitionsTheme: _disableAnimations == true
               ? PageTransitionsTheme(
                   builders: {
