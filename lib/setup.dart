@@ -7,48 +7,7 @@ import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/settings/_account.dart';
 import 'package:quacker/subscriptions/_import.dart';
 
-class SetupScreen extends StatefulWidget {
-  @override
-  State<SetupScreen> createState() => _SetupScreen();
-}
-
-class _SetupScreen extends State<SetupScreen> {
-  final pages = [WelcomePage(), SetupAccount()];
-  int page = 0;
-
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: pages[page],
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (page > 0)
-                FloatingActionButton(
-                  child: Icon(Icons.arrow_back),
-                  onPressed: () => setState(() {
-                    page = page - 1;
-                  }),
-                ),
-              const Spacer(),
-              FloatingActionButton(
-                child: Icon(Icons.arrow_forward),
-                onPressed: () => setState(() {
-                  if (page >= pages.length + 1) {
-                    PrefService.of(context).set(optionWizardCompleted, true);
-                  } else {
-                    page = page + 1;
-                  }
-                }),
-              ),
-            ],
-          ),
-        ));
-  }
-}
-
-class WelcomePage extends StatelessWidget {
+class SetupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
