@@ -22,11 +22,12 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
       appBar: AppBar(
         title: Text(L10n.current.account),
         actions: [
-          IconButton(
+          /* IconButton(
               onPressed: () => showDialog(context: context, builder: (_) => addDialog(model)),
-              icon: const Icon(Icons.add))
+              icon: const Icon(Icons.add)) */
         ],
       ),
+      body: addDialog(model),
     );
   }
 }
