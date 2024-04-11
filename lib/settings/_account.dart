@@ -60,8 +60,9 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
 
 class addDialog extends StatefulWidget {
   final WebFlowAuthModel model;
+  final Widget? pushTo;
 
-  const addDialog(this.model, {super.key});
+  const addDialog(this.model, {super.key, this.pushTo});
 
   @override
   State<addDialog> createState() => _addDialog();
@@ -81,31 +82,41 @@ class _addDialog extends State<addDialog> {
         Flexible(
           child: TextField(
             controller: _username,
-            decoration:
-                InputDecoration(label: Text(L10n.of(context).loginNameTwitterAcc), border: const OutlineInputBorder()),
+            decoration: InputDecoration(
+                isDense: true, label: Text(L10n.of(context).loginNameTwitterAcc), border: const OutlineInputBorder()),
           ),
+        ),
+        const SizedBox(
+          height: 8.0,
         ),
         Flexible(
           child: TextField(
             controller: _password,
             obscureText: hidePassword,
             decoration: InputDecoration(
+              isDense: true,
               label: Text(L10n.of(context).passwordTwitterAcc),
               border: const OutlineInputBorder(),
-              suffix: IconButton(
+              suffixIcon: IconButton(
                 icon: Icon(hidePassword ? Icons.visibility : Icons.visibility_off),
                 onPressed: () => setState(() => hidePassword = !hidePassword),
               ),
             ),
           ),
         ),
+        const SizedBox(
+          height: 8.0,
+        ),
         Flexible(
           child: TextField(
             controller: _email,
             keyboardType: TextInputType.emailAddress,
-            decoration:
-                InputDecoration(label: Text(L10n.of(context).emailTwitterAcc), border: const OutlineInputBorder()),
+            decoration: InputDecoration(
+                isDense: true, label: Text(L10n.of(context).emailTwitterAcc), border: const OutlineInputBorder()),
           ),
+        ),
+        const SizedBox(
+          height: 8.0,
         ),
         const Padding(
             padding: EdgeInsets.all(8.0),
@@ -114,7 +125,6 @@ class _addDialog extends State<addDialog> {
               textAlign: TextAlign.center,
             )),
       ]),
-      actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(
             onPressed: () async {
@@ -122,9 +132,16 @@ class _addDialog extends State<addDialog> {
               if (context.mounted) {
                 showSnackBar(context, icon: '', message: response);
               }
+              if (response == L10n.current.login_success && widget.pushTo != null) {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => widget.pushTo!));
+              } else {
+                Navigator.pop(context);
+              }
+
               setState(() {});
             },
             child: Text(L10n.of(context).login)),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(L10n.of(context).close)),
       ],
     );
   }

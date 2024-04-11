@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
+import 'package:quacker/client/NEWclient_regular_account.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/group/group_screen.dart';
@@ -97,52 +98,67 @@ class _HomeScreenState extends State<_HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PrefService.of(context).get(optionWizardCompleted) == true
-        ? ScopedBuilder<HomeModel, List<HomePage>>.transition(
-            store: widget.model,
-            onError: (_, e) => ScaffoldErrorWidget(
-                  prefix: L10n.current.unable_to_load_home_pages,
-                  error: e,
-                  stackTrace: null,
-                  onRetry: () async => await widget.model.resetPages(),
-                  retryText: L10n.current.reset_home_pages,
-                ),
-            onLoading: (_) => const Center(child: CircularProgressIndicator()),
-            onState: (_, state) {
-              return ScaffoldWithBottomNavigation(
-                  pages: _pages,
-                  initialPage: _initialPage,
-                  builder: (scrollController) {
-                    return [
-                      ..._pages.map((e) {
-                        if (e.id.startsWith('group-')) {
-                          return SubscriptionGroupScreen(
-                            scrollController: scrollController,
-                            id: e.id.replaceAll('group-', ''),
-                            actions: createCommonAppBarActions(context),
-                            name: '',
-                          );
-                        }
+    return FutureBuilder(
+        future: getAccounts(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            if (snapshot.data?.isNotEmpty == true) {
+              return ScopedBuilder<HomeModel, List<HomePage>>.transition(
+                  store: widget.model,
+                  onError: (_, e) => ScaffoldErrorWidget(
+                        prefix: L10n.current.unable_to_load_home_pages,
+                        error: e,
+                        stackTrace: null,
+                        onRetry: () async => await widget.model.resetPages(),
+                        retryText: L10n.current.reset_home_pages,
+                      ),
+                  onLoading: (_) => const Center(child: CircularProgressIndicator()),
+                  onState: (_, state) {
+                    return ScaffoldWithBottomNavigation(
+                        pages: _pages,
+                        initialPage: _initialPage,
+                        builder: (scrollController) {
+                          return [
+                            ..._pages.map((e) {
+                              if (e.id.startsWith('group-')) {
+                                return SubscriptionGroupScreen(
+                                  scrollController: scrollController,
+                                  id: e.id.replaceAll('group-', ''),
+                                  actions: createCommonAppBarActions(context),
+                                  name: '',
+                                );
+                              }
 
-                        switch (e.id) {
-                          case 'feed':
-                            return FeedScreen(scrollController: scrollController, id: '-1', name: L10n.current.feed);
-                          case 'subscriptions':
-                            return SubscriptionsScreen(
-                              scrollController: scrollController,
-                            );
-                          case 'trending':
-                            return TrendsScreen();
-                          case 'saved':
-                            return SavedScreen(scrollController: scrollController);
-                          default:
-                            return const MissingScreen();
-                        }
-                      })
-                    ];
+                              switch (e.id) {
+                                case 'feed':
+                                  return FeedScreen(
+                                      scrollController: scrollController, id: '-1', name: L10n.current.feed);
+                                case 'subscriptions':
+                                  return SubscriptionsScreen(
+                                    scrollController: scrollController,
+                                  );
+                                case 'trending':
+                                  return TrendsScreen();
+                                case 'saved':
+                                  return SavedScreen(scrollController: scrollController);
+                                default:
+                                  return const MissingScreen();
+                              }
+                            })
+                          ];
+                        });
                   });
-            })
-        : SetupScreen();
+            }
+          }
+
+          return SetupScreen();
+        });
   }
 }
 

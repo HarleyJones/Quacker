@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pref/pref.dart';
 import 'package:quacker/client/client_regular_account.dart';
-import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/settings/_account.dart';
 import 'package:quacker/settings/_general.dart';
-import 'package:quacker/subscriptions/_import.dart';
 
 class SetupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
+    var model = WebFlowAuthModel(PrefService.of(context));
+
     return Scaffold(
       body: Center(
           child: Column(
@@ -24,44 +24,26 @@ class SetupScreen extends StatelessWidget {
             L10n.of(context).fritter,
             textScaler: TextScaler.linear(3),
           ),
-          languagePicker()
+          languagePicker(),
+          InkWell(
+              onTap: () => showDialog(
+                  context: context,
+                  builder: (_) => addDialog(model,
+                      pushTo: HomeScreen(
+                        key: key,
+                      ))),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                      alignment: Alignment.bottomCenter,
+                      width: MediaQuery.sizeOf(context).width - 120,
+                      color: Theme.of(context).buttonTheme.colorScheme?.primary,
+                      child: Text(
+                        L10n.of(context).login,
+                        style: TextStyle(fontSize: 25, color: Theme.of(context).buttonTheme.colorScheme?.onPrimary),
+                      ))))
         ],
       )),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.arrow_forward),
-        onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => SetupAccount())),
-      ),
-    );
-  }
-}
-
-class SetupAccount extends StatelessWidget {
-  Widget build(BuildContext context) {
-    var model = WebFlowAuthModel(PrefService.of(context));
-
-    return Scaffold(
-      body: Center(
-        child: addDialog(model),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.arrow_forward),
-        onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ImportSubscriptions())),
-      ),
-    );
-  }
-}
-
-class ImportSubscriptions extends StatelessWidget {
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SubscriptionImportScreen(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.arrow_forward),
-        onPressed: () {
-          PrefService.of(context).set(optionWizardCompleted, true);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
-        },
-      ),
     );
   }
 }

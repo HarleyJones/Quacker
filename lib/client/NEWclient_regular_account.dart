@@ -15,8 +15,8 @@ Future<String> addAccount(BasePrefService prefs, String username, String passwor
     final authHeader = await model.GetAuthHeader(username: username, password: password, email: email);
 
     if (authHeader != null) {
-      database.insert(
-          tableAccounts, {"id": username, "password": password, "email": email, "authHeader": json.encode(authHeader)});
+      database.insert(tableAccounts,
+          {"id": username, "password": password, "email": email, "auth_header": json.encode(authHeader)});
 
       return L10n.current.login_success;
     } else {
