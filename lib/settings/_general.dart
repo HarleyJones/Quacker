@@ -23,6 +23,21 @@ class SettingLocale {
   }
 }
 
+languagePicker() {
+  return PrefDropdown(
+      fullWidth: false,
+      title: Text(L10n.current.language),
+      subtitle: Text(L10n.current.language_subtitle),
+      pref: optionLocale,
+      items: [
+        DropdownMenuItem(value: optionLocaleDefault, child: Text(L10n.current.system)),
+        ...L10n.delegate.supportedLocales
+            .map((e) => SettingLocale.fromLocale(e))
+            .sorted((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()))
+            .map((e) => DropdownMenuItem(value: e.code, child: Text(e.name)))
+      ]);
+}
+
 class SettingsGeneralFragment extends StatelessWidget {
   static final log = Logger('SettingsGeneralFragment');
 
@@ -42,7 +57,7 @@ class SettingsGeneralFragment extends StatelessWidget {
                 await prefService.set(optionShareBaseUrl, controller.text);
 
                 if (context.mounted) {
-                Navigator.pop(context);
+                  Navigator.pop(context);
                 }
               },
               child: Text(L10n.of(context).save))
@@ -66,18 +81,7 @@ class SettingsGeneralFragment extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: ListView(children: [
-          PrefDropdown(
-              fullWidth: false,
-              title: Text(L10n.current.language),
-              subtitle: Text(L10n.current.language_subtitle),
-              pref: optionLocale,
-              items: [
-                DropdownMenuItem(value: optionLocaleDefault, child: Text(L10n.current.system)),
-                ...L10n.delegate.supportedLocales
-                    .map((e) => SettingLocale.fromLocale(e))
-                    .sorted((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()))
-                    .map((e) => DropdownMenuItem(value: e.code, child: Text(e.name)))
-              ]),
+          languagePicker(),
           PrefSwitch(
             title: Text(L10n.of(context).should_check_for_updates_label),
             pref: optionShouldCheckForUpdates,

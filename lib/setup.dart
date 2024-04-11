@@ -5,6 +5,7 @@ import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/settings/_account.dart';
+import 'package:quacker/settings/_general.dart';
 import 'package:quacker/subscriptions/_import.dart';
 
 class SetupScreen extends StatelessWidget {
@@ -22,7 +23,8 @@ class SetupScreen extends StatelessWidget {
           Text(
             L10n.of(context).fritter,
             textScaler: TextScaler.linear(3),
-          )
+          ),
+          languagePicker()
         ],
       )),
       floatingActionButton: FloatingActionButton(
