@@ -171,9 +171,6 @@ Future<void> main() async {
         {'name': 'Worldwide', 'woeid': 1}
       ]
     }),
-    optionPasswordTwitterAcc: '',
-    optionLoginNameTwitterAcc: '',
-    optionEmailTwitterAcc: '',
   });
 
   FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();

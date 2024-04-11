@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:pref/pref.dart';
 import 'package:quacker/group/group_model.dart';
 import 'package:logging/logging.dart';
 import 'package:sqflite/sqflite.dart';
@@ -18,6 +19,8 @@ const String tableSearchSubscriptionGroupMember = 'search_subscription_group_mem
 const String tableSubscription = 'subscription';
 const String tableSubscriptionGroup = 'subscription_group';
 const String tableSubscriptionGroupMember = 'subscription_group_member';
+
+const String tableAccounts = 'accounts';
 
 class Repository {
   static final log = Logger('Repository');
@@ -220,7 +223,7 @@ class Repository {
       21: [
         // create table for storing twitter accounts
         SqlMigration(
-            'CREATE TABLE accounts (id VARCHAR PRIMARY KEY, screen_name VARCHAR, password VARCHAR, email VARCHAR, kdt_cookie VARCHAR, auth_header VARCHAR)'),
+            'CREATE TABLE accounts (screen_name TEXT PRIMARY KEY, password TEXT, email TEXT, auth_header VARCHAR)'),
       ]
     });
     await openDatabase(

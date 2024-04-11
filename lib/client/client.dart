@@ -5,7 +5,9 @@ import 'dart:io';
 import 'package:dart_twitter_api/src/utils/date_utils.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:ffcache/ffcache.dart';
+import 'package:quacker/client/NEWclient_regular_account.dart';
 import 'package:quacker/client/client_unauthenticated.dart';
+import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile_model.dart';
 import 'package:quacker/user.dart';
@@ -18,14 +20,6 @@ import 'package:quiver/iterables.dart';
 import 'client_regular_account.dart';
 
 const Duration _defaultTimeout = Duration(seconds: 30);
-
-final Map<String, String> userAgentHeader = {
-  'user-agent':
-      "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.3",
-  "Pragma": "no-cache",
-  "Cache-Control": "no-cache"
-  // "If-Modified-Since": "Sat, 1 Jan 2000 00:00:00 GMT",
-};
 
 class _FritterTwitterClient extends TwitterClient {
   static final log = Logger('_FritterTwitterClient');
@@ -52,7 +46,8 @@ class _FritterTwitterClient extends TwitterClient {
     var prefs = await PrefServiceShared.init(prefix: 'pref_');
 
     WebFlowAuthModel webFlowAuthModel = WebFlowAuthModel(prefs);
-    var authHeader = await webFlowAuthModel.GetAuthHeader(userAgentHeader);
+    var authHeader = await getAuthHeader(prefs);
+
     if (authHeader != null) {
       var response = await http.get(uri, headers: {
         ...?headers,

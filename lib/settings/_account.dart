@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:quacker/client/NEWclient_regular_account.dart';
 import 'package:quacker/client/client.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
@@ -22,12 +23,37 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
       appBar: AppBar(
         title: Text(L10n.current.account),
         actions: [
-          /* IconButton(
+          IconButton(
               onPressed: () => showDialog(context: context, builder: (_) => addDialog(model)),
-              icon: const Icon(Icons.add)) */
+              icon: const Icon(Icons.add))
         ],
       ),
-      body: addDialog(model),
+      body: FutureBuilder(
+          future: getAccounts(),
+          builder: (BuildContext listContext, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return LinearProgressIndicator();
+            } else {
+              List<Map<String, Object?>> data = snapshot.data;
+              return ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (BuildContext itemContext, int index) {
+                    return Card(
+                        child: ListTile(
+                      title: Text(data[index]['screen_name'].toString()),
+                      subtitle: Text(data[index]['email'].toString()),
+                      leading: Icon(Icons.account_circle),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () async {
+                          await deleteAccount(data[index]['screen_name'].toString());
+                          setState(() {});
+                        },
+                      ),
+                    ));
+                  });
+            }
+          }),
     );
   }
 }
@@ -43,23 +69,26 @@ class addDialog extends StatefulWidget {
 
 class _addDialog extends State<addDialog> {
   bool hidePassword = true;
-  var multiFactorController = TextEditingController();
+
+  TextEditingController _username = TextEditingController();
+  TextEditingController _password = TextEditingController();
+  TextEditingController _email = TextEditingController();
 
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(L10n.of(context).account),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         Flexible(
-          child: PrefText(
-            pref: optionLoginNameTwitterAcc,
+          child: TextField(
+            controller: _username,
             decoration:
                 InputDecoration(label: Text(L10n.of(context).loginNameTwitterAcc), border: const OutlineInputBorder()),
           ),
         ),
         Flexible(
-          child: PrefText(
+          child: TextField(
+            controller: _password,
             obscureText: hidePassword,
-            pref: optionPasswordTwitterAcc,
             decoration: InputDecoration(
               label: Text(L10n.of(context).passwordTwitterAcc),
               border: const OutlineInputBorder(),
@@ -71,9 +100,9 @@ class _addDialog extends State<addDialog> {
           ),
         ),
         Flexible(
-          child: PrefText(
+          child: TextField(
+            controller: _email,
             keyboardType: TextInputType.emailAddress,
-            pref: optionEmailTwitterAcc,
             decoration:
                 InputDecoration(label: Text(L10n.of(context).emailTwitterAcc), border: const OutlineInputBorder()),
           ),
@@ -87,34 +116,15 @@ class _addDialog extends State<addDialog> {
       ]),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
-        FilledButton(
+        TextButton(
             onPressed: () async {
-              try {
-                await widget.model.GetAuthHeader(userAgentHeader);
-                Navigator.pop(context);
-                sleep(Durations.medium1);
-                if (context.mounted) {
-                  showSnackBar(context, icon: '✅', message: L10n.of(context).login_success);
-                }
-              } catch (e) {
-                Navigator.pop(context);
-                sleep(Durations.medium1);
-                if (context.mounted) {
-                  showSnackBar(context, icon: '🙅', message: e.toString().substring(22).replaceAll('\n', ''));
-                }
+              final response = await addAccount(PrefService.of(context), _username.text, _password.text, _email.text);
+              if (context.mounted) {
+                showSnackBar(context, icon: '', message: response);
               }
+              setState(() {});
             },
             child: Text(L10n.of(context).login)),
-        OutlinedButton(
-            onPressed: () async {
-              await widget.model.DeleteAllCookies();
-              Navigator.pop(context);
-              sleep(Durations.medium1);
-              if (context.mounted) {
-                showSnackBar(context, icon: '🍪', message: L10n.current.twitterCookiesDeleted);
-              }
-            },
-            child: Text(L10n.of(context).DeleteTwitterCookies))
       ],
     );
   }

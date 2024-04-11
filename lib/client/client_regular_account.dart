@@ -1,3 +1,6 @@
+// DO NOT ADD NEW FEATURES HErE
+// Instead put your code in the NEWclient_regular_account.dart file
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:dart_twitter_api/api/twitter_client.dart';
@@ -11,6 +14,7 @@ import 'package:dart_twitter_api/src/utils/date_utils.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:faker/faker.dart';
 import 'package:ffcache/ffcache.dart';
+import 'package:quacker/client/NEWclient_regular_account.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile_model.dart';
 import 'package:quacker/user.dart';
@@ -27,95 +31,45 @@ const String _accessToken =
     'AAAAAAAAAAAAAAAAAAAAAGHtAgAAAAAA%2Bx7ILXNILCqkSGIzy6faIHZ9s3Q%3DQy97w6SIrzE7lQwPJEYQBsArEE2fC25caFwRBvAGi456G09vGR';
 
 class AuthenticatedTwitterClient extends TwitterClient {
-  static final log = Logger('_AuthenticatedTwitterClient');
+  static final log = Logger('_FritterTwitterClient');
 
   AuthenticatedTwitterClient() : super(consumerKey: '', consumerSecret: '', token: '', secret: '');
-
-  static String? _guestToken;
-  static int _expiresAt = -1;
-  static int _tokenLimit = -1;
-  static int _tokenRemaining = -1;
 
   @override
   Future<http.Response> get(Uri uri, {Map<String, String>? headers, Duration? timeout}) {
     return fetch(uri, headers: headers).timeout(timeout ?? _defaultTimeout).then((response) {
-      if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (response?.statusCode != null && response!.statusCode >= 200 && response.statusCode < 300) {
         return response;
+      } else if (response?.statusCode != null && response!.statusCode == 429) {
+        return Future.error(jsonDecode(response.body)['errors'][0]['message'].toString().replaceAll('.', ''));
       } else {
-        return Future.error(HttpException(response.toString()));
+        return Future.error(
+            HttpException(response?.reasonPhrase ?? response?.statusCode.toString() ?? "unknown error"));
       }
     });
   }
 
-  static Future<String> getToken() async {
-    if (_guestToken != null) {
-      // If we don't have an expiry or limit, it's probably because we haven't made a request yet, so assume they're OK
-      if (_expiresAt == -1 && _tokenLimit == -1 && _tokenRemaining == -1) {
-        // TODO: Null safety with concurrent threads
-        return _guestToken!;
-      }
-
-      // Check if the token we have hasn't expired yet
-      if (DateTime.now().millisecondsSinceEpoch < _expiresAt) {
-        // Check if the token we have still has usages remaining
-        if (_tokenRemaining < _tokenLimit) {
-          // TODO: Null safety with concurrent threads
-          return _guestToken!;
-        }
-      }
-    }
-
-    // Otherwise, fetch a new token
-    _guestToken = null;
-    _tokenLimit = -1;
-    _tokenRemaining = -1;
-    _expiresAt = -1;
-
-    log.info('Refreshing the Twitter token');
-
-    var response = await http.post(Uri.parse('https://api.twitter.com/1.1/guest/activate.json'), headers: {
-      'Authorization': 'Bearer $_accessToken',
-    });
-
-    if (response.statusCode == 200) {
-      var result = jsonDecode(response.body);
-      if (result.containsKey('guest_token')) {
-        _guestToken = result['guest_token'];
-
-        return _guestToken!;
-      }
-    }
-
-    throw Exception(
-        'Unable to refresh the token. The response (${response.statusCode}) from Twitter was: ${response.body}');
-  }
-
-  static Future<http.Response> fetch(Uri uri, {Map<String, String>? headers}) async {
+  static Future<http.Response?> fetch(Uri uri, {Map<String, String>? headers}) async {
     log.info('Fetching $uri');
 
-    var response = await http.get(uri, headers: {
-      ...?headers,
-      'Authorization': 'Bearer $_accessToken',
-      'x-guest-token': await getToken(),
-      'x-twitter-active-user': 'yes',
-      'user-agent': faker.internet.userAgent()
-    });
+    var prefs = await PrefServiceShared.init(prefix: 'pref_');
 
-    var headerRateLimitReset = response.headers['x-rate-limit-reset'];
-    var headerRateLimitRemaining = response.headers['x-rate-limit-remaining'];
-    var headerRateLimitLimit = response.headers['x-rate-limit-limit'];
+    WebFlowAuthModel webFlowAuthModel = WebFlowAuthModel(prefs);
+    Map<dynamic, dynamic>? authHeader = await getAuthHeader(prefs);
+    if (authHeader != null) {
+      var response = await http.get(uri, headers: {
+        ...?headers,
+        ...authHeader,
+        ...userAgentHeader,
+        'authorization': bearerToken,
+        'x-guest-token': (await webFlowAuthModel.GetGT(userAgentHeader)).toString(),
+        'x-twitter-active-user': 'yes',
+        'user-agent': userAgentHeader.toString()
+      });
 
-    if (headerRateLimitReset == null || headerRateLimitRemaining == null || headerRateLimitLimit == null) {
-      // If the rate limit headers are missing, the endpoint probably doesn't send them back
       return response;
     }
-
-    // Update our token's rate limit counters
-    _expiresAt = int.parse(headerRateLimitReset) * 1000;
-    _tokenRemaining = int.parse(headerRateLimitRemaining);
-    _tokenLimit = int.parse(headerRateLimitLimit);
-
-    return response;
+    return null;
   }
 }
 
@@ -998,7 +952,7 @@ class WebFlowAuthModel extends ChangeNotifier {
       throw Exception("Return Status is (${response.statusCode}), it should be 200");
   }
 
-  Future<void> PassUsername(String username, Map<String, String> userAgentHeader) async {
+  Future<void> PassUsername(String username, String? email) async {
     var body = {
       "flow_token": flowToken2,
       "subtask_inputs": [
@@ -1040,7 +994,7 @@ class WebFlowAuthModel extends ChangeNotifier {
           "subtask_inputs": [
             {
               "subtask_id": "LoginEnterAlternateIdentifierSubtask",
-              "enter_text": {"text": GetEmail(), "link": "next_link"}
+              "enter_text": {"text": email, "link": "next_link"}
             }
           ]
         };
@@ -1286,8 +1240,8 @@ class WebFlowAuthModel extends ChangeNotifier {
     }
   }
 
-  Future<Map<dynamic, dynamic>?> GetAuthHeader(Map<String, String> userAgentHeader,
-      {String? authCode, BuildContext? context}) async {
+  Future<Map<dynamic, dynamic>?> GetAuthHeader(
+      {required String username, required String password, String? email, BuildContext? context}) async {
     try {
       if (_authHeader == null) await getAuthTokenFromPref();
       if (!await IsTokenExpired() && _authHeader != null) return _authHeader!;
@@ -1295,8 +1249,8 @@ class WebFlowAuthModel extends ChangeNotifier {
       await GetGT(userAgentHeader);
       await GetFlowToken1(userAgentHeader);
       await GetFlowToken2(userAgentHeader);
-      await PassUsername(await GetUserName(), userAgentHeader);
-      await PassPassword(await GetPassword(), userAgentHeader);
+      await PassUsername(username, email);
+      await PassPassword(password, userAgentHeader);
       //if (authCode != null) await Pass2FA(authCode.toString(), userAgentHeader);
       await GetAuthTokenCsrf(userAgentHeader);
       await BuildAuthHeader();
@@ -1384,26 +1338,6 @@ class WebFlowAuthModel extends ChangeNotifier {
 
   Future DeleteTokenLimit() async {
     return prefs.remove("auth_tokenLimit");
-  }
-
-  Future<String> GetUserName() async {
-    return prefs.get(optionLoginNameTwitterAcc);
-  }
-
-  Future SetUserName(String userName) async {
-    return prefs.set(optionLoginNameTwitterAcc, userName);
-  }
-
-  Future<String> GetPassword() async {
-    return prefs.get(optionPasswordTwitterAcc);
-  }
-
-  Future SetPassword(String password) async {
-    return prefs.set(optionPasswordTwitterAcc, password);
-  }
-
-  Future<String> GetEmail() async {
-    return prefs.get(optionEmailTwitterAcc);
   }
 
   // log.info('Imported data into ${}');

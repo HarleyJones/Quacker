@@ -211,49 +211,34 @@ class SubscriptionGroupMember with ToMappable {
   }
 }
 
-class TwitterAccount {
+class Account {
   final String id;
   final String screenName;
   final String password;
   final String? email;
-  final String kdtCookie;
   final String authHeader;
 
-  TwitterAccount(
-      {required this.id,
-      required this.screenName,
-      required this.password,
-      this.email,
-      required this.kdtCookie,
-      required this.authHeader});
+  Account({required this.id, required this.screenName, required this.password, this.email, required this.authHeader});
 
-  factory TwitterAccount.fromMap(Map<String, Object?> map) {
-    return TwitterAccount(
+  factory Account.fromMap(Map<String, Object?> map) {
+    return Account(
       id: map['id'] as String,
       screenName: map['screen_name'] as String,
       password: map['password'] as String,
       email: map['email'] as String?,
-      kdtCookie: map['kdt_cookie'] as String,
       authHeader: map['auth_header'] as String,
     );
   }
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is TwitterAccount && runtimeType == other.runtimeType && id == other.id;
+      identical(this, other) || other is Account && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'screen_name': screenName,
-      'password': password,
-      'email': email,
-      'kdt_cookie': kdtCookie,
-      'auth_header': authHeader
-    };
+    return {'id': id, 'screen_name': screenName, 'password': password, 'email': email, 'auth_header': authHeader};
   }
 }
