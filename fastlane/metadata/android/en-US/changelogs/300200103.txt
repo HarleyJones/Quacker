@@ -1,0 +1,8 @@
+This release massively improves Quacker dramatically by adding many QoL fixes and the ability to add multiple accounts in settings
+
+Notable updates:
+- New icon
+- Multiple accounts
+- Color theming
+
+Check out https://github.com/TheHCJ/Quacker/releases/tag/v3.4.0 for the full changelog
