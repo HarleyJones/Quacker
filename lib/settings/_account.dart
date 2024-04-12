@@ -40,13 +40,13 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                   itemBuilder: (BuildContext itemContext, int index) {
                     return Card(
                         child: ListTile(
-                      title: Text(data[index]['screen_name'].toString()),
+                      title: Text(data[index]['id'].toString()),
                       subtitle: Text(data[index]['email'].toString()),
                       leading: Icon(Icons.account_circle),
                       trailing: IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () async {
-                          await deleteAccount(data[index]['screen_name'].toString());
+                          await deleteAccount(data[index]['id'].toString());
                           setState(() {});
                         },
                       ),
@@ -60,9 +60,9 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
 
 class addDialog extends StatefulWidget {
   final WebFlowAuthModel model;
-  final Widget? pushTo;
+  final bool? returnHome;
 
-  const addDialog(this.model, {super.key, this.pushTo});
+  const addDialog(this.model, {super.key, this.returnHome});
 
   @override
   State<addDialog> createState() => _addDialog();
@@ -132,11 +132,7 @@ class _addDialog extends State<addDialog> {
               if (context.mounted) {
                 showSnackBar(context, icon: '', message: response);
               }
-              if (response == L10n.current.login_success && widget.pushTo != null) {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => widget.pushTo!));
-              } else {
-                Navigator.pop(context);
-              }
+              Navigator.pop(context);
 
               setState(() {});
             },

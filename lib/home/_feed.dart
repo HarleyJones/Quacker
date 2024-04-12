@@ -38,7 +38,6 @@ class _FeedScreenState extends State<FeedScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.animation!.addListener(_tabListener);
-    WidgetsBinding.instance.addPostFrameCallback((_) => print("hi"));
   }
 
   void _tabListener() {
