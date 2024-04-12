@@ -49,6 +49,7 @@ Future<Map<dynamic, dynamic>?> getAuthHeader(BasePrefService prefs) async {
         username: account['id'].toString(),
         password: account['password'].toString(),
         email: account['email'].toString());
+  } else {
+    return null;
   }
-  return null;
 }
