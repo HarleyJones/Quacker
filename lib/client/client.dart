@@ -42,7 +42,11 @@ class _QuackerTwitterClient extends TwitterClient {
     var authHeader = await getAuthHeader(prefs);
 
     if (authHeader != null) {
-      return await fetchAuthenticated(uri, headers: headers, log: log, prefs: prefs, authHeader: authHeader);
+      try {
+        return await fetchAuthenticated(uri, headers: headers, log: log, prefs: prefs, authHeader: authHeader);
+      } catch (_) {
+        return await fetchUnauthenticated(uri, headers: headers, log: log);
+      }
     } else {
       return await fetchUnauthenticated(uri, headers: headers, log: log);
     }
