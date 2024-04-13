@@ -7,7 +7,6 @@ import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:ffcache/ffcache.dart';
 import 'package:quacker/client/NEWclient_regular_account.dart';
 import 'package:quacker/client/client_unauthenticated.dart';
-import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile_model.dart';
 import 'package:quacker/user.dart';
@@ -17,51 +16,36 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
 import 'package:quiver/iterables.dart';
-import 'client_regular_account.dart';
 
 const Duration _defaultTimeout = Duration(seconds: 30);
 
-class _FritterTwitterClient extends TwitterClient {
-  static final log = Logger('_FritterTwitterClient');
+class _QuackerTwitterClient extends TwitterClient {
+  static final log = Logger('_QuackerTwitterClient');
 
-  _FritterTwitterClient() : super(consumerKey: '', consumerSecret: '', token: '', secret: '');
+  _QuackerTwitterClient() : super(consumerKey: '', consumerSecret: '', token: '', secret: '');
 
   @override
   Future<http.Response> get(Uri uri, {Map<String, String>? headers, Duration? timeout}) {
     return fetch(uri, headers: headers).timeout(timeout ?? _defaultTimeout).then((response) {
       if (response?.statusCode != null && response!.statusCode >= 200 && response.statusCode < 300) {
         return response;
-      } else if (response?.statusCode != null && response!.statusCode == 429) {
-        return Future.error(jsonDecode(response.body)['errors'][0]['message'].toString().replaceAll('.', ''));
+      } else if (response?.statusCode != null) {
+        return Future.error(jsonDecode(response!.body)['errors'][0]['message'].toString().replaceAll('.', ''));
       } else {
-        return Future.error(
-            HttpException(response?.reasonPhrase ?? response?.statusCode.toString() ?? "unknown error"));
+        return Future.error(HttpException("${response?.statusCode}: ${response?.reasonPhrase}"));
       }
     });
   }
 
   static Future<http.Response?> fetch(Uri uri, {Map<String, String>? headers}) async {
-    log.info('Fetching $uri');
-
     var prefs = await PrefServiceShared.init(prefix: 'pref_');
-
-    WebFlowAuthModel webFlowAuthModel = WebFlowAuthModel(prefs);
     var authHeader = await getAuthHeader(prefs);
 
     if (authHeader != null) {
-      var response = await http.get(uri, headers: {
-        ...?headers,
-        ...authHeader,
-        ...userAgentHeader,
-        'authorization': bearerToken,
-        'x-guest-token': (await webFlowAuthModel.GetGT(userAgentHeader)).toString(),
-        'x-twitter-active-user': 'yes',
-        'user-agent': userAgentHeader.toString()
-      });
-
-      return response;
+      return await fetchAuthenticated(uri, headers: headers, log: log, prefs: prefs, authHeader: authHeader);
+    } else {
+      return await fetchUnauthenticated(uri, headers: headers, log: log);
     }
-    return null;
   }
 }
 
@@ -91,8 +75,7 @@ class UnknownProfileUnavailableReason implements Exception {
 }
 
 class Twitter {
-  static final TwitterApi _twitterApi = TwitterApi(client: AuthenticatedTwitterClient());
-  static final TwitterApi _unAuthenticatedTwitterApi = TwitterApi(client: UnauthenticatedTwitterClient());
+  static final TwitterApi _twitterApi = TwitterApi(client: _QuackerTwitterClient());
 
   static final FFCache _cache = FFCache();
 
@@ -516,7 +499,7 @@ class Twitter {
 
   static Future<List<TrendLocation>> getTrendLocations() async {
     var result = await _cache.getOrCreateAsJSON('trends.locations', const Duration(days: 2), () async {
-      var locations = await _unAuthenticatedTwitterApi.trendsService.available();
+      var locations = await _twitterApi.trendsService.available();
 
       return jsonEncode(locations.map((e) => e.toJson()).toList());
     });
@@ -526,7 +509,7 @@ class Twitter {
 
   static Future<List<Trends>> getTrends(int location) async {
     var result = await _cache.getOrCreateAsJSON('trends.$location', const Duration(minutes: 2), () async {
-      var trends = await _unAuthenticatedTwitterApi.trendsService.place(id: location);
+      var trends = await _twitterApi.trendsService.place(id: location);
 
       return jsonEncode(trends.map((e) => e.toJson()).toList());
     });

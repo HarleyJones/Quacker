@@ -62,6 +62,9 @@ final Map<String, String> userAgentHeader = {
   // "If-Modified-Since": "Sat, 1 Jan 2000 00:00:00 GMT",
 };
 
+const String bearerToken =
+    "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
+
 const routeHome = '/';
 const routeGroup = '/group';
 const routeProfile = '/profile';

@@ -1,11 +1,12 @@
 import 'dart:convert';
 import "dart:math";
+import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
-import 'package:quacker/database/entities.dart';
+import 'package:quacker/constants.dart';
 import 'package:quacker/database/repository.dart';
 import 'package:quacker/generated/l10n.dart';
-
-import 'client_regular_account.dart';
+import 'package:quacker/client/client_regular_account.dart';
 
 Future<String> addAccount(BasePrefService prefs, String username, String password, String email) async {
   var database = await Repository.writable();
@@ -15,8 +16,8 @@ Future<String> addAccount(BasePrefService prefs, String username, String passwor
     final authHeader = await model.GetAuthHeader(username: username, password: password, email: email);
 
     if (authHeader != null) {
-      database.insert(tableAccounts,
-          {"id": username, "password": password, "email": email, "auth_header": json.encode(authHeader)});
+      database.insert(
+          tableAccounts, {"id": username, "password": password, "email": email, "auth_header": jsonEncode(authHeader)});
 
       return L10n.current.login_success;
     } else {
@@ -52,4 +53,25 @@ Future<Map<dynamic, dynamic>?> getAuthHeader(BasePrefService prefs) async {
   } else {
     return null;
   }
+}
+
+Future<http.Response?> fetchAuthenticated(Uri uri,
+    {Map<String, String>? headers,
+    required Logger log,
+    required BasePrefService prefs,
+    required Map<dynamic, dynamic> authHeader}) async {
+  log.info('Fetching $uri');
+
+  WebFlowAuthModel webFlowAuthModel = WebFlowAuthModel(prefs);
+  var response = await http.get(uri, headers: {
+    ...?headers,
+    ...authHeader,
+    ...userAgentHeader,
+    'authorization': bearerToken,
+    'x-guest-token': (await webFlowAuthModel.GetGT(userAgentHeader)).toString(),
+    'x-twitter-active-user': 'yes',
+    'user-agent': userAgentHeader.toString()
+  });
+
+  return response;
 }
