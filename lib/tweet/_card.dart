@@ -23,20 +23,20 @@ class TweetCard extends StatelessWidget {
 
   const TweetCard({Key? key, required this.tweet, required this.card}) : super(key: key);
 
-  _createBaseCard(Widget child) {
+  _createBaseCard(Widget child, BuildContext context) {
     return Container(
         margin: const EdgeInsets.symmetric(horizontal: 12),
         width: double.infinity,
         child: Card(
           clipBehavior: Clip.antiAlias,
-          color: Colors.blue,
+          color: Theme.of(context).colorScheme.inversePrimary,
           child: child,
         ));
   }
 
-  _createCard(String? url, Widget child) {
+  _createCard(String? url, Widget child, BuildContext context) {
     return GestureDetector(
-      child: _createBaseCard(child),
+      child: _createBaseCard(child, context),
       onTap: () => url == null ? null : openUri(url),
     );
   }
@@ -163,7 +163,8 @@ class TweetCard extends StatelessWidget {
                   unifiedCard['component_objects']['details_1']['data']['subtitle']['content'], null),
             ),
           ],
-        ));
+        ),
+        context);
   }
 
   _createUnifiedCard(BuildContext context, Map<String, dynamic> card, String imageKey, String imageSize) {
@@ -284,7 +285,8 @@ class TweetCard extends StatelessWidget {
                         card['binding_values']?['description']?['string_value'],
                         card['binding_values']?['vanity_url']?['string_value']))
               ],
-            ));
+            ),
+            context);
       case 'summary_large_image':
         var image = card['binding_values']['thumbnail_image$imageKey']?['image_value'];
 
@@ -304,7 +306,8 @@ class TweetCard extends StatelessWidget {
                       card['binding_values']?['vanity_url']?['string_value']),
                 ),
               ],
-            ));
+            ),
+            context);
       case 'player':
         var image = card['binding_values']['player_image$imageKey']?['image_value'];
 
@@ -321,7 +324,8 @@ class TweetCard extends StatelessWidget {
                         card['binding_values']?['description']?['string_value'],
                         card['binding_values']?['vanity_url']?['string_value']))
               ],
-            ));
+            ),
+            context);
       case 'poll2choice_text_only':
         return _createVoteCard(context, card, 2);
       case 'poll3choice_text_only':
@@ -347,7 +351,8 @@ class TweetCard extends StatelessWidget {
                   child: _createListTile(context, title, null, vanityUrl),
                 ),
               ],
-            ));
+            ),
+            context);
       case 'unified_card':
         try {
           return _createUnifiedCard(context, card, imageKey, imageSize);
@@ -377,7 +382,8 @@ class TweetCard extends StatelessWidget {
                       card['binding_values']['event_subtitle']?['string_value'], '@$user'),
                 ),
               ],
-            ));
+            ),
+            context);
       case '745291183405076480:broadcast':
         // https://twitter.com/KwasiKwarteng/status/1573229010779516929
         var uri = card['binding_values']['card_url']['string_value'];
@@ -417,7 +423,8 @@ class TweetCard extends StatelessWidget {
                   child: _createListTile(context, title, '@$username', null),
                 ),
               ],
-            ));
+            ),
+            context);
       default:
         return Container();
     }
