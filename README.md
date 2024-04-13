@@ -9,19 +9,18 @@
 </p>
 
 <p align="center">
-  <!-- <a href="https://f-droid.org/en/packages/com.thehcj.quacker/">
-    <img alt="Get it on F-Droid" src="https://f-droid.org/badge/get-it-on.png" height="80"></a> -->
-  <a href="https://apt.izzysoft.de/fdroid/index/apk/com.thehcj.quacker">
-    <img alt="Get it on IzzyOnDroid" src="assets/readme/get-it-on-izzyondroid.png" height="80"></a>
+  <a href="https://f-droid.org/en/packages/com.thehcj.quacker/">
+    <img alt="Get it on F-Droid" src="https://f-droid.org/badge/get-it-on.png" height="80"></a>
   <a href="https://github.com/TheHCJ/Quacker/releases">
     <img alt="Get it on GitHub" src="assets/readme/get-it-on-github.png" height="80"></a>
 </p>
 
 <p align="center">
-<a href="https://github.com/TheHCJ/Quacker/releases" alt="GitHub release"><img src="https://img.shields.io/github/release/TheHCJ/Quacker.svg" ></a>
-<a href="/LICENSE" alt="License: MIT"><img src="https://img.shields.io/badge/license-mit-E51400.svg"></a>
-<a href="https://github.com/TheHCJ/Quacker/actions" alt="Build Status"><img src="https://github.com/TheHCJ/Quacker/workflows/ci/badge.svg"></a>
-<a href="https://hosted.weblate.org/engage/quacker/" alt="Translation Status"><img src="https://hosted.weblate.org/widgets/quacker/-/svg-badge.svg"></a>
+  <a href="https://github.com/TheHCJ/Quacker/releases" alt="GitHub release"><img src="https://img.shields.io/github/release/TheHCJ/Quacker.svg" ></a>
+  <a href="https://f-droid.org/packages/com.thehcj.quacker/"><img alt="F-Droid Version" src="https://img.shields.io/f-droid/v/com.thehcj.quacker?label=release%20(f-droid)&color=green"></a>
+  <a href="/LICENSE" alt="License: MIT"><img src="https://img.shields.io/badge/license-mit-E51400.svg"></a>
+  <a href="https://github.com/TheHCJ/Quacker/actions" alt="Build Status"><img src="https://github.com/TheHCJ/Quacker/workflows/ci/badge.svg"></a>
+  <a href="https://hosted.weblate.org/engage/quacker/" alt="Translation Status"><img src="https://hosted.weblate.org/widgets/quacker/-/svg-badge.svg"></a>
 </p>
  
 ## Features:
