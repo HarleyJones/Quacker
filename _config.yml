@@ -35,26 +35,26 @@ features                                  :
 
   - title                                 : Trends
     description                           : See what's trending in the world
-    fontawesome_icon_name                 : arrow-trend-up
+    fontawesome_icon_name                 : fire
 
   - title                                 : Light and Dark themes
     description                           : Protect your eyes
-    fontawesome_icon_name                 : circle-half-stroke
+    fontawesome_icon_name                 : moon
   
   - title                                 : Subscriptions
     description                           : Follow and group accounts
-    fontawesome_icon_name                 : person
+    fontawesome_icon_name                 : user
 
   - title                                 : Polls
     description                           : View results without needing to vote
-    fontawesome_icon_name                 : check
+    fontawesome_icon_name                 : poll
 
   - title                                 : Search
     description                           : Find users and posts
-    fontawesome_icon_name                 : magnifying-glass
+    fontawesome_icon_name                 : search
 
   - title                                 : And more!
-    fontawesome_icon_name                 : add
+    fontawesome_icon_name                 : plus
 
   - title                                 : # New Feature Title
     description                           : # New Feature Description
