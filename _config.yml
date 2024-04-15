@@ -1,12 +1,6 @@
 #page title
 page_title                                : Quacker                                           # Automatically populates with app name if not set and if iOS app ID is set. Otherwise enter manually.
 
-# App Info
-ios_app_country                           : gb                                        # Required outside USA. Enter 2 letter country code as in https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-
-presskit_download_link                    : https://github.com/TheHCJ/Quacker/releases/latest                                          # Enter a link to downloadable file or (e.g. public Dropbox link to a .zip file). 
-                                                                                      # Or upload your press kit file to assets and set path accordingly (e.g. "assets/your_press_kit.zip").
-
 app_icon                                  : https://raw.githubusercontent.com/TheHCJ/Quacker/master/assets/icon.png                 # Automatically populates if not set and if iOS app ID is set.  Otherwise enter path to icon file manually.
 app_name                                  : Quacker                                        # Automatically populates if not set and if iOS app ID is set.  Otherwise enter manually.
 app_description                           : Quacker is a more private and clean way to browse X
