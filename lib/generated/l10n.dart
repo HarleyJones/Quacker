@@ -2565,6 +2565,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Go to profile: @`
+  String get go_to_profile {
+    return Intl.message(
+      'Go to profile: @',
+      name: 'go_to_profile',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

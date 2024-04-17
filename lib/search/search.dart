@@ -178,8 +178,17 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
                 TweetSearchResultList<SearchUsersModel, UserWithExtra>(
                     queryController: _queryController,
                     store: context.read<SearchUsersModel>(),
-                    searchFunction: (q) => context.read<SearchUsersModel>().searchUsers(q),
-                    itemBuilder: (context, user) => UserTile(user: UserSubscription.fromUser(user))),
+                    searchFunction: (q) => context.read<SearchUsersModel>().searchUsers(q, context),
+                    itemBuilder: (context, user) {
+                      if (user.idStr == "GOTOPROFILE") {
+                        return ListTile(
+                          title: Text(L10n.of(context).go_to_profile + user.screenName!),
+                          onTap: () => Navigator.pushNamed(context, routeProfile,
+                              arguments: ProfileScreenArguments(null, user.screenName)),
+                        );
+                      }
+                      return UserTile(user: UserSubscription.fromUser(user));
+                    }),
               ])),
             )
           ],

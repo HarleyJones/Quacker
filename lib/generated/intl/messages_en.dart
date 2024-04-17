@@ -197,6 +197,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "This functionality is no longer supported by X!"),
         "general": MessageLookupByLibrary.simpleMessage("General"),
         "generic_username": MessageLookupByLibrary.simpleMessage("User"),
+        "go_to_profile":
+            MessageLookupByLibrary.simpleMessage("Go to profile: @"),
         "group_name": m6,
         "groups": MessageLookupByLibrary.simpleMessage("Groups"),
         "help_make_fritter_even_better": MessageLookupByLibrary.simpleMessage(
