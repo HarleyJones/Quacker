@@ -213,6 +213,7 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
   @override
   Widget build(BuildContext context) {
     final showNavigationLabels = PrefService.of(context).get(optionShowNavigationLabels);
+    final trueDark = PrefService.of(context).get(optionThemeTrueBlack);
     final _disableAnimations = PrefService.of(context).get(optionDisableAnimations);
 
     return Scaffold(
@@ -228,6 +229,7 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPage,
+        surfaceTintColor: Theme.of(context).brightness == Brightness.dark && trueDark == true ? Colors.black : null,
         height: !showNavigationLabels ? 50 : 70,
         labelBehavior: showNavigationLabels
             ? NavigationDestinationLabelBehavior.alwaysShow
