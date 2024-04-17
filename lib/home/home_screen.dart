@@ -228,6 +228,7 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPage,
+        height: !showNavigationLabels ? 50 : 70,
         labelBehavior: showNavigationLabels
             ? NavigationDestinationLabelBehavior.alwaysShow
             : NavigationDestinationLabelBehavior.alwaysHide,
