@@ -155,7 +155,7 @@ Future<void> main() async {
     optionMediaSize: 'medium',
     optionMediaDefaultMute: true,
     optionNonConfirmationBiasMode: false,
-    optionShouldCheckForUpdates: true,
+    optionShouldCheckForUpdates: const String.fromEnvironment('app.flavor') == "fdroid" ? false : true,
     optionSubscriptionGroupsOrderByAscending: true,
     optionSubscriptionGroupsOrderByField: 'name',
     optionSubscriptionOrderByAscending: true,
