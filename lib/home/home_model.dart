@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
@@ -38,8 +39,8 @@ class HomeModel extends Store<List<HomePage>> {
 
       var available = [
         ...defaultHomePages,
-        ...groupsModel.state
-            .map((e) => NavigationPage('group-${e.id}', (c) => L10n.of(c).group_name(e.name), e.iconData)),
+        ...groupsModel.state.map((e) =>
+            NavigationPage('group-${e.id}', (c) => L10n.of(c).group_name(e.name), Icon(e.iconData), Icon(e.iconData))),
       ];
 
       var pages = <HomePage>[];

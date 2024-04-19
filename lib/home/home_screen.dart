@@ -27,9 +27,10 @@ typedef NavigationTitleBuilder = String Function(BuildContext context);
 class NavigationPage {
   final String id;
   final NavigationTitleBuilder titleBuilder;
-  final IconData icon;
+  final Widget icon;
+  final Widget selectedIcon;
 
-  NavigationPage(this.id, this.titleBuilder, this.icon);
+  NavigationPage(this.id, this.titleBuilder, this.icon, this.selectedIcon);
 }
 
 List<Widget> createCommonAppBarActions(BuildContext context) {
@@ -46,10 +47,11 @@ List<Widget> createCommonAppBarActions(BuildContext context) {
 }
 
 final List<NavigationPage> defaultHomePages = [
-  NavigationPage('feed', (c) => L10n.of(c).feed, Icons.rss_feed),
-  NavigationPage('subscriptions', (c) => L10n.of(c).subscriptions, Icons.subscriptions),
-  NavigationPage('trending', (c) => L10n.of(c).trending, Icons.trending_up),
-  NavigationPage('saved', (c) => L10n.of(c).saved, Icons.bookmark),
+  NavigationPage('home', (c) => L10n.of(c).home, Icon(Icons.home_outlined), Icon(Icons.home)),
+  NavigationPage(
+      'subscriptions', (c) => L10n.of(c).subscriptions, Icon(Icons.subscriptions_outlined), Icon(Icons.subscriptions)),
+  NavigationPage('trending', (c) => L10n.of(c).trending, Icon(Icons.trending_up_outlined), Icon(Icons.trending_up)),
+  NavigationPage('saved', (c) => L10n.of(c).saved, Icon(Icons.bookmark_border_outlined), Icon(Icons.bookmark)),
 ];
 
 class HomeScreen extends StatelessWidget {
@@ -127,14 +129,14 @@ class _HomeScreenState extends State<_HomeScreen> {
                     }
 
                     switch (e.id) {
-                      case 'feed':
+                      case 'home':
                         return FeedScreen(scrollController: scrollController, id: '-1', name: L10n.current.feed);
                       case 'subscriptions':
                         return SubscriptionsScreen(
                           scrollController: scrollController,
                         );
                       case 'trending':
-                        return TrendsScreen();
+                        return const TrendsScreen();
                       case 'saved':
                         return SavedScreen(scrollController: scrollController);
                       default:
@@ -184,7 +186,8 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
     var widgetPages = pages;
     if (widgetPages.length < 2) {
       widgetPages.addAll(List.generate(2 - widgetPages.length, (index) {
-        return NavigationPage('none', (context) => L10n.current.missing_page, Icons.disabled_by_default);
+        return NavigationPage('none', (context) => L10n.current.missing_page, Icon(Icons.disabled_by_default_outlined),
+            Icon(Icons.disabled_by_default));
       }));
     }
 
@@ -230,13 +233,14 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPage,
         surfaceTintColor: Theme.of(context).brightness == Brightness.dark && trueDark == true ? Colors.black : null,
-        height: !showNavigationLabels ? 50 : 70,
+        height: !showNavigationLabels ? 40 : 80,
         labelBehavior: showNavigationLabels
             ? NavigationDestinationLabelBehavior.alwaysShow
             : NavigationDestinationLabelBehavior.alwaysHide,
         animationDuration: _disableAnimations == true ? Duration.zero : null,
         destinations: [
-          ..._pages.map((e) => NavigationDestination(icon: Icon(e.icon, size: 22), label: e.titleBuilder(context)))
+          ..._pages.map(
+              (e) => NavigationDestination(icon: e.icon, selectedIcon: e.selectedIcon, label: e.titleBuilder(context)))
         ],
         onDestinationSelected: (int value) {
           setState(() {
