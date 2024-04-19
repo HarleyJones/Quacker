@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quacker/constants.dart';
+import 'package:quacker/generated/l10n.dart';
+import 'package:quacker/search/search.dart';
 import 'package:quacker/trends/_list.dart';
 import 'package:quacker/trends/_settings.dart';
 import 'package:quacker/trends/_tabs.dart';
@@ -16,10 +19,24 @@ class _TrendsScreenState extends State<TrendsScreen> with AutomaticKeepAliveClie
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    TextEditingController _searchController = TextEditingController();
 
     return Scaffold(
-      appBar: const TrendsTabBar(),
+      appBar: AppBar(
+          flexibleSpace: Padding(
+              padding: EdgeInsets.fromLTRB(8.0, 36.0, 8.0, 8.0),
+              child: SearchBar(
+                controller: _searchController,
+                hintText: L10n.of(context).search,
+                leading: Padding(padding: EdgeInsets.only(left: 8.0), child: Icon(Icons.search)),
+                onSubmitted: (value) {
+                  Navigator.pushNamed(context, routeSearch,
+                      arguments: SearchArguments(0,
+                          focusInputOnOpen: false, query: Uri.decodeQueryComponent(_searchController.text)));
+                  _searchController.clear();
+                },
+              )),
+          bottom: const TrendsTabBar()),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () async => showModalBottomSheet(

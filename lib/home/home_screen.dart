@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:quacker/client/client_regular_account.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/group/group_screen.dart';
@@ -10,9 +9,6 @@ import 'package:quacker/home/_feed.dart';
 import 'package:quacker/home/_missing.dart';
 import 'package:quacker/home/_saved.dart';
 import 'package:quacker/home/home_model.dart';
-import 'package:quacker/search/search.dart';
-import 'package:quacker/settings/_account.dart';
-import 'package:quacker/settings/_general.dart';
 import 'package:quacker/subscriptions/subscriptions.dart';
 import 'package:quacker/trends/trends.dart';
 import 'package:quacker/ui/errors.dart';
@@ -35,10 +31,6 @@ class NavigationPage {
 List<Widget> createCommonAppBarActions(BuildContext context) {
   return [
     IconButton(
-      icon: const Icon(Icons.search),
-      onPressed: () => Navigator.pushNamed(context, routeSearch, arguments: SearchArguments(0, focusInputOnOpen: true)),
-    ),
-    IconButton(
       icon: const Icon(Icons.settings),
       onPressed: () => Navigator.pushNamed(context, routeSettings),
     )
@@ -46,10 +38,10 @@ List<Widget> createCommonAppBarActions(BuildContext context) {
 }
 
 final List<NavigationPage> defaultHomePages = [
-  NavigationPage('home', (c) => L10n.of(c).home, Icon(Icons.home_outlined), Icon(Icons.home)),
+  NavigationPage('feed', (c) => L10n.of(c).home, Icon(Icons.home_outlined), Icon(Icons.home)),
+  NavigationPage('trending', (c) => L10n.of(c).search, Icon(Icons.search_outlined), Icon(Icons.search)),
   NavigationPage(
       'subscriptions', (c) => L10n.of(c).subscriptions, Icon(Icons.subscriptions_outlined), Icon(Icons.subscriptions)),
-  NavigationPage('trending', (c) => L10n.of(c).trending, Icon(Icons.trending_up_outlined), Icon(Icons.trending_up)),
   NavigationPage('saved', (c) => L10n.of(c).saved, Icon(Icons.bookmark_border_outlined), Icon(Icons.bookmark)),
 ];
 
@@ -128,7 +120,7 @@ class _HomeScreenState extends State<_HomeScreen> {
                     }
 
                     switch (e.id) {
-                      case 'home':
+                      case 'feed':
                         return FeedScreen(scrollController: scrollController, id: '-1', name: L10n.current.feed);
                       case 'subscriptions':
                         return SubscriptionsScreen(

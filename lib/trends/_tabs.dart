@@ -67,17 +67,14 @@ class _TrendsTabBarState extends State<TrendsTabBar> with TickerProviderStateMix
     return ScopedBuilder<UserTrendLocationModel, UserTrendLocations>(
       store: context.read<UserTrendLocationModel>(),
       onState: (context, state) {
-        return AppBar(
-          bottom: TabBar(
-              labelColor: Theme.of(context).appBarTheme.foregroundColor,
-              indicatorColor: Theme.of(context).appBarTheme.foregroundColor,
-              controller: _tabController,
-              isScrollable: true,
-              tabAlignment: TabAlignment.start,
-              onTap: (index) async {
-                await model.change(state.locations[index]);
-              },
-              tabs: _tabs),
+        return TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
+          onTap: (index) async {
+            await model.change(state.locations[index]);
+          },
+          tabs: _tabs,
         );
       },
     );
