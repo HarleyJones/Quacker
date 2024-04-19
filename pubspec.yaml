@@ -33,7 +33,6 @@ dependencies:
     git: 
       url: https://github.com/TheHCJ/twitter_api.git
   device_info_plus: ^10.1.0
-  dotted_border: ^2.0.0+3
   extended_image: ^8.2.0
   extended_nested_scroll_view: ^6.0.0
   faker: ^2.1.0

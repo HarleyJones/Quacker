@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:dotted_border/dotted_border.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_iconpicker_plus/IconPicker/Packs/Material.dart';
@@ -38,6 +37,7 @@ class _SubscriptionGroupsState extends State<SubscriptionGroups> {
     var title = numberOfMembers == null ? name : '$name ($numberOfMembers)';
 
     return Card(
+      color: color?.harmonizeWith(Theme.of(context).colorScheme.primary),
       child: InkWell(
         onTap: () {
           // Open page with the group's feed
@@ -45,29 +45,15 @@ class _SubscriptionGroupsState extends State<SubscriptionGroups> {
         },
         onLongPress: onLongPress,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: color != null ? color.withOpacity(0.9) : Theme.of(context).highlightColor,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Icon(deserializeIconData(icon), size: 24),
-            ),
-            Expanded(
-                child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: color != null ? color.withOpacity(0.4) : Colors.white10,
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12))),
-              width: double.infinity,
-              padding: const EdgeInsets.all(8),
-              child: Text(title,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-            ))
+            Icon(deserializeIconData(icon), size: 24),
+            Text(title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
@@ -85,13 +71,10 @@ class _SubscriptionGroupsState extends State<SubscriptionGroups> {
           controller: widget.scrollController,
           padding: const EdgeInsets.only(top: 4),
           gridDelegate:
-              const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 100, childAspectRatio: 160 / 150),
-          itemCount: state.length + 2,
+              const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 100, childAspectRatio: 20 / 15),
+          itemCount: state.length + 1,
           itemBuilder: (context, index) {
-            var actualIndex = index - 1;
-            if (actualIndex == -1) {
-              return _createGroupCard('-1', L10n.of(context).all, defaultGroupIcon, null, null, null);
-            }
+            var actualIndex = index;
 
             if (actualIndex < state.length) {
               var e = state[actualIndex];
@@ -100,32 +83,7 @@ class _SubscriptionGroupsState extends State<SubscriptionGroups> {
                   () => openSubscriptionGroupDialog(context, e.id, e.name, e.icon));
             }
 
-            return Card(
-              child: InkWell(
-                onTap: () {
-                  openSubscriptionGroupDialog(context, null, '', defaultGroupIcon);
-                },
-                child: DottedBorder(
-                  color: Theme.of(context).textTheme.bodySmall!.color!,
-                  borderType: BorderType.RRect,
-                  radius: const Radius.circular(12),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.add, size: 16),
-                        const SizedBox(height: 4),
-                        Text(
-                          L10n.of(context).newTrans,
-                          style: const TextStyle(fontSize: 13),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
+            return null;
           },
         );
       },
@@ -325,7 +283,8 @@ class _SubscriptionGroupEditDialogState extends State<SubscriptionGroupEditDialo
                               title: Text(L10n.of(context).pick_a_color),
                               content: SingleChildScrollView(
                                 child: MaterialPicker(
-                                  pickerColor: color ?? Colors.grey,
+                                  pickerColor:
+                                      color?.harmonizeWith(Theme.of(context).colorScheme.primary) ?? Colors.grey,
                                   onColorChanged: (value) => setState(() {
                                     selectedColor = value;
                                   }),

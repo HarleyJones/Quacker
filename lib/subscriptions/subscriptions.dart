@@ -33,6 +33,13 @@ class SubscriptionsScreen extends StatelessWidget {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.add,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      onPressed: () => openSubscriptionGroupDialog(context, null, '', defaultGroupIcon),
+                    ),
                     PopupMenuButton<String>(
                       icon: Icon(
                         Icons.sort,
