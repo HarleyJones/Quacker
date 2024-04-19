@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:dart_twitter_api/src/utils/date_utils.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:ffcache/ffcache.dart';
-import 'package:quacker/client/NEWclient_regular_account.dart';
+import 'package:quacker/client/client_regular_account.dart';
 import 'package:quacker/client/client_unauthenticated.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile_model.dart';

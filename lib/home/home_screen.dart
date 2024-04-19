@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:quacker/client/NEWclient_regular_account.dart';
 import 'package:quacker/client/client_regular_account.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';

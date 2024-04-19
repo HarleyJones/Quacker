@@ -1,15 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:quacker/client/NEWclient_regular_account.dart';
+import 'package:quacker/client/client_regular_account.dart';
 import 'package:quacker/client/client.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:pref/pref.dart';
 import 'package:quacker/ui/errors.dart';
-
-import '../client/client_regular_account.dart';
 
 class SettingsAccountFragment extends StatefulWidget {
   State<SettingsAccountFragment> createState() => _SettingsAccountFragment();
@@ -50,6 +48,12 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                           setState(() {});
                         },
                       ),
+                      onTap: () => showDialog(
+                          context: context,
+                          builder: (_) => addDialog(model,
+                              username: data[index]['id'],
+                              password: data[index]['password'],
+                              email: data[index]['email'])),
                     ));
                   });
             }
@@ -60,9 +64,11 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
 
 class addDialog extends StatefulWidget {
   final WebFlowAuthModel model;
-  final bool? returnHome;
+  final username;
+  final password;
+  final email;
 
-  const addDialog(this.model, {super.key, this.returnHome});
+  const addDialog(this.model, {super.key, this.username, this.password, this.email});
 
   @override
   State<addDialog> createState() => _addDialog();
@@ -76,6 +82,10 @@ class _addDialog extends State<addDialog> {
   TextEditingController _email = TextEditingController();
 
   Widget build(BuildContext context) {
+    _username.text = widget.username;
+    _password.text = widget.password;
+    _email.text = widget.email;
+
     return AlertDialog(
       title: Text(L10n.of(context).account),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
