@@ -1,5 +1,6 @@
 import 'package:dart_twitter_api/src/utils/date_utils.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
@@ -77,20 +78,18 @@ class UserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      dense: true,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       leading: UserAvatar(uri: user.profileImageUrlHttps),
       title: Row(
         children: [
           Flexible(child: Text(user.name, maxLines: 1, overflow: TextOverflow.ellipsis)),
           if (user.verified) const SizedBox(width: 6),
-          if (user.verified) const Icon(Icons.verified, size: 14, color: Colors.blue)
+          if (user.verified)
+            Icon(Icons.verified, size: 14, color: Colors.blue.harmonizeWith(Theme.of(context).colorScheme.primary))
         ],
       ),
       subtitle: Text('@${user.screenName}', maxLines: 1, overflow: TextOverflow.ellipsis),
-      trailing: SizedBox(
-        width: 36,
-        child: FollowButton(user: user),
-      ),
+      trailing: FollowButton(user: user),
       onTap: () {
         Navigator.pushNamed(context, routeProfile, arguments: ProfileScreenArguments(user.id, user.screenName));
       },

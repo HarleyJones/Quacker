@@ -48,7 +48,7 @@ class SubscriptionsScreen extends StatelessWidget {
         ],
       ),
       body: ListView(
-        shrinkWrap: true,
+        controller: scrollController,
         children: [
           SubscriptionGroups(
             scrollController: scrollController,
