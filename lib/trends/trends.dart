@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
+import 'package:quacker/profile/profile.dart';
 import 'package:quacker/search/search.dart';
 import 'package:quacker/trends/_list.dart';
 import 'package:quacker/trends/_settings.dart';
@@ -31,9 +32,16 @@ class _TrendsScreenState extends State<TrendsScreen> with AutomaticKeepAliveClie
                 leading: Padding(
                     padding: EdgeInsets.all(8.0), child: Icon(Icons.search, size: Theme.of(context).iconTheme.size)),
                 onSubmitted: (value) {
-                  Navigator.pushNamed(context, routeSearch,
-                      arguments: SearchArguments(0,
-                          focusInputOnOpen: false, query: Uri.decodeQueryComponent(_searchController.text)));
+                  if (Uri.decodeQueryComponent(_searchController.text)[0] == '@' &&
+                      Uri.decodeQueryComponent(_searchController.text).split(" ").last.isNotEmpty) {
+                    Navigator.pushNamed(context, routeProfile,
+                        arguments: ProfileScreenArguments(
+                            null, Uri.decodeQueryComponent(_searchController.text).substring(1)));
+                  } else {
+                    Navigator.pushNamed(context, routeSearch,
+                        arguments: SearchArguments(0,
+                            focusInputOnOpen: false, query: Uri.decodeQueryComponent(_searchController.text)));
+                  }
                   _searchController.clear();
                 },
               )),
