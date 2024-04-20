@@ -76,6 +76,9 @@ dependencies:
     sdk: flutter
   flutter_local_notifications: ^17.0.0
   dynamic_color: ^1.7.0
+  hex: ^0.2.0
+  cryptography: ^2.7.0
+  socks5_proxy: ^1.0.4
 
 dev_dependencies:
   flutter_test:

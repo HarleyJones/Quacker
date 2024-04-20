@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:pref/pref.dart';
 import 'package:quacker/group/group_model.dart';
 import 'package:logging/logging.dart';
 import 'package:sqflite/sqflite.dart';
@@ -12,6 +11,7 @@ const String databaseName = 'quacker.db';
 
 const String tableFeedGroupChunk = 'feed_group_chunk';
 const String tableFeedGroupCursor = 'feed_group_cursor';
+const String tableFeedGroupPositionState = 'feed_group_position_state';
 
 const String tableSavedTweet = 'saved_tweet';
 const String tableSearchSubscription = 'search_subscription';
@@ -19,8 +19,9 @@ const String tableSearchSubscriptionGroupMember = 'search_subscription_group_mem
 const String tableSubscription = 'subscription';
 const String tableSubscriptionGroup = 'subscription_group';
 const String tableSubscriptionGroupMember = 'subscription_group_member';
-
-const String tableAccounts = 'accounts';
+const String tableRateLimits = 'rate_limits';
+const String tableTwitterToken = 'twitter_token';
+const String tableTwitterProfile = 'twitter_profile';
 
 class Repository {
   static final log = Logger('Repository');
@@ -129,7 +130,7 @@ class Repository {
       12: [
         // Insert a dummy record for the "All" subscription group
         Migration(Operation((db) async {
-          await db.insert(tableSubscriptionGroup, {'id': '-1', 'name': 'All', 'icon': 'rss_feed'},
+          await db.insert(tableSubscriptionGroup, {'id': '-1', 'name': 'All', 'icon': 'rss_feed_rounded'},
               conflictAlgorithm: ConflictAlgorithm.replace);
         }), reverse: Operation((db) async {
           await db.delete(tableSubscriptionGroup, where: 'id = ?', whereArgs: ['-1']);
@@ -138,7 +139,7 @@ class Repository {
       13: [
         // Duplicate migration 12, as some people had deleted the "All" group when it displayed twice in the groups list
         Migration(Operation((db) async {
-          await db.insert(tableSubscriptionGroup, {'id': '-1', 'name': 'All', 'icon': 'rss_feed'},
+          await db.insert(tableSubscriptionGroup, {'id': '-1', 'name': 'All', 'icon': 'rss_feed_rounded'},
               conflictAlgorithm: ConflictAlgorithm.replace);
         }), reverse: Operation((db) async {
           await db.delete(tableSubscriptionGroup, where: 'id = ?', whereArgs: ['-1']);
@@ -146,8 +147,7 @@ class Repository {
       ],
       14: [
         // Add a "verified" column to the subscriptions table
-        SqlMigration('ALTER TABLE $tableSubscription ADD COLUMN verified BOOLEAN DEFAULT 0',
-            reverseSql: 'ALTER TABLE $tableSubscription DROP COLUMN verified')
+        SqlMigration('ALTER TABLE $tableSubscription ADD COLUMN verified BOOLEAN DEFAULT 0')
       ],
       15: [
         // Re-apply migration 14 in a different way, as it looks like it didn't apply for some people
@@ -160,12 +160,11 @@ class Repository {
       ],
       16: [
         // Add a "color" column to the subscription groups table, and set a default icon for existing groups
-        SqlMigration('ALTER TABLE $tableSubscriptionGroup ADD COLUMN color INT DEFAULT NULL',
-            reverseSql: 'ALTER TABLE $tableSubscriptionGroup DROP COLUMN color'),
+        SqlMigration('ALTER TABLE $tableSubscriptionGroup ADD COLUMN color INT DEFAULT NULL'),
 
         Migration(Operation((db) async {
           await db.update(tableSubscriptionGroup, {'icon': defaultGroupIcon},
-              where: "icon IS NULL OR icon = '' OR icon = ?", whereArgs: ['rss_feed']);
+              where: "icon IS NULL OR icon = '' OR icon = ?", whereArgs: ['rss_feed_rounded']);
         }))
       ],
       17: [
@@ -188,8 +187,7 @@ class Repository {
       ],
       19: [
         // Add a new column for saved tweet user IDs, and extract them from all existing records
-        SqlMigration('ALTER TABLE $tableSavedTweet ADD COLUMN user_id VARCHAR DEFAULT NULL',
-            reverseSql: 'ALTER TABLE $tableSavedTweet DROP COLUMN user_id'),
+        SqlMigration('ALTER TABLE $tableSavedTweet ADD COLUMN user_id VARCHAR DEFAULT NULL'),
         Migration(Operation((db) async {
           var tweets = await db.query(tableSavedTweet, columns: ['id', 'content']);
           var batch = db.batch();
@@ -221,14 +219,135 @@ class Repository {
         }))
       ],
       21: [
-        // create table for storing twitter accounts
+        Migration(Operation((db) async {
+          await db.delete(tableFeedGroupChunk);
+        })),
+        SqlMigration('CREATE TABLE IF NOT EXISTS feed_group_offset (group_id VARCHAR, offset REAL)',
+            reverseSql: 'DROP TABLE IF EXISTS feed_group_offset'),
+      ],
+      22: [
+        SqlMigration('DROP TABLE IF EXISTS feed_group_offset'),
+        SqlMigration('DROP TABLE IF EXISTS $tableFeedGroupCursor'),
+        SqlMigration('DROP TABLE IF EXISTS $tableFeedGroupChunk'),
         SqlMigration(
-            'CREATE TABLE IF NOT EXISTS $tableAccounts (id TEXT PRIMARY KEY, password TEXT, email TEXT, auth_header VARCHAR)'),
+            'CREATE TABLE IF NOT EXISTS $tableFeedGroupChunk (group_id VARCHAR, hash VARCHAR NOT NULL, cursor_top VARCHAR, cursor_bottom VARCHAR, response VARCHAR, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)'),
+        SqlMigration(
+            'CREATE TABLE IF NOT EXISTS $tableFeedGroupPositionState (group_id VARCHAR, chain_id VARCHAR, tweet_id VARCHAR)',
+            reverseSql: 'DROP TABLE IF EXISTS $tableFeedGroupPositionState'),
+      ],
+      23: [
+        Migration(Operation((db) async {
+          await db.delete(tableFeedGroupChunk);
+          await db.delete(tableFeedGroupPositionState);
+        })),
+        SqlMigration(
+            'CREATE TABLE IF NOT EXISTS guest_account (id_str VARCHAR, screen_name VARCHAR, oauth_token VARCHAR, oauth_token_secret VARCHAR, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)',
+            reverseSql: 'DROP TABLE IF EXISTS guest_account'),
+      ],
+      24: [
+        SqlMigration('CREATE TABLE IF NOT EXISTS $tableRateLimits (remaining VARCHAR, reset VARCHAR)',
+            reverseSql: 'DROP TABLE IF EXISTS $tableRateLimits'),
+      ],
+      25: [
+        SqlMigration('ALTER TABLE $tableSubscription ADD COLUMN in_feed BOOLEAN DEFAULT 1'),
+      ],
+      26: [
+        SqlMigration('ALTER TABLE $tableRateLimits ADD COLUMN oauth_token VARCHAR DEFAULT NULL'),
+      ],
+      27: [
+        SqlMigration('ALTER TABLE guest_account RENAME TO $tableTwitterToken'),
+        SqlMigration('ALTER TABLE $tableTwitterToken ADD COLUMN guest BOOLEAN DEFAULT 1'),
+        SqlMigration(
+            'CREATE TABLE IF NOT EXISTS $tableTwitterProfile (username VARCHAR, password VARCHAR, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, name VARCHAR, email VARCHAR, phone VARCHAR)',
+            reverseSql: 'DROP TABLE IF EXISTS $tableTwitterProfile'),
+      ],
+      28: [
+        SqlMigration('CREATE TABLE ${tableTwitterToken}_2 AS SELECT DISTINCT * FROM $tableTwitterToken'),
+        SqlMigration('DROP TABLE $tableTwitterToken'),
+        SqlMigration(
+            'CREATE TABLE $tableTwitterToken (oauth_token VARCHAR PRIMARY KEY, oauth_token_secret VARCHAR, id_str VARCHAR, screen_name VARCHAR, guest BOOLEAN, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)'),
+        SqlMigration(
+            'INSERT INTO $tableTwitterToken (oauth_token, oauth_token_secret, id_str, screen_name, guest, created_at) SELECT oauth_token, oauth_token_secret, id_str, screen_name, guest, created_at FROM ${tableTwitterToken}_2'),
+        SqlMigration('DROP TABLE ${tableTwitterToken}_2'),
+        SqlMigration('CREATE TABLE ${tableTwitterProfile}_2 AS SELECT DISTINCT * FROM $tableTwitterProfile'),
+        SqlMigration('DROP TABLE $tableTwitterProfile'),
+        SqlMigration(
+            'CREATE TABLE $tableTwitterProfile (username VARCHAR PRIMARY KEY, password VARCHAR, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, name VARCHAR, email VARCHAR, phone VARCHAR)'),
+        SqlMigration(
+            'INSERT INTO $tableTwitterProfile (username, password, created_at, name, email, phone) SELECT username, password, created_at, name, email, phone FROM ${tableTwitterProfile}_2'),
+        SqlMigration('DROP TABLE ${tableTwitterProfile}_2')
+      ],
+      29: [
+        Migration(Operation((db) async {
+          var tokens = await db.rawQuery(
+              'SELECT screen_name, oauth_token, MAX(created_at) FROM $tableTwitterToken WHERE guest = 0 GROUP BY screen_name');
+          for (var token in tokens) {
+            var screenName = token['screen_name'] as String;
+            var oauthToken = token['oauth_token'] as String;
+            await db.delete(tableTwitterToken,
+                where: 'screen_name = ? AND oauth_token != ?', whereArgs: [screenName, oauthToken]);
+            var profiles =
+                await db.query(tableTwitterProfile, where: 'lower(username) = lower(?)', whereArgs: [screenName]);
+            var password, name, email, phone;
+            for (var profile in profiles) {
+              password ??= profile['password'];
+              name ??= profile['name'];
+              email ??= profile['email'];
+              phone ??= profile['phone'];
+            }
+            await db.delete(tableTwitterProfile, where: 'lower(username) = lower(?)', whereArgs: [screenName]);
+            await db.insert(tableTwitterProfile,
+                {'username': screenName, 'password': password, 'name': name, 'email': email, 'phone': phone});
+          }
+        }))
+      ],
+      30: [
+        Migration(Operation((db) async {
+          await db.delete(tableTwitterToken,
+              where:
+                  "screen_name IS NULL OR screen_name = '' OR id_str IS NULL OR id_str = '' OR oauth_token IS NULL OR oauth_token = '' OR oauth_token_secret IS NULL OR oauth_token_secret = '' OR guest IS NULL OR created_at IS NULL OR created_at = ''");
+          await db.delete(tableTwitterProfile,
+              where:
+                  "username IS NULL OR username = '' OR password IS NULL OR password = '' OR created_at IS NULL OR created_at = ''");
+
+          await db.rawQuery('CREATE TABLE ${tableTwitterToken}_2 AS SELECT DISTINCT * FROM $tableTwitterToken');
+          await db.rawQuery('DROP TABLE $tableTwitterToken');
+          await db.rawQuery(
+              'CREATE TABLE $tableTwitterToken (oauth_token VARCHAR NON NULL PRIMARY KEY, oauth_token_secret VARCHAR NON NULL, id_str VARCHAR NON NULL, screen_name VARCHAR NON NULL, guest BOOLEAN NON NULL, created_at TIMESTAMP NON NULL DEFAULT CURRENT_TIMESTAMP)');
+          await db.rawQuery(
+              'INSERT INTO $tableTwitterToken (oauth_token, oauth_token_secret, id_str, screen_name, guest, created_at) SELECT oauth_token, oauth_token_secret, id_str, screen_name, guest, created_at FROM ${tableTwitterToken}_2');
+          await db.rawQuery('DROP TABLE ${tableTwitterToken}_2');
+
+          await db.rawQuery('CREATE TABLE ${tableTwitterProfile}_2 AS SELECT DISTINCT * FROM $tableTwitterProfile');
+          await db.rawQuery('DROP TABLE $tableTwitterProfile');
+          await db.rawQuery(
+              'CREATE TABLE $tableTwitterProfile (username VARCHAR NON NULL PRIMARY KEY, password VARCHAR NON NULL, created_at TIMESTAMP NON NULL DEFAULT CURRENT_TIMESTAMP, name VARCHAR, email VARCHAR, phone VARCHAR)');
+          await db.rawQuery(
+              'INSERT INTO $tableTwitterProfile (username, password, created_at, name, email, phone) SELECT username, password, created_at, name, email, phone FROM ${tableTwitterProfile}_2');
+          await db.rawQuery('DROP TABLE ${tableTwitterProfile}_2');
+
+          var tokens = await db.rawQuery(
+              'SELECT t.oauth_token, p.username FROM $tableTwitterToken t LEFT JOIN $tableTwitterProfile p ON t.screen_name = p.username WHERE t.guest = 0 AND p.username IS NULL');
+          if (tokens.isNotEmpty) {
+            var oauthTokenLst = tokens.map((e) => e['oauth_token'] as String).toList();
+            await db.delete(tableTwitterToken,
+                where: 'oauth_token IN (${List.filled(oauthTokenLst.length, '?').join(',')})',
+                whereArgs: oauthTokenLst);
+          }
+
+          var profiles = await db.rawQuery(
+              'SELECT p.username, t.oauth_token FROM $tableTwitterProfile p LEFT JOIN $tableTwitterToken t ON p.username = t.screen_name WHERE t.oauth_token IS NULL');
+          if (profiles.isNotEmpty) {
+            var usernameLst = profiles.map((e) => e['username'] as String).toList();
+            await db.delete(tableTwitterProfile,
+                where: 'username IN (${List.filled(usernameLst.length, '?').join(',')})', whereArgs: usernameLst);
+          }
+        }))
       ]
     });
     await openDatabase(
       databaseName,
-      version: 21,
+      version: 30,
       onUpgrade: myMigrationPlan,
       onCreate: myMigrationPlan,
       onDowngrade: myMigrationPlan,
@@ -236,10 +355,12 @@ class Repository {
 
     // Clean up any old feed chunks and cursors
     var repository = await writable();
-    await repository.delete(tableFeedGroupChunk, where: "created_at <= date('now', '-7 day')");
-    await repository.delete(tableFeedGroupCursor, where: "created_at <= date('now', '-7 day')");
 
-    log.info('Finished migrating database');
+    await repository.delete(tableFeedGroupChunk, where: "created_at <= date('now', '-7 day')");
+
+    int version = await repository.getVersion();
+
+    log.info('Finished migrating database version $version');
 
     return true;
   }

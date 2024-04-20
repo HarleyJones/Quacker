@@ -226,7 +226,6 @@ Future<void> main() async {
           Provider(create: (context) => TrendLocationsModel()),
           Provider(create: (context) => TrendsModel(trendLocationModel)),
           ChangeNotifierProvider(create: (_) => VideoContextState(prefService.get(optionMediaDefaultMute))),
-          ChangeNotifierProvider(create: (_) => WebFlowAuthModel(prefService)),
         ],
         child: FritterApp(),
         builder: (BuildContext _, Widget? w) => w ?? Container(),
