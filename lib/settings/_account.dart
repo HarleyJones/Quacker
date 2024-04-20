@@ -1,15 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:quacker/client/client_regular_account.dart';
-import 'package:quacker/client/client.dart';
-import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:pref/pref.dart';
 import 'package:quacker/ui/errors.dart';
 
 class SettingsAccountFragment extends StatefulWidget {
+  const SettingsAccountFragment({super.key});
+
+  @override
   State<SettingsAccountFragment> createState() => _SettingsAccountFragment();
 }
 
@@ -30,7 +29,7 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
           future: getAccounts(),
           builder: (BuildContext listContext, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return LinearProgressIndicator();
+              return const LinearProgressIndicator();
             } else {
               List<Map<String, Object?>> data = snapshot.data;
               return ListView.builder(
@@ -51,9 +50,9 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                       onTap: () => showDialog(
                           context: context,
                           builder: (_) => addDialog(model,
-                              username: data[index]['id'],
-                              password: data[index]['password'],
-                              email: data[index]['email'])),
+                              username: data[index]['id'] as String,
+                              password: data[index]['password'] as String,
+                              email: data[index]['email'].toString())),
                     ));
                   });
             }
@@ -64,11 +63,11 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
 
 class addDialog extends StatefulWidget {
   final WebFlowAuthModel model;
-  final username;
-  final password;
-  final email;
+  final String username;
+  final String password;
+  final String email;
 
-  const addDialog(this.model, {super.key, this.username, this.password, this.email});
+  const addDialog(this.model, {super.key, this.username = "", this.password = "", this.email = ""});
 
   @override
   State<addDialog> createState() => _addDialog();
