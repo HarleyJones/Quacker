@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:path/path.dart';
 import 'package:quacker/client/client.dart';
-import 'package:quacker/constants.dart';
-import 'package:quacker/profile/profile.dart';
 import 'package:quacker/user.dart';
 
 class SearchTweetsModel extends Store<List<TweetWithCard>> {

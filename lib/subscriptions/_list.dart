@@ -82,17 +82,14 @@ class SubscriptionUsersList extends StatelessWidget {
         }
 
         return ListTile(
-          dense: true,
-          leading: const SizedBox(width: 48, child: Icon(Icons.search)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          leading: const SizedBox(width: 48, child: Icon(Icons.saved_search)),
           title: Text(user.name, maxLines: 1, overflow: TextOverflow.ellipsis),
           subtitle: Text(L10n.current.search_term),
-          trailing: SizedBox(
-            width: 36,
-            child: FollowButton(user: user),
-          ),
+          trailing: FollowButton(user: user),
           onTap: () {
             Navigator.pushNamed(context, routeSearch,
-                arguments: SearchArguments(1, focusInputOnOpen: false, query: user.id));
+                arguments: SearchArguments(0, focusInputOnOpen: false, query: user.id));
           },
         );
       },

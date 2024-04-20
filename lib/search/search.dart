@@ -78,121 +78,82 @@ class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderS
 
     var prefs = PrefService.of(context, listen: false);
 
-    var defaultTheme = Theme.of(context);
-    var searchTheme = defaultTheme.copyWith(
-      appBarTheme: AppBarTheme(
-        backgroundColor: defaultTheme.colorScheme.brightness == Brightness.dark ? Colors.grey[900] : Colors.white,
-        iconTheme: defaultTheme.primaryIconTheme.copyWith(color: Colors.grey),
-      ),
-      inputDecorationTheme: const InputDecorationTheme(
-        border: InputBorder.none,
-      ),
-    );
-
-    return Theme(
-      data: searchTheme,
-      child: Scaffold(
-        // Needed as we're nesting Scaffolds, which causes Flutter to calculate keyboard height incorrectly
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            forceMaterialTransparency: true,
-            flexibleSpace: Padding(
-              padding: EdgeInsets.fromLTRB(8, 36, 8, 4),
-              child: SearchBar(
-                controller: _queryController,
-                focusNode: _focusNode,
-                textInputAction: TextInputAction.search,
-                leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
-                trailing: [
-                  IconButton(icon: const Icon(Icons.close), onPressed: () => _queryController.clear()),
-                  ScopedBuilder<SubscriptionsModel, List<Subscription>>.transition(
-                    store: subscriptionsModel,
-                    onState: (_, state) {
-                      return AnimatedBuilder(
-                        animation: _bothControllers,
-                        builder: (context, child) {
-                          var id = _queryController.text;
-
-                          if (_tabController.index != 2) {
-                            var currentlyFollowed = state.any((element) => element.id == id);
-                            if (!currentlyFollowed) {
-                              return IconButton(
-                                  icon: const Icon(Icons.save),
-                                  onPressed: () async {
-                                    await subscriptionsModel.toggleSubscribe(
-                                        SearchSubscription(id: id, createdAt: DateTime.now()), currentlyFollowed);
-                                  });
-                            }
-                          }
-
-                          return Container();
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            )),
-        body: Column(
-          children: [
-            TabBar(
-              controller: _tabController,
-              tabs: const [
-                Tab(
-                  icon: Icon(Icons.trending_up),
-                ),
-                Tab(
-                  icon: Icon(Icons.search),
-                ),
-                Tab(
-                  icon: Icon(Icons.person_search),
-                ),
-              ],
-              labelColor: Theme.of(context).appBarTheme.foregroundColor,
-              indicatorColor: Theme.of(context).appBarTheme.foregroundColor,
-            ),
-            MultiProvider(
-              providers: [
-                ChangeNotifierProvider<TweetContextState>(
-                    create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
-                ChangeNotifierProvider<VideoContextState>(
-                    create: (_) => VideoContextState(prefs.get(optionMediaDefaultMute))),
-              ],
-              child: Expanded(
-                  child: TabBarView(controller: _tabController, children: [
-                TweetSearchResultList<SearchTweetsModel, TweetWithCard>(
-                    queryController: _queryController,
-                    store: context.read<SearchTweetsModel>(),
-                    searchFunction: (q) => context.read<SearchTweetsModel>().searchTweets(q, "Top"),
-                    itemBuilder: (context, item) {
-                      return TweetTile(tweet: item, clickable: true);
-                    }),
-                TweetSearchResultList<SearchTweetsModel, TweetWithCard>(
-                    queryController: _queryController,
-                    store: context.read<SearchTweetsModel>(),
-                    searchFunction: (q) => context.read<SearchTweetsModel>().searchTweets(q, "Latest"),
-                    itemBuilder: (context, item) {
-                      return TweetTile(tweet: item, clickable: true);
-                    }),
-                TweetSearchResultList<SearchUsersModel, UserWithExtra>(
-                    queryController: _queryController,
-                    store: context.read<SearchUsersModel>(),
-                    searchFunction: (q) => context.read<SearchUsersModel>().searchUsers(q, context),
-                    itemBuilder: (context, user) {
-                      if (user.idStr == "GOTOPROFILE") {
-                        return ListTile(
-                          title: Text(L10n.of(context).go_to_profile + user.screenName!),
-                          onTap: () => Navigator.pushNamed(context, routeProfile,
-                              arguments: ProfileScreenArguments(null, user.screenName)),
-                        );
-                      }
-                      return UserTile(user: UserSubscription.fromUser(user));
-                    }),
-              ])),
-            )
-          ],
+    return Scaffold(
+      // Needed as we're nesting Scaffolds, which causes Flutter to calculate keyboard height incorrectly
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        flexibleSpace: Padding(
+          padding: EdgeInsets.fromLTRB(8, 36, 8, 8),
+          child: SearchBar(
+            controller: _queryController,
+            focusNode: _focusNode,
+            textInputAction: TextInputAction.search,
+            leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
+            trailing: [
+              FollowButton(user: SearchSubscription(id: _queryController.text, createdAt: DateTime.now())),
+            ],
+          ),
         ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(
+              icon: Icon(Icons.trending_up),
+            ),
+            Tab(
+              icon: Icon(Icons.search),
+            ),
+            Tab(
+              icon: Icon(Icons.person_search),
+            ),
+          ],
+          labelColor: Theme.of(context).appBarTheme.foregroundColor,
+          indicatorColor: Theme.of(context).appBarTheme.foregroundColor,
+        ),
+      ),
+      body: Column(
+        children: [
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider<TweetContextState>(
+                  create: (_) => TweetContextState(prefs.get(optionTweetsHideSensitive))),
+              ChangeNotifierProvider<VideoContextState>(
+                  create: (_) => VideoContextState(prefs.get(optionMediaDefaultMute))),
+            ],
+            child: Expanded(
+                child: TabBarView(controller: _tabController, children: [
+              TweetSearchResultList<SearchTweetsModel, TweetWithCard>(
+                  queryController: _queryController,
+                  store: context.read<SearchTweetsModel>(),
+                  searchFunction: (q) => context.read<SearchTweetsModel>().searchTweets(q, "Top"),
+                  itemBuilder: (context, item) {
+                    return TweetTile(tweet: item, clickable: true);
+                  }),
+              TweetSearchResultList<SearchTweetsModel, TweetWithCard>(
+                  queryController: _queryController,
+                  store: context.read<SearchTweetsModel>(),
+                  searchFunction: (q) => context.read<SearchTweetsModel>().searchTweets(q, "Latest"),
+                  itemBuilder: (context, item) {
+                    return TweetTile(tweet: item, clickable: true);
+                  }),
+              TweetSearchResultList<SearchUsersModel, UserWithExtra>(
+                  queryController: _queryController,
+                  store: context.read<SearchUsersModel>(),
+                  searchFunction: (q) => context.read<SearchUsersModel>().searchUsers(q, context),
+                  itemBuilder: (context, user) {
+                    if (user.idStr == "GOTOPROFILE") {
+                      return ListTile(
+                        title: Text(L10n.of(context).go_to_profile + user.screenName!),
+                        onTap: () => Navigator.pushNamed(context, routeProfile,
+                            arguments: ProfileScreenArguments(null, user.screenName)),
+                      );
+                    }
+                    return UserTile(user: UserSubscription.fromUser(user));
+                  }),
+            ])),
+          )
+        ],
       ),
     );
   }

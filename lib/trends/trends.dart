@@ -28,7 +28,8 @@ class _TrendsScreenState extends State<TrendsScreen> with AutomaticKeepAliveClie
               child: SearchBar(
                 controller: _searchController,
                 hintText: L10n.of(context).search,
-                leading: Padding(padding: EdgeInsets.only(left: 8.0), child: Icon(Icons.search)),
+                leading: Padding(
+                    padding: EdgeInsets.all(8.0), child: Icon(Icons.search, size: Theme.of(context).iconTheme.size)),
                 onSubmitted: (value) {
                   Navigator.pushNamed(context, routeSearch,
                       arguments: SearchArguments(0,
