@@ -88,6 +88,16 @@ class SubscriptionsScreen extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: Icon(
+                        Icons.cloud_download,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const SubscriptionImportScreen()),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
                         Icons.refresh,
                         color: Theme.of(context).iconTheme.color,
                       ),
@@ -131,13 +141,6 @@ class SubscriptionsScreen extends StatelessWidget {
               ),
             ],
           )),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.cloud_download),
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => const SubscriptionImportScreen(),
-        ),
-      ),
     );
   }
 }
