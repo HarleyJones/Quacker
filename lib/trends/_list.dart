@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
-import 'package:quacker/search/search.dart';
+import 'package:quacker/search/results_screen.dart';
 import 'package:quacker/trends/trends_model.dart';
 import 'package:quacker/ui/errors.dart';
 import 'package:quacker/ui/physics.dart';
@@ -11,7 +11,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class TrendsList extends StatefulWidget {
-  const TrendsList({super.key});
+  final ScrollController scrollController;
+
+  const TrendsList({super.key, required this.scrollController});
 
   @override
   State<TrendsList> createState() => _TrendsListState();
@@ -53,6 +55,7 @@ class _TrendsListState extends State<TrendsList> {
         var numberFormat = NumberFormat.compact();
 
         return ListView.builder(
+          controller: widget.scrollController,
           shrinkWrap: true,
           physics: const LessSensitiveScrollPhysics(),
           itemCount: trends.length,

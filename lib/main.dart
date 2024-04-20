@@ -21,7 +21,7 @@ import 'package:quacker/home/home_screen.dart';
 import 'package:quacker/import_data_model.dart';
 import 'package:quacker/profile/profile.dart';
 import 'package:quacker/saved/saved_tweet_model.dart';
-import 'package:quacker/search/search.dart';
+import 'package:quacker/search/results_screen.dart';
 import 'package:quacker/search/search_model.dart';
 import 'package:quacker/settings/_home.dart';
 import 'package:quacker/settings/settings.dart';
@@ -428,7 +428,7 @@ class _FritterAppState extends State<FritterApp> {
           routeHome: (context) => const DefaultPage(),
           routeGroup: (context) => const GroupScreen(),
           routeProfile: (context) => const ProfileScreen(),
-          routeSearch: (context) => const SearchScreen(),
+          routeSearch: (context) => const ResultsScreen(),
           routeSettings: (context) => const SettingsScreen(),
           routeSettingsExport: (context) => const SettingsExportScreen(),
           routeSettingsHome: (context) => const SettingsHomeFragment(),

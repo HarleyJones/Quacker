@@ -10,7 +10,7 @@ import 'package:quacker/home/_missing.dart';
 import 'package:quacker/home/_saved.dart';
 import 'package:quacker/home/home_model.dart';
 import 'package:quacker/subscriptions/subscriptions.dart';
-import 'package:quacker/trends/trends.dart';
+import 'package:quacker/search/search_screen.dart';
 import 'package:quacker/ui/errors.dart';
 import 'package:quacker/ui/physics.dart';
 import 'package:quacker/utils/debounce.dart';
@@ -127,7 +127,7 @@ class _HomeScreenState extends State<_HomeScreen> {
                           scrollController: scrollController,
                         );
                       case 'trending':
-                        return const TrendsScreen();
+                        return SearchScreen(scrollController: scrollController);
                       case 'saved':
                         return SavedScreen(scrollController: scrollController);
                       default:

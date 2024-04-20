@@ -8,7 +8,7 @@ import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/import_data_model.dart';
 import 'package:quacker/profile/profile.dart';
 import 'package:quacker/saved/saved_tweet_model.dart';
-import 'package:quacker/search/search.dart';
+import 'package:quacker/search/results_screen.dart';
 import 'package:quacker/status.dart';
 import 'package:quacker/tweet/_card.dart';
 import 'package:quacker/tweet/_entities.dart';

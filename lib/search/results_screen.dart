@@ -25,31 +25,31 @@ class SearchArguments {
   SearchArguments(this.initialTab, {this.query, this.focusInputOnOpen = false});
 }
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+class ResultsScreen extends StatelessWidget {
+  const ResultsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as SearchArguments;
 
-    return _SearchScreen(
+    return _ResultsScreen(
         initialTab: arguments.initialTab, query: arguments.query, focusInputOnOpen: arguments.focusInputOnOpen);
   }
 }
 
-class _SearchScreen extends StatefulWidget {
+class _ResultsScreen extends StatefulWidget {
   final int initialTab;
   final String? query;
   final bool focusInputOnOpen;
 
-  const _SearchScreen({Key? key, required this.initialTab, this.query, this.focusInputOnOpen = false})
+  const _ResultsScreen({Key? key, required this.initialTab, this.query, this.focusInputOnOpen = false})
       : super(key: key);
 
   @override
-  State<_SearchScreen> createState() => _SearchScreenState();
+  State<_ResultsScreen> createState() => _ResultsScreenState();
 }
 
-class _SearchScreenState extends State<_SearchScreen> with SingleTickerProviderStateMixin {
+class _ResultsScreenState extends State<_ResultsScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _queryController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 

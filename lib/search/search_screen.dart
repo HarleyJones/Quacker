@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile.dart';
-import 'package:quacker/search/search.dart';
+import 'package:quacker/search/results_screen.dart';
 import 'package:quacker/trends/_list.dart';
 import 'package:quacker/trends/_settings.dart';
 import 'package:quacker/trends/_tabs.dart';
 
-class TrendsScreen extends StatefulWidget {
-  const TrendsScreen({Key? key}) : super(key: key);
+class SearchScreen extends StatefulWidget {
+  final ScrollController scrollController;
+
+  const SearchScreen({Key? key, required this.scrollController}) : super(key: key);
 
   @override
-  State<TrendsScreen> createState() => _TrendsScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _TrendsScreenState extends State<TrendsScreen> with AutomaticKeepAliveClientMixin<TrendsScreen> {
+class _SearchScreenState extends State<SearchScreen> with AutomaticKeepAliveClientMixin<SearchScreen> {
   @override
   bool get wantKeepAlive => true;
 
@@ -52,7 +54,9 @@ class _TrendsScreenState extends State<TrendsScreen> with AutomaticKeepAliveClie
                 context: context,
                 builder: (context) => const TrendsSettings(),
               )),
-      body: TrendsList(),
+      body: TrendsList(
+        scrollController: widget.scrollController,
+      ),
     );
   }
 }
