@@ -64,8 +64,7 @@ class _SubscriptionImportScreenState extends State<SubscriptionImportScreen> {
                 profileImageUrlHttps: e.profileImageUrlHttps,
                 screenName: e.screenName!,
                 verified: e.verified ?? false,
-                createdAt: createdAt,
-                inFeed: true))
+                createdAt: createdAt))
           ]
         });
 

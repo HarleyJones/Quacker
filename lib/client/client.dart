@@ -1,64 +1,48 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dart_twitter_api/src/utils/date_utils.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:ffcache/ffcache.dart';
+import 'package:quacker/client/client_regular_account.dart';
+import 'package:quacker/client/client_unauthenticated.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/profile/profile_model.dart';
 import 'package:quacker/user.dart';
 import 'package:quacker/utils/cache.dart';
 import 'package:quacker/utils/iterables.dart';
-import 'package:quacker/client/client_account.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
+import 'package:pref/pref.dart';
 import 'package:quiver/iterables.dart';
 
 const Duration _defaultTimeout = Duration(seconds: 30);
 
-class _quackerTwitterClientAllowUnauthenticated extends _quackerTwitterClient {
-  @override
-  Future<http.Response> get(Uri uri, {Map<String, String>? headers, Duration? timeout}) async {
-    return getWithRateFetchCtx(uri, headers: headers, timeout: timeout, allowUnauthenticated: true);
-  }
-}
+class _QuackerTwitterClient extends TwitterClient {
+  static final log = Logger('_QuackerTwitterClient');
 
-class _quackerTwitterClient extends TwitterClient {
-  static final log = Logger('_quackerTwitterClient');
-
-  _quackerTwitterClient() : super(consumerKey: '', consumerSecret: '', token: '', secret: '');
+  _QuackerTwitterClient() : super(consumerKey: '', consumerSecret: '', token: '', secret: '');
 
   @override
-  Future<http.Response> get(Uri uri, {Map<String, String>? headers, Duration? timeout}) async {
-    return getWithRateFetchCtx(uri, headers: headers, timeout: timeout);
-  }
-
-  Future<http.Response> getWithRateFetchCtx(Uri uri,
-      {Map<String, String>? headers,
-      Duration? timeout,
-      RateFetchContext? fetchContext,
-      bool allowUnauthenticated = false}) async {
-    try {
-      if (allowUnauthenticated && !TwitterAccount.hasAccountAvailable()) {
-        log.info('(Unauthenticated) Fetching $uri');
-      } else {
-        log.info('Fetching $uri');
-      }
-      http.Response response = await TwitterAccount.fetch(uri,
-              headers: headers, fetchContext: fetchContext, allowUnauthenticated: allowUnauthenticated)
-          .timeout(timeout ?? _defaultTimeout);
-      if (response.statusCode >= 200 && response.statusCode < 300) {
+  Future<http.Response> get(Uri uri, {Map<String, String>? headers, Duration? timeout}) {
+    return fetch(uri, headers: headers).timeout(timeout ?? _defaultTimeout).then((response) {
+      if (response?.statusCode != null && response!.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        log.severe(
-            'The request ${uri.path} has a response in error: ${response.statusCode} - ${utf8.decode(response.bodyBytes.toList())}');
-        return Future.error(response);
+        return Future.error(HttpException("${response?.statusCode}: ${response?.reasonPhrase}"));
       }
-    } on Exception catch (err) {
-      if (err is! TwitterAccountException && err is! RateLimitException) {
-        log.severe('The request ${uri.path} has an error: ${err.toString()}');
-      }
-      return Future.error(ExceptionResponse(err));
+    });
+  }
+
+  static Future<http.Response?> fetch(Uri uri, {Map<String, String>? headers}) async {
+    var prefs = await PrefServiceShared.init(prefix: 'pref_');
+    var authHeader = await getAuthHeader(prefs);
+
+    if (authHeader != null) {
+      return await fetchAuthenticated(uri, headers: headers, log: log, prefs: prefs, authHeader: authHeader);
+    } else {
+      return await fetchUnauthenticated(uri, headers: headers, log: log);
     }
   }
 }
@@ -89,16 +73,11 @@ class UnknownProfileUnavailableReason implements Exception {
 }
 
 class Twitter {
-  static final TwitterApi _twitterApi = TwitterApi(client: _quackerTwitterClient());
-  static final TwitterApi _twitterApiAllowUnauthenticated =
-      TwitterApi(client: _quackerTwitterClientAllowUnauthenticated());
+  static final TwitterApi _twitterApi = TwitterApi(client: _QuackerTwitterClient());
 
   static final FFCache _cache = FFCache();
 
-  static const graphqlSearchTimelineUriPath = '/graphql/nK1dw4oV3k4w5TdtcAdSww/SearchTimeline';
-  static const searchTweetsUriPath = '/1.1/search/tweets.json';
-
-  static final Map<String, String> defaultParams = {
+  static Map<String, String> defaultParams = {
     'include_profile_interstitial_type': '1',
     'include_blocking': '1',
     'include_blocked_by': '1',
@@ -111,127 +90,87 @@ class Twitter {
     'skip_status': '1',
     'cards_platform': 'Web-12',
     'include_cards': '1',
-    'include_ext_alt_text': '1',
-    'include_ext_limited_action_results': '0',
-    'include_quote_count': '1',
+    'include_ext_alt_text': 'true',
+    'include_ext_limited_action_results': 'false',
+    'include_quote_count': 'true',
     'include_reply_count': '1',
     'tweet_mode': 'extended',
-    'include_ext_collab_control': '1',
-    'include_entities': '1',
-    'include_user_entities': '1',
-    'include_ext_media_color': '1',
-    'include_ext_media_availability': '1',
-    'include_ext_sensitive_media_warning': '1',
-    'include_ext_trusted_friends_metadata': '1',
-    'send_error_codes': '1',
-    'simple_quoted_tweet': '1',
+    'include_ext_collab_control': 'true',
+    'include_entities': 'true',
+    'include_user_entities': 'true',
+    'include_ext_media_color': 'true',
+    'include_ext_media_availability': 'true',
+    'include_ext_sensitive_media_warning': 'true',
+    'include_ext_trusted_friends_metadata': 'true',
+    'send_error_codes': 'true',
+    'simple_quoted_tweet': 'true',
     'pc': '1',
     'spelling_corrections': '1',
-    'include_ext_edit_control': '1',
+    'include_ext_edit_control': 'true',
     'ext':
         'mediaStats,highlightedLabel,hasNftAvatar,voiceInfo,enrichments,superFollowMetadata,unmentionInfo,editControl,collab_control,vibe,'
   };
 
-  static Map<String, String> defaultFeatures = {
-    'android_graphql_skip_api_media_color_palette': 'false',
-    'blue_business_profile_image_shape_enabled': 'false',
-    'creator_subscriptions_subscription_count_enabled': 'false',
-    'creator_subscriptions_tweet_preview_api_enabled': 'true',
-    'freedom_of_speech_not_reach_fetch_enabled': 'false',
-    'graphql_is_translatable_rweb_tweet_is_translatable_enabled': 'false',
-    'hidden_profile_likes_enabled': 'false',
-    'highlights_tweets_tab_ui_enabled': 'false',
-    'interactive_text_enabled': 'false',
-    'longform_notetweets_consumption_enabled': 'true',
-    'longform_notetweets_inline_media_enabled': 'false',
-    'longform_notetweets_richtext_consumption_enabled': 'true',
-    'longform_notetweets_rich_text_read_enabled': 'false',
-    'responsive_web_edit_tweet_api_enabled': 'false',
-    'responsive_web_enhance_cards_enabled': 'false',
-    'responsive_web_graphql_exclude_directive_enabled': 'true',
-    'responsive_web_graphql_skip_user_profile_image_extensions_enabled': 'false',
-    'responsive_web_graphql_timeline_navigation_enabled': 'false',
-    'responsive_web_media_download_video_enabled': 'false',
-    'responsive_web_text_conversations_enabled': 'false',
-    'responsive_web_twitter_article_tweet_consumption_enabled': 'false',
-    'responsive_web_twitter_blue_verified_badge_is_enabled': 'true',
-    'rweb_lists_timeline_redesign_enabled': 'true',
-    'spaces_2022_h2_clipping': 'true',
-    'spaces_2022_h2_spaces_communities': 'true',
-    'standardized_nudges_misinfo': 'false',
-    'subscriptions_verification_info_enabled': 'true',
-    'subscriptions_verification_info_reason_enabled': 'true',
-    'subscriptions_verification_info_verified_since_enabled': 'true',
-    'super_follow_badge_privacy_enabled': 'false',
-    'super_follow_exclusive_tweet_notifications_enabled': 'false',
-    'super_follow_tweet_api_enabled': 'false',
-    'super_follow_user_api_enabled': 'false',
-    'tweet_awards_web_tipping_enabled': 'false',
-    'tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled': 'false',
-    'tweetypie_unmention_optimization_enabled': 'false',
-    'unified_cards_ad_metadata_container_dynamic_card_content_query_enabled': 'false',
-    'verified_phone_label_enabled': 'false',
-    'vibe_api_enabled': 'false',
-    'view_counts_everywhere_api_enabled': 'false'
-  };
-
-  static Map<String, String> defaultFeaturesUnauthenticated = {
-    'creator_subscriptions_tweet_preview_api_enabled': 'true',
-    'c9s_tweet_anatomy_moderator_badge_enabled': 'true',
-    'tweetypie_unmention_optimization_enabled': 'true',
-    'responsive_web_edit_tweet_api_enabled': 'true',
-    'graphql_is_translatable_rweb_tweet_is_translatable_enabled': 'true',
-    'view_counts_everywhere_api_enabled': 'true',
-    'longform_notetweets_consumption_enabled': 'true',
-    'responsive_web_twitter_article_tweet_consumption_enabled': 'true',
-    'tweet_awards_web_tipping_enabled': 'false',
-    'freedom_of_speech_not_reach_fetch_enabled': 'true',
-    'standardized_nudges_misinfo': 'true',
-    'tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled': 'true',
-    'rweb_video_timestamps_enabled': 'true',
-    'longform_notetweets_rich_text_read_enabled': 'true',
-    'longform_notetweets_inline_media_enabled': 'true',
-    'responsive_web_graphql_exclude_directive_enabled': 'true',
-    'verified_phone_label_enabled': 'false',
-    'responsive_web_graphql_skip_user_profile_image_extensions_enabled': 'false',
-    'responsive_web_graphql_timeline_navigation_enabled': 'true',
-    'responsive_web_enhance_cards_enabled': 'false'
+  static Map<String, bool> gqlFeatures = {
+    "blue_business_profile_image_shape_enabled": false,
+    "freedom_of_speech_not_reach_fetch_enabled": false,
+    "graphql_is_translatable_rweb_tweet_is_translatable_enabled": false,
+    "interactive_text_enabled": false,
+    "longform_notetweets_consumption_enabled": true,
+    "longform_notetweets_richtext_consumption_enabled": true,
+    "longform_notetweets_rich_text_read_enabled": false,
+    "responsive_web_edit_tweet_api_enabled": false,
+    "responsive_web_enhance_cards_enabled": false,
+    "responsive_web_graphql_exclude_directive_enabled": true,
+    "responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
+    "responsive_web_graphql_timeline_navigation_enabled": false,
+    "responsive_web_text_conversations_enabled": false,
+    "responsive_web_twitter_blue_verified_badge_is_enabled": true,
+    "spaces_2022_h2_clipping": true,
+    "spaces_2022_h2_spaces_communities": true,
+    "standardized_nudges_misinfo": false,
+    "tweet_awards_web_tipping_enabled": false,
+    "tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled": false,
+    "tweetypie_unmention_optimization_enabled": false,
+    "verified_phone_label_enabled": false,
+    "vibe_api_enabled": false,
+    "view_counts_everywhere_api_enabled": false
   };
 
   static Future<Profile> getProfileById(String id) async {
-    var uri = Uri.https('api.twitter.com', '/graphql/Lxg1V9AiIzzXEiP2c8dRnw/UserByRestId', {
+    var uri = Uri.https('twitter.com', '/i/api/graphql/Qs44y3K0SXxItjNi6mUFQA/UserByRestId', {
       'variables': jsonEncode({
         'userId': id,
         'withHighlightedLabel': true,
         'withSafetyModeUserFields': true,
         'withSuperFollowsUserFields': true
       }),
-      'features': jsonEncode(defaultFeatures)
+      'features': jsonEncode({
+        'responsive_web_graphql_timeline_navigation_enabled': true,
+        'responsive_web_twitter_blue_verified_badge_is_enabled': true,
+        'verified_phone_label_enabled': false,
+      })
     });
 
     return _getProfile(uri);
   }
 
   static Future<Profile> getProfileByScreenName(String screenName) async {
-    var uri = Uri.https('api.twitter.com', '/graphql/oUZZZ8Oddwxs8Cd3iW3UEA/UserByScreenName', {
+    var uri = Uri.https('twitter.com', '/i/api/graphql/vG3rchZtwqiwlKgUYCrTRA/UserByScreenName', {
       'variables': jsonEncode({
         'screen_name': screenName,
         'withHighlightedLabel': true,
         'withSafetyModeUserFields': true,
         'withSuperFollowsUserFields': true
       }),
-      'features': jsonEncode(defaultFeatures)
+      'features': jsonEncode({'responsive_web_graphql_timeline_navigation_enabled': false})
     });
 
-    return _getProfile(uri, allowAuthenticated: true);
+    return _getProfile(uri);
   }
 
-  static Future<Profile> _getProfile(Uri uri, {bool allowAuthenticated = false}) async {
-    var response =
-        await (allowAuthenticated ? _twitterApiAllowUnauthenticated.client.get(uri) : _twitterApi.client.get(uri));
-    if (response.body.isEmpty) {
-      throw TwitterError(code: 0, message: 'Response is empty', uri: uri.toString());
-    }
+  static Future<Profile> _getProfile(Uri uri) async {
+    var response = await _twitterApi.client.get(uri);
     var content = jsonDecode(response.body) as Map<String, dynamic>;
 
     var hasErrors = content.containsKey('errors');
@@ -277,9 +216,9 @@ class Twitter {
 
   static Future<Follows> getProfileFollows(String screenName, String type, {int? cursor, int? count = 200}) async {
     var response = type == 'following'
-        ? await _twitterApiAllowUnauthenticated.userService
+        ? await _twitterApi.userService
             .friendsList(screenName: screenName, cursor: cursor, count: count, skipStatus: true)
-        : await _twitterApiAllowUnauthenticated.userService
+        : await _twitterApi.userService
             .followersList(screenName: screenName, cursor: cursor, count: count, skipStatus: true);
 
     return Follows(
@@ -294,20 +233,18 @@ class Twitter {
     for (var entry in addEntries) {
       var entryId = entry['entryId'] as String;
       if (entryId.startsWith('tweet-')) {
-        if (entry['content']['itemContent']['promotedMetadata'] == null) {
-          var result = entry['content']['itemContent']['tweet_results']?['result'];
+        dynamic result;
+        if (entry['content']['itemContent']['tweet_results']['result']["__typename"] == "TweetWithVisibilityResults") {
+          result = entry['content']['itemContent']['tweet_results']['result']['tweet'];
+        } else {
+          result = entry['content']['itemContent']['tweet_results']['result'];
+        }
 
-          if (result != null) {
-            if (result['rest_id'] != null || result['tweet'] != null) {
-              result = result['rest_id'] != null ? result : result['tweet'];
-              replies.add(
-                  TweetChain(id: result['rest_id'], tweets: [TweetWithCard.fromGraphqlJson(result)], isPinned: false));
-            } else {
-              replies.add(TweetChain(id: entryId.substring(6), tweets: [TweetWithCard.tombstone({})], isPinned: false));
-            }
-          } else {
-            replies.add(TweetChain(id: entryId.substring(6), tweets: [TweetWithCard.tombstone({})], isPinned: false));
-          }
+        if (result != null) {
+          replies
+              .add(TweetChain(id: result['rest_id'], tweets: [TweetWithCard.fromGraphqlJson(result)], isPinned: false));
+        } else {
+          replies.add(TweetChain(id: entryId.substring(6), tweets: [TweetWithCard.tombstone({})], isPinned: false));
         }
       }
 
@@ -322,17 +259,10 @@ class Twitter {
         for (var item in entry['content']['items']) {
           var itemType = item['item']?['itemContent']?['itemType'];
           if (itemType == 'TimelineTweet') {
-            if (item['item']['itemContent']['promotedMetadata'] == null) {
-              var result = item['item']['itemContent']['tweet_results']?['result'];
-              if (result != null) {
-                if (result['rest_id'] != null || result['tweet'] != null) {
-                  tweets.add(TweetWithCard.fromGraphqlJson(result['rest_id'] != null ? result : result['tweet']));
-                } else {
-                  tweets.add(TweetWithCard.tombstone({}));
-                }
-              } else {
-                tweets.add(TweetWithCard.tombstone({}));
-              }
+            if (item['item']['itemContent']['tweet_results']?['result'] != null) {
+              tweets.add(TweetWithCard.fromGraphqlJson(item['item']['itemContent']['tweet_results']['result']));
+            } else {
+              tweets.add(TweetWithCard.tombstone({}));
             }
           }
         }
@@ -343,27 +273,6 @@ class Twitter {
     }
 
     return replies;
-  }
-
-  static Future<TweetStatus> getTweetRes(String id) async {
-    var variables = {'tweetId': id, 'withCommunity': false, 'includePromotedContent': false, 'withVoice': false};
-    var response = await _twitterApiAllowUnauthenticated.client
-        .get(Uri.https('api.twitter.com', '/graphql/pq4JqttrkAz73WE6s2yUqg/TweetResultByRestId', {
-      'variables': jsonEncode(variables),
-      'features': jsonEncode(defaultFeaturesUnauthenticated),
-    }));
-    if (response.body.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-    var result = json.decode(response.body);
-    Map<String, dynamic>? tweetResult = result?['data']?['tweetResult']?['result'];
-    if (tweetResult?.isEmpty ?? true) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-
-    TweetWithCard twc = TweetWithCard.fromGraphqlJson(tweetResult!);
-    TweetChain tc = TweetChain(id: id, tweets: [twc], isPinned: false);
-    return TweetStatus(chains: [tc], cursorBottom: null, cursorTop: null);
   }
 
   static List<TweetChain> createTweets(List<dynamic> addEntries, [bool isPinned = false]) {
@@ -411,34 +320,26 @@ class Twitter {
   }
 
   static Future<TweetStatus> getTweet(String id, {String? cursor}) async {
-    if (!TwitterAccount.hasAccountAvailable()) {
-      return getTweetRes(id);
-    }
-    var variables = {
-      'focalTweetId': id,
-      //'referrer': 'tweet',
-      //'with_rux_injections': false,
-      'includePromotedContent': false,
-      //'withCommunity': true,
-      'withQuickPromoteEligibilityTweetFields': false,
-      'includeHasBirdwatchNotes': false,
-      'withBirdwatchNotes': false,
-      'withVoice': false,
-      'withV2Timeline': true
+    Map<String, Object> defaultParam = {
+      "variables":
+          "{\"focalTweetId\":\"1696081434153214389\",\"referrer\":\"profile\",\"controller_data\":\"DAACDAABDAABCgABAAAAAAAAAAAKAAkNObspUxawBQAAAAA=\",\"with_rux_injections\":false,\"includePromotedContent\":true,\"withCommunity\":true,\"withQuickPromoteEligibilityTweetFields\":true,\"withBirdwatchNotes\":true,\"withVoice\":true,\"withV2Timeline\":true}",
+      "features":
+          "{\"rweb_lists_timeline_redesign_enabled\":true,\"responsive_web_graphql_exclude_directive_enabled\":true,\"verified_phone_label_enabled\":false,\"creator_subscriptions_tweet_preview_api_enabled\":true,\"responsive_web_graphql_timeline_navigation_enabled\":true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\":false,\"tweetypie_unmention_optimization_enabled\":true,\"responsive_web_edit_tweet_api_enabled\":true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\":true,\"view_counts_everywhere_api_enabled\":true,\"longform_notetweets_consumption_enabled\":true,\"responsive_web_twitter_article_tweet_consumption_enabled\":false,\"tweet_awards_web_tipping_enabled\":false,\"freedom_of_speech_not_reach_fetch_enabled\":true,\"standardized_nudges_misinfo\":true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\":true,\"longform_notetweets_rich_text_read_enabled\":true,\"longform_notetweets_inline_media_enabled\":true,\"responsive_web_media_download_video_enabled\":false,\"responsive_web_enhance_cards_enabled\":false}",
+      "fieldToggles": "{\"withArticleRichContentState\":false}"
     };
+
+    Map<String, dynamic> variables = json.decode(defaultParam["variables"].toString());
+    variables["focalTweetId"] = id;
 
     if (cursor != null) {
       variables['cursor'] = cursor;
     }
 
-    var response =
-        await _twitterApi.client.get(Uri.https('api.twitter.com', '/graphql/3XDB26fBve-MmjHaWTUZxA/TweetDetail', {
-      'variables': jsonEncode(variables),
-      'features': jsonEncode(defaultFeatures),
-    }));
-    if (response.body.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
+    defaultParam["variables"] = json.encode(variables);
+
+    var response = await _twitterApi.client
+        .get(Uri.https('twitter.com', '/i/api/graphql/3XDB26fBve-MmjHaWTUZxA/TweetDetail', defaultParam));
+
     var result = json.decode(response.body);
 
     var instructions = List.from(result?['data']?['threaded_conversation_with_injections_v2']?['instructions'] ?? []);
@@ -456,6 +357,12 @@ class Twitter {
 
     // TODO: Could this use createUnconversationedChains at some point?
     var chains = createTweetChains(addEntries);
+    var rootTweet = chains.first;
+    chains.remove(rootTweet);
+    chains.sort((a, b) {
+      return b.id.compareTo(a.id);
+    });
+    chains.insert(0, rootTweet);
 
     String? cursorBottom = getCursor(addEntries, repEntries, 'cursor-bottom', 'Bottom');
     String? cursorTop = getCursor(addEntries, repEntries, 'cursor-top', 'Top');
@@ -463,33 +370,49 @@ class Twitter {
     return TweetStatus(chains: chains, cursorBottom: cursorBottom, cursorTop: cursorTop);
   }
 
-  static Future<TweetStatus> searchTweetsGraphql(String query, bool includeReplies,
-      {int limit = 25,
-      String? cursor,
-      bool leanerFeeds = false,
-      bool trending = false,
-      RateFetchContext? fetchContext}) async {
+  static Future<TweetStatus> searchTweets(String query, bool includeReplies,
+      {int limit = 25, String? cursor, String product = "Latest"}) async {
     var variables = {
       "rawQuery": query,
       "count": limit.toString(),
-      "product": trending ? 'Top' : 'Latest',
+      "querySource": "typed_query",
+      "product": product,
       "withDownvotePerspective": false,
       "withReactionsMetadata": false,
       "withReactionsPerspective": false
+    };
+
+    var features = {
+      "responsive_web_graphql_exclude_directive_enabled": true,
+      "verified_phone_label_enabled": false,
+      "creator_subscriptions_tweet_preview_api_enabled": true,
+      "responsive_web_graphql_timeline_navigation_enabled": true,
+      "responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
+      "c9s_tweet_anatomy_moderator_badge_enabled": true,
+      "tweetypie_unmention_optimization_enabled": true,
+      "responsive_web_edit_tweet_api_enabled": true,
+      "graphql_is_translatable_rweb_tweet_is_translatable_enabled": true,
+      "view_counts_everywhere_api_enabled": true,
+      "longform_notetweets_consumption_enabled": true,
+      "responsive_web_twitter_article_tweet_consumption_enabled": true,
+      "tweet_awards_web_tipping_enabled": false,
+      "freedom_of_speech_not_reach_fetch_enabled": true,
+      "standardized_nudges_misinfo": true,
+      "tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled": true,
+      "rweb_video_timestamps_enabled": true,
+      "longform_notetweets_rich_text_read_enabled": true,
+      "longform_notetweets_inline_media_enabled": true,
+      "responsive_web_enhance_cards_enabled": false
     };
 
     if (cursor != null) {
       variables['cursor'] = cursor;
     }
 
-    var uri = Uri.https('api.twitter.com', graphqlSearchTimelineUriPath,
-        {'variables': jsonEncode(variables), 'features': jsonEncode(defaultFeatures)});
+    var uri = Uri.https('twitter.com', '/i/api/graphql/flaR-PUMshxFWZWPNpq4zA/SearchTimeline',
+        {'variables': jsonEncode(variables), 'features': jsonEncode(features)});
 
-    var response =
-        await (_twitterApi.client as _quackerTwitterClient).getWithRateFetchCtx(uri, fetchContext: fetchContext);
-    if (response.body.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
+    var response = await _twitterApi.client.get(uri);
     var result = json.decode(response.body);
 
     var timeline = result?['data']?['search_by_raw_query']?['search_timeline'];
@@ -497,189 +420,72 @@ class Twitter {
       return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
     }
 
-    return createUnconversationedChainsGraphql(timeline, 'tweet', [], includeReplies, leanerFeeds);
+    return createUnconversationedChainsGraphql(timeline, 'tweet', [], true, includeReplies);
   }
 
-  static Future<TweetStatus> searchTweets(String query, bool includeReplies,
-      {int limit = 25,
-      String? cursor,
-      String? cursorType,
-      bool leanerFeeds = false,
-      RateFetchContext? fetchContext}) async {
-    var queryParameters = {
-      'q': query,
-      'count': limit.toString(),
-      'tweet_mode': 'extended',
-      'skip_status': '1',
-      'include_entities': '1',
-      'include_user_entities': '1',
-      'include_can_media_tag': '1',
-      'include_ext_is_blue_verified': '1',
-      'include_ext_media_availability': '1',
-      'include_ext_alt_text': '1',
-      'include_quote_count': '1',
-      'include_reply_count': '1',
-      'simple_quoted_tweet': '1',
-      'send_error_codes': '1',
-      'tweet_search_mode': 'live',
-    };
-    if (!leanerFeeds) {
-      queryParameters['cards_platform'] = 'Web-12';
-      queryParameters['include_cards'] = '1';
-    }
-
-    if (cursor != null && cursorType != null) {
-      if (cursorType == 'cursor_bottom') {
-        queryParameters['max_id'] = cursor;
-      } else {
-        // cursorType == 'top'
-        queryParameters['since_id'] = cursor;
-      }
-    }
-
-    var response = await (_twitterApi.client as _quackerTwitterClient).getWithRateFetchCtx(
-        Uri.https('api.twitter.com', searchTweetsUriPath, queryParameters),
-        fetchContext: fetchContext);
-    if (response.body.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-    var result = json.decode(response.body);
-
-    var tweets = result['statuses'];
-
-    if (tweets == null || tweets.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-
-    var tweetChains = _createTweetsChains(tweets, includeReplies);
-
-    String? cursorBottom = result['search_metadata']?['since_id_str'];
-    if (cursorBottom == null || cursorBottom == '0') {
-      String? cursorBottomNextRes = result['search_metadata']?['next_results'];
-      if (cursorBottomNextRes != null) {
-        RegExpMatch? m = RegExp('max_id=(.+?)&').firstMatch(cursorBottomNextRes);
-        cursorBottom = m?.group(1);
-      }
-    }
-    String? cursorTop = result['search_metadata']?['max_id_str'];
-
-    return TweetStatus(chains: tweetChains, cursorBottom: cursorBottom, cursorTop: cursorTop);
-  }
-
-  static List<TweetChain> _createTweetsChains(List<dynamic> tweets, bool includeReplies) {
-    var tweetMap = <String, TweetWithCard>{};
-
-    for (var tweetData in tweets) {
-      var tweet = _fromCardJsonLegacy(tweetData);
-
-      if (!includeReplies && tweet.inReplyToStatusIdStr != null) {
-        // Exclude replies
-        continue;
-      }
-
-      tweetMap[tweet.idStr!] = tweet;
-    }
-
-    var chains = <TweetChain>[];
-
-    for (var tweet in tweetMap.values) {
-      var chainId = tweet.conversationIdStr ?? tweet.idStr!;
-      var chainExists = chains.any((chain) => chain.id == chainId);
-
-      if (chainExists) {
-        // Add tweet to existing chain
-        var existingChain = chains.firstWhere((chain) => chain.id == chainId);
-        existingChain.tweets.add(tweet);
-      } else {
-        // Create new chain
-        chains.add(TweetChain(id: chainId, tweets: [tweet], isPinned: false));
-      }
-    }
-
-    return chains;
-  }
-
-  static TweetWithCard _fromCardJsonLegacy(Map<String, dynamic> tweetData) {
-    var tweet = TweetWithCard.fromJson(tweetData);
-
-    var quotedStatusMap = tweetData['quoted_status'];
-    if (quotedStatusMap != null) {
-      TweetWithCard quotedStatus = _fromCardJsonLegacy(quotedStatusMap);
-      tweet.quotedStatus = quotedStatus;
-      tweet.quotedStatusWithCard = quotedStatus;
-    }
-    var retweetedStatusMap = tweetData['retweeted_status'];
-    if (retweetedStatusMap != null) {
-      TweetWithCard retweetedStatus = _fromCardJsonLegacy(retweetedStatusMap);
-      tweet.retweetedStatus = retweetedStatus;
-      tweet.retweetedStatusWithCard = retweetedStatus;
-    }
-
-    return tweet;
-  }
-
-  static Future<SearchStatus<UserWithExtra>> searchUsers(String query, {int limit = 25, int? page}) async {
-    var queryParameters = {'count': limit.toString(), 'q': query};
-
-    if (page != null) {
-      queryParameters['page'] = page.toString();
-    }
-
-    var response =
-        await _twitterApi.client.get(Uri.https('api.twitter.com', '/1.1/users/search.json', queryParameters));
-    if (response.body.isEmpty) {
-      return SearchStatus(items: []);
-    }
-
-    List result = json.decode(response.body);
-    if (result.isEmpty) {
-      return SearchStatus(items: []);
-    }
-
-    List<UserWithExtra> users = result.map((e) => UserWithExtra.fromJson(e)).toList();
-
-    return SearchStatus(items: users);
-  }
-
-  static Future<SearchStatus<UserWithExtra>> searchUsersGraphql(String query, {int limit = 25, String? cursor}) async {
+  static Future<List<UserWithExtra>> searchUsers(String query, {int limit = 25, String? cursor}) async {
     var variables = {
       "rawQuery": query,
       "count": limit.toString(),
+      "querySource": "typed_query",
       "product": 'People',
       "withDownvotePerspective": false,
       "withReactionsMetadata": false,
       "withReactionsPerspective": false
     };
 
+    var searchFeatures = {
+      "responsive_web_graphql_exclude_directive_enabled": true,
+      "verified_phone_label_enabled": false,
+      "creator_subscriptions_tweet_preview_api_enabled": true,
+      "responsive_web_graphql_timeline_navigation_enabled": true,
+      "responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
+      "c9s_tweet_anatomy_moderator_badge_enabled": true,
+      "tweetypie_unmention_optimization_enabled": true,
+      "responsive_web_edit_tweet_api_enabled": true,
+      "graphql_is_translatable_rweb_tweet_is_translatable_enabled": true,
+      "view_counts_everywhere_api_enabled": true,
+      "longform_notetweets_consumption_enabled": true,
+      "responsive_web_twitter_article_tweet_consumption_enabled": true,
+      "tweet_awards_web_tipping_enabled": false,
+      "freedom_of_speech_not_reach_fetch_enabled": true,
+      "standardized_nudges_misinfo": true,
+      "tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled": true,
+      "rweb_video_timestamps_enabled": true,
+      "longform_notetweets_rich_text_read_enabled": true,
+      "longform_notetweets_inline_media_enabled": true,
+      "responsive_web_enhance_cards_enabled": false
+    };
+
     if (cursor != null) {
       variables['cursor'] = cursor;
     }
 
-    var uri = Uri.https('api.twitter.com', graphqlSearchTimelineUriPath,
-        {'variables': jsonEncode(variables), 'features': jsonEncode(defaultFeatures)});
+    var uri = Uri.https('twitter.com', '/i/api/graphql/-KWrbTBsPifMuLUqqDiU_A/SearchTimeline',
+        {'variables': jsonEncode(variables), 'features': jsonEncode(searchFeatures)});
 
     var response = await _twitterApi.client.get(uri);
     if (response.body.isEmpty) {
-      return SearchStatus(items: []);
+      return [];
     }
 
     var result = json.decode(response.body);
     if (result.isEmpty) {
-      return SearchStatus(items: []);
+      return [];
     }
 
     List instructions =
         List.from(result?['data']?['search_by_raw_query']?['search_timeline']?['timeline']?['instructions'] ?? []);
     if (instructions.isEmpty) {
-      return SearchStatus(items: []);
+      return [];
     }
     List addEntries = List.from(
         instructions.firstWhere((e) => e['type'] == 'TimelineAddEntries', orElse: () => null)?['entries'] ?? []);
     if (addEntries.isEmpty) {
-      return SearchStatus(items: []);
+      return [];
     }
 
-    List<UserWithExtra> users = addEntries
+    return addEntries
         .where((entry) => entry['entryId']?.startsWith('user-'))
         .where((entry) => entry['content']?['itemContent']?['user_results']?['result']?['legacy'] != null)
         .map((entry) {
@@ -687,16 +493,11 @@ class Twitter {
       return UserWithExtra.fromJson(
           {...res['legacy'], 'id_str': res['rest_id'], 'ext_is_blue_verified': res['is_blue_verified']});
     }).toList();
-
-    String? cursorBottom =
-        addEntries.firstWhereOrNull((entry) => entry['entryId']?.startsWith('cursor-bottom-'))?['content']?['value'];
-
-    return SearchStatus(items: users, cursorBottom: cursorBottom);
   }
 
   static Future<List<TrendLocation>> getTrendLocations() async {
     var result = await _cache.getOrCreateAsJSON('trends.locations', const Duration(days: 2), () async {
-      var locations = await _twitterApiAllowUnauthenticated.trendsService.available();
+      var locations = await _twitterApi.trendsService.available();
 
       return jsonEncode(locations.map((e) => e.toJson()).toList());
     });
@@ -706,7 +507,7 @@ class Twitter {
 
   static Future<List<Trends>> getTrends(int location) async {
     var result = await _cache.getOrCreateAsJSON('trends.$location', const Duration(minutes: 2), () async {
-      var trends = await _twitterApiAllowUnauthenticated.trendsService.place(id: location);
+      var trends = await _twitterApi.trendsService.place(id: location);
 
       return jsonEncode(trends.map((e) => e.toJson()).toList());
     });
@@ -714,90 +515,94 @@ class Twitter {
     return List.from(jsonDecode(result)).map((e) => Trends.fromJson(e)).toList(growable: false);
   }
 
-  // profile's tweets with unauthenticated access
-  static Future<TweetStatus> getUserTweets(String id, String type, List<String> pinnedTweets,
-      {int count = 10, bool includeReplies = true}) async {
-    var variables = {
-      'userId': id,
-      'count': count.toString(),
-      'includePromotedContent': true,
-      'withQuickPromoteEligibilityTweetFields': true,
-      'withVoice': true,
-      'withV2Timeline': true
+  static Future<TweetStatus> getTimelineTweets(
+    String id,
+    String type,
+    List<String> pinnedTweets, {
+    int count = 10,
+    String? cursor,
+    bool includeReplies = true,
+    bool includeRetweets = true,
+    required int Function() getTweetsCounter,
+    required void Function() incrementTweetsCounter,
+  }) async {
+    bool showPinnedTweet = true;
+    Map<String, Object> defaultUserTweetsParam = {
+      "variables":
+          "{\"userId\":\"160534877\",\"count\":$count,\"includePromotedContent\":true,\"withQuickPromoteEligibilityTweetFields\":true,\"withVoice\":true,\"withV2Timeline\":true}",
+      "features":
+          "{\"rweb_lists_timeline_redesign_enabled\":true,\"responsive_web_graphql_exclude_directive_enabled\":true,\"verified_phone_label_enabled\":false,\"creator_subscriptions_tweet_preview_api_enabled\":true,\"responsive_web_graphql_timeline_navigation_enabled\":true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\":false,\"tweetypie_unmention_optimization_enabled\":true,\"responsive_web_edit_tweet_api_enabled\":true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\":true,\"view_counts_everywhere_api_enabled\":true,\"longform_notetweets_consumption_enabled\":true,\"responsive_web_twitter_article_tweet_consumption_enabled\":false,\"tweet_awards_web_tipping_enabled\":false,\"freedom_of_speech_not_reach_fetch_enabled\":true,\"standardized_nudges_misinfo\":true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\":true,\"longform_notetweets_rich_text_read_enabled\":true,\"longform_notetweets_inline_media_enabled\":true,\"responsive_web_media_download_video_enabled\":false,\"responsive_web_enhance_cards_enabled\":false}",
+      "fieldToggles": "{\"withAuxiliaryUserLabels\":false,\"withArticleRichContentState\":false}"
     };
-    var response = await _twitterApiAllowUnauthenticated.client.get(Uri.https(
-        'api.twitter.com',
-        '/graphql/WmvfySbQ0FeY1zk4HU_5ow/UserTweets',
-        {'variables': jsonEncode(variables), 'features': jsonEncode(defaultFeaturesUnauthenticated)}));
-    if (response.body.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
+
+    Map<String, dynamic> variables = json.decode(defaultUserTweetsParam["variables"].toString());
+    variables["userId"] = id;
+    if (cursor != null) {
+      variables['cursor'] = cursor;
     }
+    defaultUserTweetsParam["variables"] = json.encode(variables);
+
+    var response = await _twitterApi.client
+        .get(Uri.https('twitter.com', 'i/api/graphql/W4Tpu1uueTGK53paUgxF0Q/HomeTimeline', defaultUserTweetsParam));
     var result = json.decode(response.body);
-    if (response.body.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-    return createProfileUnconversationedChainsGraphql(result, pinnedTweets, includeReplies);
+    //if this page is not first one on the profile page, dont add pinned tweet
+    if (variables['cursor'] != null) showPinnedTweet = false;
+    return createTimelineChains(
+      result,
+      'tweet',
+      pinnedTweets,
+      includeReplies == false,
+      includeReplies,
+      showPinnedTweet,
+      getTweetsCounter,
+      incrementTweetsCounter,
+    );
   }
 
   static Future<TweetStatus> getTweets(String id, String type, List<String> pinnedTweets,
-      {int count = 10, String? cursor, bool includeReplies = true}) async {
+      {int count = 10,
+      String? cursor,
+      bool includeReplies = true,
+      bool includeRetweets = true,
+      required int Function() getTweetsCounter,
+      required void Function() incrementTweetsCounter}) async {
+    bool showPinnedTweet = true;
     var query = {
       ...defaultParams,
       'include_tweet_replies': includeReplies ? '1' : '0',
+      'include_want_retweets': includeRetweets ? '1' : '0', // This may not actually do anything
       'count': count.toString(),
     };
+
+    Map<String, Object> defaultUserTweetsParam = {
+      "variables":
+          "{\"userId\":\"160534877\",\"count\":20,\"includePromotedContent\":true,\"withQuickPromoteEligibilityTweetFields\":true,\"withVoice\":true,\"withV2Timeline\":true}",
+      "features":
+          "{\"rweb_lists_timeline_redesign_enabled\":true,\"responsive_web_graphql_exclude_directive_enabled\":true,\"verified_phone_label_enabled\":false,\"creator_subscriptions_tweet_preview_api_enabled\":true,\"responsive_web_graphql_timeline_navigation_enabled\":true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\":false,\"tweetypie_unmention_optimization_enabled\":true,\"responsive_web_edit_tweet_api_enabled\":true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\":true,\"view_counts_everywhere_api_enabled\":true,\"longform_notetweets_consumption_enabled\":true,\"responsive_web_twitter_article_tweet_consumption_enabled\":false,\"tweet_awards_web_tipping_enabled\":false,\"freedom_of_speech_not_reach_fetch_enabled\":true,\"standardized_nudges_misinfo\":true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\":true,\"longform_notetweets_rich_text_read_enabled\":true,\"longform_notetweets_inline_media_enabled\":true,\"responsive_web_media_download_video_enabled\":false,\"responsive_web_enhance_cards_enabled\":false}",
+      "fieldToggles": "{\"withAuxiliaryUserLabels\":false,\"withArticleRichContentState\":false}"
+    };
+
+    Map<String, dynamic> variables = json.decode(defaultUserTweetsParam["variables"].toString());
+    variables["userId"] = id;
+    if (cursor != null) {
+      variables['cursor'] = cursor;
+    }
+    variables['count'] = count;
+    defaultUserTweetsParam["variables"] = json.encode(variables);
+
+    var response = await _twitterApi.client
+        .get(Uri.https('twitter.com', '/i/api/graphql/2GIWTr7XwadIixZDtyXd4A/UserTweets', defaultUserTweetsParam));
 
     if (cursor != null) {
       query['cursor'] = cursor;
     }
 
-    var response = await _twitterApi.client.get(Uri.https('api.twitter.com', '/2/timeline/$type/$id.json', query));
-    if (response.body.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-
     var result = json.decode(response.body);
-    if (response.body.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-    return createUnconversationedChains(result, 'tweet', 'homeConversation', pinnedTweets, includeReplies);
-  }
 
-  static Future<TweetStatus> getUserWithProfileGraphql(String id, String type, List<String> pinnedTweets,
-      {int count = 10, String? cursor, bool includeReplies = true}) async {
-    var variables = {"rest_id": id, "count": count.toString()};
-
-    if (cursor != null) {
-      variables['cursor'] = cursor;
-    }
-
-    Uri uri;
-
-    if (type == 'profile') {
-      if (includeReplies) {
-        uri = Uri.https('api.twitter.com', 'graphql/8IS8MaO-2EN6GZZZb8jF0g/UserWithProfileTweetsAndRepliesQueryV2',
-            {'variables': jsonEncode(variables), 'features': jsonEncode(defaultFeatures)});
-      } else {
-        uri = Uri.https('api.twitter.com', 'graphql/3JNH4e9dq1BifLxAa3UMWg/UserWithProfileTweetsQueryV2',
-            {'variables': jsonEncode(variables), 'features': jsonEncode(defaultFeatures)});
-      }
-    } else {
-      // type = 'media'
-      uri = Uri.https('api.twitter.com', 'graphql/PDfFf8hGeJvUCiTyWtw4wQ/MediaTimelineV2',
-          {'variables': jsonEncode(variables), 'features': jsonEncode(defaultFeatures)});
-    }
-
-    var response = await _twitterApi.client.get(uri);
-    if (response.body.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-
-    var result = json.decode(response.body);
-    if (result.isEmpty) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-
-    return createProfileUnconversationedChainsGraphql(result, pinnedTweets, includeReplies);
+    //if this page is not first one on the profile page, dont add pinned tweet
+    if (variables['cursor'] != null) showPinnedTweet = false;
+    return createUnconversationedChains(result, 'tweet', pinnedTweets, includeReplies == false, includeReplies,
+        showPinnedTweet, getTweetsCounter, incrementTweetsCounter);
   }
 
   static String? getCursor(List<dynamic> addEntries, List<dynamic> repEntries, String legacyType, String type) {
@@ -841,80 +646,8 @@ class Twitter {
     return cursor;
   }
 
-  static TweetStatus createProfileUnconversationedChainsGraphql(
-      Map<String, dynamic> parentResult, List<String> pinnedTweets, bool includeReplies) {
-    List instructions = List.from(
-        parentResult['data']?['user_result']?['result']?['timeline_response']?['timeline']?['instructions'] ?? []);
-    if (instructions.isEmpty) {
-      instructions =
-          List.from(parentResult['data']?['user']?['result']?['timeline_v2']?['timeline']?['instructions'] ?? []);
-    }
-    if (instructions.isEmpty ||
-        !instructions.any((e) => e['__typename'] == 'TimelineAddEntries' || e['type'] == 'TimelineAddEntries')) {
-      return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
-    }
-
-    List pinEntries =
-        List.from(instructions.where((e) => e['__typename'] == 'TimelinePinEntry' || e['type'] == 'TimelinePinEntry'));
-    List addEntries = List.from(instructions
-        .firstWhere((e) => e['__typename'] == 'TimelineAddEntries' || e['type'] == 'TimelineAddEntries')['entries']);
-
-    List<TweetChain> chains = [];
-
-    for (Map<String, dynamic> pinEntry in pinEntries) {
-      Map<String, dynamic>? result = pinEntry["entry"]?["content"]?["content"]?["tweetResult"]?["result"];
-      result ??= pinEntry["entry"]?["content"]?["itemContent"]?["tweet_results"]?["result"];
-      if (result != null) {
-        result = result['rest_id'] != null ? result : result['tweet'];
-        if (result != null) {
-          TweetWithCard tc = TweetWithCard.fromGraphqlJson(result);
-          chains.add(TweetChain(id: result['rest_id'], tweets: [tc], isPinned: true));
-        }
-      }
-    }
-
-    String? cursorTop;
-    String? cursorBottom;
-    for (Map<String, dynamic> addEntry in addEntries) {
-      String entryId = addEntry['entryId'] ?? '';
-      if (entryId.startsWith('tweet-')) {
-        Map<String, dynamic>? result = addEntry["content"]?["content"]?["tweetResult"]?["result"];
-        result ??= addEntry["content"]?["itemContent"]?["tweet_results"]?["result"];
-        if (result != null) {
-          result = result['rest_id'] != null ? result : result['tweet'];
-          if (result != null) {
-            TweetWithCard tc = TweetWithCard.fromGraphqlJson(result);
-            //tweets.add(tc);
-            chains.add(TweetChain(id: result['rest_id'], tweets: [tc], isPinned: false));
-          }
-        }
-      } else if (entryId.contains('-conversation-') || entryId.startsWith('homeConversation-')) {
-        List<TweetWithCard> tweets = [];
-        for (Map<String, dynamic> item in List.from(addEntry['content']?['items'] ?? [])) {
-          Map<String, dynamic>? result = item['item']?['content']?['tweetResult']?['result'];
-          if (result != null) {
-            result = result['rest_id'] != null ? result : result['tweet'];
-            if (result != null) {
-              TweetWithCard tc = TweetWithCard.fromGraphqlJson(result);
-              tweets.add(tc);
-            }
-          }
-        }
-        if (tweets.isNotEmpty) {
-          chains.add(TweetChain(id: tweets[0].conversationIdStr!, tweets: tweets, isPinned: false));
-        }
-      } else if (entryId.startsWith('cursor-top-')) {
-        cursorTop = addEntry['content']?['value'];
-      } else if (entryId.startsWith('cursor-bottom-')) {
-        cursorBottom = addEntry['content']?['value'];
-      }
-    }
-
-    return TweetStatus(chains: chains, cursorBottom: cursorBottom, cursorTop: cursorTop);
-  }
-
   static TweetStatus createUnconversationedChainsGraphql(Map<String, dynamic> result, String tweetIndicator,
-      List<String> pinnedTweets, bool includeReplies, bool leanerFeeds) {
+      List<String> pinnedTweets, bool mapToThreads, bool includeReplies) {
     var instructions = List.from(result['timeline']['instructions']);
     if (instructions.isEmpty || !instructions.any((e) => e['type'] == 'TimelineAddEntries')) {
       return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
@@ -926,22 +659,20 @@ class Twitter {
     String? cursorBottom = getCursor(addEntries, repEntries, 'cursor-bottom', 'Bottom');
     String? cursorTop = getCursor(addEntries, repEntries, 'cursor-top', 'Top');
 
-    var tweets = _createTweetsGraphql(tweetIndicator, addEntries, includeReplies, leanerFeeds);
+    var tweets = _createTweetsGraphql(tweetIndicator, addEntries, includeReplies);
 
     // First, get all the IDs of the tweets we need to display
     var tweetEntries = addEntries
         .where((e) => e['entryId'].contains(tweetIndicator))
         .sorted((a, b) => b['sortIndex'].compareTo(a['sortIndex']))
-        .map((e) {
-          var res = e['content']['itemContent']['tweet_results']['result'];
-          return res['rest_id'] ?? res['tweet']['rest_id'];
-        })
-        .cast<String>()
+        .map((e) => e['content']['itemContent']['tweet_results']['result']['rest_id'])
+        .cast<String?>()
         .toList();
 
     Map<String, List<TweetWithCard>> conversations =
         tweets.values.where((e) => tweetEntries.contains(e.idStr)).groupBy((e) {
-      if (e.conversationIdStr != null) {
+      // TODO: I don't think a flag is the right way to handle this
+      if (mapToThreads) {
         // Then group the tweets-to-display by their conversation ID
         return e.conversationIdStr;
       }
@@ -971,98 +702,57 @@ class Twitter {
     return TweetStatus(chains: chains, cursorBottom: cursorBottom, cursorTop: cursorTop);
   }
 
-  static TweetStatus createUnconversationedChains(Map<String, dynamic> result, String tweetIndicator,
-      String conversationIndicator, List<String> pinnedTweets, bool includeReplies) {
-    var instructions = List.from(result['timeline']['instructions']);
-    if (instructions.isEmpty || !instructions.any((e) => e.containsKey('addEntries'))) {
+  static TweetStatus createUnconversationedChains(
+    Map<String, dynamic> result,
+    String tweetIndicator,
+    List<String> pinnedTweets,
+    bool mapToThreads,
+    bool includeReplies,
+    bool showPinnedTweet,
+    int Function() getTweetsCounter,
+    void Function() increaseTweetCounter,
+  ) {
+    var instructions = List.from(result["data"]["user"]["result"]["timeline_v2"]['timeline']['instructions']);
+    var addEntriesInstructions = instructions.firstWhereOrNull((e) => e['type'] == 'TimelineAddEntries');
+    if (addEntriesInstructions == null) {
       return TweetStatus(chains: [], cursorBottom: null, cursorTop: null);
     }
 
-    var addEntries = List.from(instructions.firstWhere((e) => e.containsKey('addEntries'))['addEntries']['entries']);
-    var repEntries = List.from(instructions.where((e) => e.containsKey('replaceEntry')));
+    var addPinnedTweetsInstructions = instructions.firstWhereOrNull((e) => e['type'] == 'TimelinePinEntry');
+    var addEntries = List.from(addEntriesInstructions['entries']);
+    var repEntries = List.from(instructions.where((e) => e['type'] == 'TimelineReplaceEntry'));
+    List addPinnedEntries = List<dynamic>.empty(growable: true);
+    if (addPinnedTweetsInstructions != null) {
+      addPinnedEntries.add(addPinnedTweetsInstructions['entry'] ?? null);
+    }
 
     String? cursorBottom = getCursor(addEntries, repEntries, 'cursor-bottom', 'Bottom');
     String? cursorTop = getCursor(addEntries, repEntries, 'cursor-top', 'Top');
 
-    var tweets = _createTweets(tweetIndicator, result, includeReplies);
+    var chains = createTweets(addEntries);
+    // var debugTweets = json.encode(chains);
+    //var debugTweets2 = json.encode(addEntries);
+    var pinnedChains = createTweets(addPinnedEntries, true);
 
-    // First, get all the IDs of the tweets we need to display
-    var tweetEntries = addEntries
-        .where((e) => e['entryId'].contains(tweetIndicator) || e['entryId'].contains(conversationIndicator))
-        .sorted((a, b) => b['sortIndex'].compareTo(a['sortIndex']))
-        .map((e) {
-          if (e['entryId'].contains(tweetIndicator)) {
-            return [e];
-          } else {
-            return e['content']['timelineModule']['items'];
-          }
-        })
-        .expand((e) => e)
-        .map((e) {
-          if (e['content'] != null) {
-            return e['content']['item']['content']['tweet']['id'];
-          } else {
-            return e['item']['content']['tweet']['id'];
-          }
-        })
-        .cast<String>()
-        .toList();
+    // Order all the conversations by newest first (assuming the ID is an incrementing key),
+    // and create a chain from them
+    chains.sort((a, b) {
+      return b.id.compareTo(a.id);
+    });
 
-    Map<String, List<TweetWithCard>> conversations =
-        tweets.values.where((e) => tweetEntries.contains(e.idStr)).groupBy((e) {
-      // TODO: I don't think a flag is the right way to handle this
-      if (e.conversationIdStr != null) {
-        // Then group the tweets-to-display by their conversation ID
-        return e.conversationIdStr;
-      }
-
-      return e.idStr;
-    }).cast<String, List<TweetWithCard>>();
-
-    List<TweetChain> chains = [];
-
-    // Order all the conversations by newest first (assuming the ID is an incrementing key), and create a chain from them
-    for (var conversation in conversations.entries.sorted((a, b) => b.key.compareTo(a.key))) {
-      var chainTweets = conversation.value.sorted((a, b) => b.idStr!.compareTo(a.idStr!)).toList();
-
-      chains.add(TweetChain(id: conversation.key, tweets: chainTweets, isPinned: false));
+    //If we want to show pinned tweets, add them before the others that we already have
+    if (pinnedTweets.isNotEmpty & showPinnedTweet) {
+      chains.insertAll(0, pinnedChains);
     }
-
-    // If we want to show pinned tweets, add them before the chains that we already have
-    if (pinnedTweets.isNotEmpty) {
-      for (var id in pinnedTweets) {
-        // It's possible for the pinned tweet to either not exist, or not be returned, so handle that
-        if (tweets.containsKey(id)) {
-          chains.insert(0, TweetChain(id: id, tweets: [tweets[id]!], isPinned: true));
-        }
-      }
+    //To prevent infinte loading of tweets while filtering via regex , we have to count added tweets.
+    //(infinite loading originating in paged_silver_builder.dart at line 246)
+    if (chains.length < 5) increaseTweetCounter();
+    //As soon as there is no tweet left that passes regex critera and we also reached maximum attemps
+    //to find them, than stop loading more.
+    if (chains.length <= 5) {
+      cursorBottom = null;
     }
-
     return TweetStatus(chains: chains, cursorBottom: cursorBottom, cursorTop: cursorTop);
-  }
-
-  static Future<List<UserWithExtra>> getUsers(Iterable<String> ids) async {
-    // Split into groups of 100, as the API only supports that many at a time
-    List<Future<List<UserWithExtra>>> futures = [];
-
-    var groups = partition(ids, 100);
-    for (var group in groups) {
-      futures.add(_getUsersPage(group));
-    }
-
-    return (await Future.wait(futures)).expand((element) => element).toList();
-  }
-
-  static Future<List<UserWithExtra>> getUsersByScreenName(Iterable<String> screenNames) async {
-    // Split into groups of 100, as the API only supports that many at a time
-    List<Future<List<UserWithExtra>>> futures = [];
-
-    var groups = partition(screenNames, 100);
-    for (var group in groups) {
-      futures.add(_getUsersPageByScreenName(group));
-    }
-
-    return (await Future.wait(futures)).expand((element) => element).toList();
   }
 
   static TweetStatus createTimelineChains(
@@ -1117,27 +807,21 @@ class Twitter {
     return TweetStatus(chains: chains, cursorBottom: cursorBottom, cursorTop: cursorTop);
   }
 
-  static Future<List<UserWithExtra>> _getUsersPage(Iterable<String> ids) async {
-    var response =
-        await _twitterApiAllowUnauthenticated.client.get(Uri.https('api.twitter.com', '/1.1/users/lookup.json', {
-      ...defaultParams,
-      'user_id': ids.join(','),
-    }));
+  static Future<List<UserWithExtra>> getUsers(Iterable<String> ids) async {
+    // Split into groups of 100, as the API only supports that many at a time
+    List<Future<List<UserWithExtra>>> futures = [];
 
-    if (response.body.isEmpty) {
-      return [];
+    var groups = partition(ids, 100);
+    for (var group in groups) {
+      futures.add(_getUsersPage(group));
     }
 
-    var result = json.decode(response.body);
-
-    return List.from(result).map((e) => UserWithExtra.fromJson(e)).toList(growable: false);
+    return (await Future.wait(futures)).expand((element) => element).toList();
   }
 
-  static Future<List<UserWithExtra>> _getUsersPageByScreenName(Iterable<String> screenNames) async {
-    var response =
-        await _twitterApiAllowUnauthenticated.client.get(Uri.https('api.twitter.com', '/1.1/users/lookup.json', {
-      ...defaultParams,
-      'screen_name': screenNames.join(','),
+  static Future<List<UserWithExtra>> _getUsersPage(Iterable<String> ids) async {
+    var response = await _twitterApi.client.get(Uri.https('api.twitter.com', '/1.1/users/lookup.json', {
+      'user_id': ids.join(','),
     }));
 
     var result = json.decode(response.body);
@@ -1146,7 +830,7 @@ class Twitter {
   }
 
   static Map<String, TweetWithCard> _createTweetsGraphql(
-      String entryPrefix, List<dynamic> allTweets, bool includeReplies, bool leanerFeeds) {
+      String entryPrefix, List<dynamic> allTweets, bool includeReplies) {
     bool includeTweet(dynamic t) {
       // Exclude any items that aren't tweets
       if (!t['entryId'].startsWith(entryPrefix)) {
@@ -1169,20 +853,22 @@ class Twitter {
 
     var globalTweets = Map.fromEntries(filteredTweets.map((e) {
       var elm = e['content']['itemContent']['tweet_results']['result'];
+
       if (elm['rest_id'] == null) {
         elm = elm['tweet'];
       }
-      return MapEntry(elm['rest_id'] as String, elm);
+
+      return MapEntry(elm['rest_id'].toString(), elm);
     }));
 
     var tweets = [];
     try {
-      tweets = globalTweets.values.map((e) => TweetWithCard.fromGraphqlJson(e, leanerFeeds: leanerFeeds)).toList();
+      tweets = globalTweets.values.map((e) => TweetWithCard.fromGraphqlJson(e)).toList();
     } catch (exc) {
       rethrow;
     }
 
-    return {for (var e in tweets) e.idStr!: e};
+    return {for (var e in tweets) e.idStr: e};
   }
 
   static Map<String, TweetWithCard> _createTweets(
@@ -1207,7 +893,7 @@ class Twitter {
   }
 
   static Future<Map<String, dynamic>> getBroadcastDetails(String key) async {
-    var response = await _twitterApi.client.get(Uri.https('api.twitter.com', '/1.1/live_video_stream/status/$key'));
+    var response = await _twitterApi.client.get(Uri.https('twitter.com', '/i/api/1.1/live_video_stream/status/$key'));
 
     return json.decode(response.body);
   }
@@ -1289,49 +975,65 @@ class TweetWithCard extends Tweet {
     return tweetWithCard;
   }
 
-  factory TweetWithCard.fromGraphqlJson(Map<String, dynamic> result, {bool leanerFeeds: false}) {
-    var resultRetweetedStatusResult = result['retweeted_status_result']?.isEmpty ?? true
-        ? result['legacy']['retweeted_status_result']
-        : result['retweeted_status_result'];
-    var retweetedStatus = resultRetweetedStatusResult?.isEmpty ?? true
-        ? null
-        : TweetWithCard.fromGraphqlJson(resultRetweetedStatusResult['result']['rest_id'] == null
-            ? resultRetweetedStatusResult['result']['tweet']
-            : resultRetweetedStatusResult['result']);
-    var quotedStatus = (result['quoted_status_result']?.isEmpty ?? true) ||
-            result['quoted_status_result']['result']['tombstone'] != null
-        ? null
-        : TweetWithCard.fromGraphqlJson(result['quoted_status_result']['result']['rest_id'] == null
-            ? result['quoted_status_result']['result']['tweet']
-            : result['quoted_status_result']['result']);
+  factory TweetWithCard.fromGraphqlJson(Map<String, dynamic> result) {
+    var retweetedStatus;
+    var quotedStatus;
+    var user;
+
+    if (result['tweet'] != null) {
+      result = result['tweet']!;
+    } else if (result['legacy']?['retweeted_status_result']?['result'] != null) {
+      retweetedStatus = TweetWithCard.fromGraphqlJson(result['legacy']['retweeted_status_result']['result']!);
+    }
+
+    if (result['quoted_status_result'] != null &&
+        result['quoted_status_result']['result']?['__typename'] != 'TweetWithVisibilityResults') {
+      quotedStatus = TweetWithCard.fromGraphqlJson(result['quoted_status_result']['result']!);
+    }
+
     var resCore = result['core']?['user_results']?['result'];
-    resCore ??= result['core']?['user_result']?['result'];
-    var user = resCore?['legacy'] == null
-        ? null
-        : UserWithExtra.fromJson(
-            {...resCore['legacy'], 'id_str': resCore['rest_id'], 'ext_is_blue_verified': resCore['is_blue_verified']});
+    if (resCore != null && resCore['legacy'] != null) {
+      user = UserWithExtra.fromJson({
+        ...resCore['legacy']!,
+        'id_str': resCore['rest_id'].toString(),
+        'ext_is_blue_verified': resCore['is_blue_verified'],
+      });
+    }
 
     String? noteText;
     Entities? noteEntities;
 
     var noteResult = result['note_tweet']?['note_tweet_results']?['result'];
-    if (noteResult?.isNotEmpty ?? false) {
+    if (noteResult != null) {
       noteText = noteResult['text'];
       noteEntities = Entities.fromJson(noteResult['entity_set']);
     }
 
-    TweetWithCard tweet =
-        TweetWithCard.fromData(result['legacy'], noteText, noteEntities, user, retweetedStatus, quotedStatus);
-    tweet.idStr ??= result['rest_id'];
-    if (!leanerFeeds && tweet.card == null && result['card']?['legacy'] != null) {
-      tweet.card = result['card']['legacy'];
-      List bindingValuesList = tweet.card!['binding_values'] as List;
-      Map<String, dynamic> bindingValues = bindingValuesList.fold({}, (prev, elm) {
-        prev[elm['key']] = elm['value'];
-        return prev;
-      });
-      tweet.card!['binding_values'] = bindingValues;
+    if (result['tombstone'] != null) {
+      return TweetWithCard.tombstone(result['tombstone']!);
     }
+
+    var tweet = TweetWithCard.fromData(
+      result['legacy'],
+      noteText,
+      noteEntities,
+      user,
+      retweetedStatus,
+      quotedStatus,
+    );
+
+    if (tweet.card == null && result['card']?['legacy'] != null) {
+      tweet.card = result['card']['legacy'];
+      var bindingValuesList = tweet.card!['binding_values'] as List?;
+      if (bindingValuesList != null) {
+        var bindingValues = <String, dynamic>{};
+        for (var elm in bindingValuesList) {
+          bindingValues[elm['key'] as String] = elm['value'];
+        }
+        tweet.card!['binding_values'] = bindingValues;
+      }
+    }
+
     return tweet;
   }
 
@@ -1466,13 +1168,6 @@ class TweetStatus {
   final List<TweetChain> chains;
 
   TweetStatus({required this.chains, required this.cursorBottom, required this.cursorTop});
-}
-
-class SearchStatus<T> {
-  final List<T> items;
-  final String? cursorBottom;
-
-  SearchStatus({required this.items, this.cursorBottom});
 }
 
 class TwitterError {

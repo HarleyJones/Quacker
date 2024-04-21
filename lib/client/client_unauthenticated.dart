@@ -1,68 +1,82 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
-import 'package:quacker/client/app_http_client.dart';
+import 'package:quacker/constants.dart';
 
-const String unauthenticatedAccessToken =
-    'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA';
+String? _guestToken;
+const int _expiresAt = -1;
+const int _tokenLimit = -1;
+const int _tokenRemaining = -1;
 
-class TwitterUnauthenticated {
-  static final log = Logger('TwitterUnauthenticated');
+int tokenLimit = -1;
+int tokenRemaining = -1;
+int expiresAt = -1;
 
-  static String? _guestToken;
-
-  static Future<String> getGuestToken() async {
-    if (_guestToken != null) {
+Future<String> getToken(Logger log) async {
+  if (_guestToken != null) {
+    // If we don't have an expiry or limit, it's probably because we haven't made a request yet, so assume they're OK
+    if (_expiresAt == -1 && _tokenLimit == -1 && _tokenRemaining == -1) {
+      // TODO: Null safety with concurrent threads
       return _guestToken!;
     }
-    log.info('Posting https://api.twitter.com/1.1/guest/activate.json');
-    var response = await AppHttpClient.httpPost(Uri.parse('https://api.twitter.com/1.1/guest/activate.json'),
-        headers: {'Authorization': 'Bearer $unauthenticatedAccessToken'});
 
-    if (response.statusCode == 200 && response.body.isNotEmpty) {
-      var result = jsonDecode(response.body);
-      if (result.containsKey('guest_token')) {
-        _guestToken = result['guest_token'];
+    // Check if the token we have hasn't expired yet
+    if (DateTime.now().millisecondsSinceEpoch < _expiresAt) {
+      // Check if the token we have still has usages remaining
+      if (_tokenRemaining < _tokenLimit) {
+        // TODO: Null safety with concurrent threads
         return _guestToken!;
       }
     }
-    throw TwitterUnauthenticatedException(
-        'Unable to get the guest token. The response (${response.statusCode}) from Twitter/X was: ${response.body}');
   }
 
-  static Future<http.Response> fetch(Uri uri, {Map<String, String>? headers}) async {
-    String guestToken = await getGuestToken();
-    var response = await AppHttpClient.httpGet(uri, headers: {
-      ...?headers,
-      'Authorization': 'Bearer $unauthenticatedAccessToken',
-      'Content-Type': 'application/json',
-      'X-Twitter-Active-User': 'yes',
-      'Authority': 'api.twitter.com',
-      'Origin': 'https://twitter.com',
-      'Referer': 'https://twitter.com/',
-      'Pragma': 'no-cache',
-      'cache-control': 'no-cache',
-      'Accept-Encoding': 'gzip, deflate',
-      'Accept-Language': 'en-US,en;q=0.9',
-      'Accept': '*/*',
-      'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-      'X-Guest-Token': guestToken,
-      'cookie': 'gt=$guestToken'
-    });
+  log.info('Refreshing the Twitter token');
 
-    return response;
+  var response = await http.post(Uri.parse('https://api.twitter.com/1.1/guest/activate.json'), headers: {
+    'Authorization':
+        'Bearer AAAAAAAAAAAAAAAAAAAAAGHtAgAAAAAA%2Bx7ILXNILCqkSGIzy6faIHZ9s3Q%3DQy97w6SIrzE7lQwPJEYQBsArEE2fC25caFwRBvAGi456G09vGR',
+  });
+
+  if (response.statusCode == 200) {
+    var result = jsonDecode(response.body);
+    if (result.containsKey('guest_token')) {
+      _guestToken = result['guest_token'];
+
+      return _guestToken!;
+    }
   }
+
+  _guestToken = null;
+
+  throw Exception(
+      'Unable to refresh the token. The response (${response.statusCode}) from Twitter was: ${response.body}');
 }
 
-class TwitterUnauthenticatedException implements Exception {
-  final String message;
+Future<http.Response> fetchUnauthenticated(Uri uri, {Map<String, String>? headers, required Logger log}) async {
+  log.info('Fetching (unauthenticated) $uri');
 
-  TwitterUnauthenticatedException(this.message);
+  var response = await http.get(uri, headers: {
+    ...?headers,
+    'Authorization':
+        'Bearer AAAAAAAAAAAAAAAAAAAAAGHtAgAAAAAA%2Bx7ILXNILCqkSGIzy6faIHZ9s3Q%3DQy97w6SIrzE7lQwPJEYQBsArEE2fC25caFwRBvAGi456G09vGR',
+    'x-guest-token': await getToken(log),
+    'x-twitter-active-user': 'yes',
+    'user-agent': userAgentHeader.toString()
+  });
 
-  @override
-  String toString() {
-    return message;
+  var headerRateLimitReset = response.headers['x-rate-limit-reset'];
+  var headerRateLimitRemaining = response.headers['x-rate-limit-remaining'];
+  var headerRateLimitLimit = response.headers['x-rate-limit-limit'];
+
+  if (headerRateLimitReset == null || headerRateLimitRemaining == null || headerRateLimitLimit == null) {
+    // If the rate limit headers are missing, the endpoint probably doesn't send them back
+    return response;
   }
+
+  // Update our token's rate limit counters
+  expiresAt = int.parse(headerRateLimitReset) * 1000;
+  tokenRemaining = int.parse(headerRateLimitRemaining);
+  tokenLimit = int.parse(headerRateLimitLimit);
+
+  return response;
 }

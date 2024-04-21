@@ -71,6 +71,8 @@ class _ProfileTweetsState extends State<ProfileTweets> with AutomaticKeepAliveCl
         cursor: cursor,
         count: pageSize,
         includeReplies: widget.includeReplies,
+        getTweetsCounter: getLoadTweetsCounter,
+        incrementTweetsCounter: incrementLoadTweetsCounter,
       );
 
       if (!mounted) {

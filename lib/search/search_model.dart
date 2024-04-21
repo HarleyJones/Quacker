@@ -1,32 +1,36 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:quacker/client/client.dart';
 import 'package:quacker/user.dart';
 
-class SearchTweetsModel extends Store<SearchStatus<TweetWithCard>> {
-  SearchTweetsModel() : super(SearchStatus(items: []));
+class SearchTweetsModel extends Store<List<TweetWithCard>> {
+  SearchTweetsModel() : super([]);
 
-  Future<void> searchTweets(String query, {bool trending = false, String? cursor}) async {
+  Future<void> searchTweets(String query, String product) async {
     await execute(() async {
       if (query.isEmpty) {
-        return SearchStatus(items: []);
+        return [];
       } else {
-        TweetStatus ts = await Twitter.searchTweetsGraphql(query, true, trending: trending, cursor: cursor);
-        return SearchStatus(
-            items: ts.chains.map((e) => e.tweets).expand((e) => e).toList(), cursorBottom: ts.cursorBottom);
+        // TODO: Is this right?
+        return (await Twitter.searchTweets(query, true, product: product))
+            .chains
+            .map((e) => e.tweets)
+            .expand((element) => element)
+            .toList();
       }
     });
   }
 }
 
-class SearchUsersModel extends Store<SearchStatus<UserWithExtra>> {
-  SearchUsersModel() : super(SearchStatus(items: []));
+class SearchUsersModel extends Store<List<UserWithExtra>> {
+  SearchUsersModel() : super([]);
 
-  Future<void> searchUsers(String query, {String? cursor}) async {
+  Future<void> searchUsers(String query, BuildContext context) async {
     await execute(() async {
       if (query.isEmpty) {
-        return SearchStatus(items: []);
+        return [];
       } else {
-        return await Twitter.searchUsersGraphql(query, limit: 100, cursor: cursor);
+        return await Twitter.searchUsers(query);
       }
     });
   }

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:quacker/client/client.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
@@ -127,19 +126,24 @@ class _ResultsScreenState extends State<_ResultsScreen> with SingleTickerProvide
               TweetSearchResultList<SearchTweetsModel, TweetWithCard>(
                   queryController: _queryController,
                   store: context.read<SearchTweetsModel>(),
-                  searchFunction: (q, c) =>
-                      context.read<SearchTweetsModel>().searchTweets(q, trending: true, cursor: c),
-                  itemBuilder: (context, item) => TweetTile(tweet: item, clickable: true)),
+                  searchFunction: (q) => context.read<SearchTweetsModel>().searchTweets(q, "Top"),
+                  itemBuilder: (context, item) {
+                    return TweetTile(tweet: item, clickable: true);
+                  }),
               TweetSearchResultList<SearchTweetsModel, TweetWithCard>(
                   queryController: _queryController,
                   store: context.read<SearchTweetsModel>(),
-                  searchFunction: (q, c) => context.read<SearchTweetsModel>().searchTweets(q, cursor: c),
-                  itemBuilder: (context, item) => TweetTile(tweet: item, clickable: true)),
+                  searchFunction: (q) => context.read<SearchTweetsModel>().searchTweets(q, "Latest"),
+                  itemBuilder: (context, item) {
+                    return TweetTile(tweet: item, clickable: true);
+                  }),
               TweetSearchResultList<SearchUsersModel, UserWithExtra>(
                   queryController: _queryController,
                   store: context.read<SearchUsersModel>(),
-                  searchFunction: (q, c) => context.read<SearchUsersModel>().searchUsers(q, cursor: c),
-                  itemBuilder: (context, user) => UserTile(user: UserSubscription.fromUser(user))),
+                  searchFunction: (q) => context.read<SearchUsersModel>().searchUsers(q, context),
+                  itemBuilder: (context, user) {
+                    return UserTile(user: UserSubscription.fromUser(user));
+                  }),
             ])),
           )
         ],
@@ -150,10 +154,10 @@ class _ResultsScreenState extends State<_ResultsScreen> with SingleTickerProvide
 
 typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T item);
 
-class TweetSearchResultList<S extends Store<SearchStatus<T>>, T> extends StatefulWidget {
+class TweetSearchResultList<S extends Store<List<T>>, T> extends StatefulWidget {
   final TextEditingController queryController;
   final S store;
-  final Future<void> Function(String query, String? cursor) searchFunction;
+  final Future<void> Function(String query) searchFunction;
   final ItemWidgetBuilder<T> itemBuilder;
 
   const TweetSearchResultList(
@@ -165,26 +169,19 @@ class TweetSearchResultList<S extends Store<SearchStatus<T>>, T> extends Statefu
       : super(key: key);
 
   @override
-  State<TweetSearchResultList<S, T>> createState() => TweetSearchResultListState<S, T>();
+  State<TweetSearchResultList<S, T>> createState() => _TweetSearchResultListState<S, T>();
 }
 
-class TweetSearchResultListState<S extends Store<SearchStatus<T>>, T> extends State<TweetSearchResultList<S, T>> {
+class _TweetSearchResultListState<S extends Store<List<T>>, T> extends State<TweetSearchResultList<S, T>> {
   Timer? _debounce;
-  String _previousQuery = '';
-  String? _previousCursor;
-  late PagingController<String?, T> _pagingController;
-  late ScrollController _scrollController;
-  double _lastOffset = 0;
-  bool _inAppend = false;
+  String? _previousQuery = '';
 
   @override
   void initState() {
     super.initState();
 
-    _previousQuery = '';
-    _previousCursor = null;
     widget.queryController.addListener(() {
-      String query = widget.queryController.text;
+      var query = widget.queryController.text;
       if (query == _previousQuery) {
         return;
       }
@@ -196,87 +193,43 @@ class TweetSearchResultListState<S extends Store<SearchStatus<T>>, T> extends St
 
       // Debounce the search, so we don't make a request per keystroke
       _debounce = Timer(const Duration(milliseconds: 750), () async {
-        fetchResults(null);
+        fetchResults();
       });
     });
 
-    _scrollController = ScrollController();
-    _pagingController = PagingController(firstPageKey: null);
-    _pagingController.addPageRequestListener((String? cursor) {
-      fetchResults(cursor);
-    });
-
-    fetchResults(null);
+    fetchResults();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
-    _pagingController.dispose();
-  }
-
-  void resetQuery() {
-    _scrollController.dispose();
-    _pagingController.dispose();
-    _previousQuery = '';
-    _previousCursor = null;
-    _lastOffset = 0;
-    _scrollController = ScrollController();
-    _pagingController = PagingController(firstPageKey: null);
-    _pagingController.addPageRequestListener((String? cursor) {
-      fetchResults(cursor);
-    });
-  }
-
-  void fetchResults(String? cursor) {
+  void fetchResults() {
     if (mounted) {
-      String query = widget.queryController.text;
-      if (query == _previousQuery && cursor == _previousCursor) {
-        widget.searchFunction('', null);
-        return;
-      }
+      var query = widget.queryController.text;
       _previousQuery = query;
-      _previousCursor = cursor;
-      widget.searchFunction(query, cursor);
+      widget.searchFunction(query);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScopedBuilder<S, SearchStatus<T>>.transition(
+    return ScopedBuilder<S, List<T>>.transition(
       store: widget.store,
       onLoading: (_) => const Center(child: CircularProgressIndicator()),
       onError: (_, error) => FullPageErrorWidget(
         error: error,
         stackTrace: null,
         prefix: L10n.of(context).unable_to_load_the_search_results,
-        onRetry: () => fetchResults(_previousCursor),
+        onRetry: () => fetchResults(),
       ),
-      onState: (_, state) {
-        if (state.items.isEmpty) {
+      onState: (_, items) {
+        if (items.isEmpty) {
           return Center(child: Text(L10n.of(context).no_results));
         }
 
-        if (_previousQuery.isNotEmpty) {
-          _inAppend = true;
-          _pagingController.appendPage(state.items, state.cursorBottom);
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _scrollController.jumpTo(_lastOffset);
-            _inAppend = false;
-          });
-        }
-
-        return PagedListView<String?, T>(
-            scrollController: _scrollController,
-            pagingController: _pagingController,
-            addAutomaticKeepAlives: false,
-            builderDelegate: PagedChildBuilderDelegate(itemBuilder: (context, elm, index) {
-              if (!_inAppend) {
-                _lastOffset = _scrollController.offset;
-              }
-              return widget.itemBuilder(context, elm);
-            }));
+        return ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return widget.itemBuilder(context, items[index]);
+          },
+        );
       },
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 import 'package:quacker/constants.dart';
+import 'package:quacker/home/_forYou.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/group/_settings.dart';
 import 'package:quacker/group/group_model.dart';
@@ -20,12 +21,32 @@ class FeedScreen extends StatefulWidget {
   State<FeedScreen> createState() => _FeedScreenState();
 }
 
-class _FeedScreenState extends State<FeedScreen> with AutomaticKeepAliveClientMixin<FeedScreen> {
+class _FeedScreenState extends State<FeedScreen>
+    with AutomaticKeepAliveClientMixin<FeedScreen>, TickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
 
   UserWithExtra user = UserWithExtra();
+
+  late TabController _tabController;
+  int _tab = 0;
+  dynamic _tabValue = L10n.current.following;
   Duration animationDuration = Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.animation!.addListener(_tabListener);
+  }
+
+  void _tabListener() {
+    if (_tab != _tabController.animation!.value.round()) {
+      setState(() {
+        _tab = _tabController.animation!.value.round();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,30 +69,70 @@ class _FeedScreenState extends State<FeedScreen> with AutomaticKeepAliveClientMi
           controller: widget.scrollController,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
-              SliverAppBar(pinned: false, snap: true, floating: true, title: Text(L10n.of(context).feed), actions: [
-                IconButton(icon: const Icon(Icons.more_vert), onPressed: () => showFeedSettings(context, model)),
-                IconButton(
-                    icon: const Icon(Icons.arrow_upward),
-                    onPressed: () async {
-                      if (_disableAnimations == false) {
-                        await widget.scrollController
-                            .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                      } else {
-                        widget.scrollController.jumpTo(0);
-                      }
-                    }),
-                IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: () async {
-                      await model.loadGroup();
-                    }),
-                ...createCommonAppBarActions(context)
-              ]),
+              SliverAppBar(
+                pinned: false,
+                snap: true,
+                floating: true,
+                title: DropdownButton(
+                    padding: EdgeInsets.only(left: 8),
+                    underline: Container(),
+                    value: _tabValue,
+                    onChanged: (value) => setState(() {
+                          if (value == L10n.current.foryou) {
+                            _tab = 1;
+                          } else if (value == L10n.current.following) {
+                            _tab = 0;
+                          }
+                          _tabValue = value;
+                        }),
+                    items: [
+                      DropdownMenuItem(value: L10n.current.following, child: Text(L10n.current.following)),
+                      DropdownMenuItem(value: L10n.current.foryou, child: Text(L10n.current.foryou))
+                    ]),
+                actions: _tab == 1
+                    ? [
+                        IconButton(
+                            icon: const Icon(Icons.arrow_upward),
+                            onPressed: () async {
+                              if (_disableAnimations == false) {
+                                await widget.scrollController
+                                    .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              } else {
+                                widget.scrollController.jumpTo(0);
+                              }
+                            }),
+                        ...createCommonAppBarActions(context)
+                      ]
+                    : [
+                        IconButton(
+                            icon: const Icon(Icons.more_vert), onPressed: () => showFeedSettings(context, model)),
+                        IconButton(
+                            icon: const Icon(Icons.arrow_upward),
+                            onPressed: () async {
+                              if (_disableAnimations == false) {
+                                await widget.scrollController
+                                    .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              } else {
+                                widget.scrollController.jumpTo(0);
+                              }
+                            }),
+                        IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: () async {
+                              await model.loadGroup();
+                            }),
+                        ...createCommonAppBarActions(context)
+                      ],
+              ),
             ];
           },
-          body: SubscriptionGroupScreenContent(
-            id: widget.id,
-          ));
+          body: [
+            SubscriptionGroupScreenContent(
+              id: widget.id,
+            ),
+            ForYouTweets(
+                user: user, type: 'profile', includeReplies: false, pinnedTweets: [], pref: PrefService.of(context)),
+          ][_tab]);
     });
   }
 }
