@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/settings/_about.dart';

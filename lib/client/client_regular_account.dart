@@ -11,7 +11,7 @@ import 'package:quacker/generated/l10n.dart';
 
 Future<String> addAccount(BasePrefService prefs, String username, String password, String email) async {
   var database = await Repository.writable();
-  final model = WebFlowAuthModel(prefs);
+  final model = XRegularAccount(prefs);
 
   try {
     final authHeader = await model.GetAuthHeader(username: username, password: password, email: email);
@@ -42,7 +42,7 @@ Future<List<Map<String, Object?>>> getAccounts() async {
 
 Future<Map<dynamic, dynamic>?> getAuthHeader(BasePrefService prefs) async {
   final accounts = await getAccounts();
-  final model = WebFlowAuthModel(prefs);
+  final model = XRegularAccount(prefs);
 
   if (accounts.isNotEmpty) {
     Map<String, Object?> account = accounts[Random().nextInt(accounts.length)];
@@ -56,35 +56,13 @@ Future<Map<dynamic, dynamic>?> getAuthHeader(BasePrefService prefs) async {
   }
 }
 
-Future<http.Response?> fetchAuthenticated(Uri uri,
-    {Map<String, String>? headers,
-    required Logger log,
-    required BasePrefService prefs,
-    required Map<dynamic, dynamic> authHeader}) async {
-  log.info('Fetching $uri');
+class XRegularAccount extends ChangeNotifier {
+  static final log = Logger('XRegularAccount');
 
-  WebFlowAuthModel webFlowAuthModel = WebFlowAuthModel(prefs);
-  var response = await http.get(uri, headers: {
-    ...?headers,
-    ...authHeader,
-    ...userAgentHeader,
-    'authorization': bearerToken,
-    'x-guest-token': (await webFlowAuthModel.GetGT(userAgentHeader)).toString(),
-    'x-twitter-active-user': 'yes',
-    'user-agent': userAgentHeader.toString()
-  });
-
-  return response;
-}
-
-class WebFlowAuthModel extends ChangeNotifier {
-  static final log = Logger('WebFlowAuthModel');
-
-  WebFlowAuthModel(this.prefs) : super();
+  XRegularAccount(this.prefs) : super();
   final BasePrefService prefs;
 
   static http.Client client = http.Client();
-  //static webFlowAuthModel =WebFlowAuthModel();
   static List<String> cookies = [];
 
   static Map<String, String>? _authHeader;
@@ -101,6 +79,27 @@ class WebFlowAuthModel extends ChangeNotifier {
       auth_token,
       csrf_token;
   static var kdt_Coookie;
+
+  Future<http.Response?> fetch(Uri uri,
+      {Map<String, String>? headers,
+      required Logger log,
+      required BasePrefService prefs,
+      required Map<dynamic, dynamic> authHeader}) async {
+    log.info('Fetching $uri');
+
+    XRegularAccount xRegularAccount = XRegularAccount(prefs);
+    var response = await http.get(uri, headers: {
+      ...?headers,
+      ...authHeader,
+      ...userAgentHeader,
+      'authorization': bearerToken,
+      'x-guest-token': (await xRegularAccount.GetGT(userAgentHeader)).toString(),
+      'x-twitter-active-user': 'yes',
+      'user-agent': userAgentHeader.toString()
+    });
+
+    return response;
+  }
 
   static Future<PrefServiceShared> GetSharedPrefs() async {
     return await PrefServiceShared.init(prefix: 'pref_');

@@ -15,7 +15,7 @@ class SettingsAccountFragment extends StatefulWidget {
 class _SettingsAccountFragment extends State<SettingsAccountFragment> {
   @override
   Widget build(BuildContext context) {
-    var model = context.read<WebFlowAuthModel>();
+    var model = context.read<XRegularAccount>();
     return Scaffold(
       appBar: AppBar(
         title: Text(L10n.current.account),
@@ -62,7 +62,7 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
 }
 
 class addDialog extends StatefulWidget {
-  final WebFlowAuthModel model;
+  final XRegularAccount model;
   final String username;
   final String password;
   final String email;
