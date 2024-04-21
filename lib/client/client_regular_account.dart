@@ -152,15 +152,11 @@ class WebFlowAuthModel extends ChangeNotifier {
   Future<void> GetFlowToken1(Map<String, String> userAgentHeader) async {
     Map<String, String> result = new Map<String, String>();
     var body = {
-      'flow_token': null,
-      'input_flow_data': {
-        'country_code': null,
-        'flow_context': {
-          'referrer_context': {'referral_details': 'utm_source=google-play&utm_medium=organic', 'referrer_url': ''},
-          'start_location': {'location': 'deeplink'}
-        },
-        'requested_variant': null,
-        'target_user_id': 0
+      "input_flow_data": {
+        "flow_context": {
+          "debug_overrides": {},
+          "start_location": {"location": "manual_link"}
+        }
       },
       "subtask_versions": {
         "action_list": 2,
