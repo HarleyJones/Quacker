@@ -23,9 +23,6 @@
   <a href="https://hosted.weblate.org/engage/quacker/" alt="Translation Status"><img src="https://hosted.weblate.org/widgets/quacker/-/svg-badge.svg"></a>
 </p>
 
-## Important Update
-<blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:5f2c6awh4ffekm7srmi4d6zg/app.bsky.feed.post/3kqnhfjquhl2l" data-bluesky-cid="bafyreiezzqzeatbzxuhm2u5dy5nm3dqxwc5gok7t6fi5l7wmsavdxblxzm"><p lang="en">I&#x27;m tempted to stop maintaining #Quacker and move to contributing to #Squawker</p>&mdash; HCJ (<a href="https://bsky.app/profile/did:plc:5f2c6awh4ffekm7srmi4d6zg?ref_src=embed">@hcj.vibes.cool</a>) <a href="https://bsky.app/profile/did:plc:5f2c6awh4ffekm7srmi4d6zg/post/3kqnhfjquhl2l?ref_src=embed">Apr 21, 2024 at 2:31 PM</a></blockquote>
- 
 ## Features:
 * Feed: View your `Following` and `For You` feeds
 * Material You: Looks and feels modern
