@@ -40,13 +40,23 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                       title: Text(data[index]['id'].toString()),
                       subtitle: Text(data[index]['email'].toString()),
                       leading: Icon(Icons.account_circle),
-                      trailing: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () async {
-                          await deleteAccount(data[index]['id'].toString());
-                          setState(() {});
-                        },
-                      ),
+                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                        IconButton(
+                          icon: Icon(Icons.refresh),
+                          onPressed: () async {
+                            await addAccount(model.prefs, data[index]['id'] as String,
+                                data[index]['password'] as String, data[index]['email'].toString());
+                            setState(() {});
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () async {
+                            await deleteAccount(data[index]['id'].toString());
+                            setState(() {});
+                          },
+                        )
+                      ]),
                       onTap: () => showDialog(
                           context: context,
                           builder: (_) => addDialog(model,

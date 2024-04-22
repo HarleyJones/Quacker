@@ -430,7 +430,6 @@ class XRegularAccount extends ChangeNotifier {
     _authHeader?.addAll({"Cookie": cookies.join(";")});
     _authHeader?.addAll({"authorization": bearerToken});
     _authHeader?.addAll({"x-csrf-token": csrf_token});
-    await SetAuthHeader(_authHeader);
     //_authHeader!.addAll(userAgentHeader);
     //authHeader.addAll({"Host": "api.twitter.com"});
   }
@@ -462,9 +461,6 @@ class XRegularAccount extends ChangeNotifier {
     if (_expiresAt == -1) _expiresAt = await GetTokenExpires();
     if (_tokenRemaining == -1) _tokenRemaining = await GetTokenRemaining();
     if (_tokenLimit == -1) _tokenLimit = await GetTokenLimit();
-    if (_authHeader == null) {
-      _authHeader = await GetAuthHeaderPref();
-    }
   }
 
   Future<void> GetAuthTokenLimits(
@@ -497,6 +493,7 @@ class XRegularAccount extends ChangeNotifier {
   Future<Map<dynamic, dynamic>?> GetAuthHeader(
       {required String username, required String password, String? email, BuildContext? context}) async {
     try {
+      DeleteAllCookies();
       if (_authHeader == null) await getAuthTokenFromPref();
       if (!await IsTokenExpired() && _authHeader != null) return _authHeader!;
       await GetGuestId(userAgentHeader);
@@ -519,11 +516,9 @@ class XRegularAccount extends ChangeNotifier {
   }
 
   Future DeleteAllCookies() async {
-    this.DeleteAuthHeader();
     this.DeleteTokenExpires();
     this.DeleteTokenLimit();
     this.DeleteTokenRemaining();
-    _authHeader = null;
     _expiresAt = -1;
     _tokenLimit = -1;
     _tokenRemaining = -1;
@@ -540,22 +535,6 @@ class XRegularAccount extends ChangeNotifier {
 
   Future DeleteKdtCookie() async {
     return prefs.remove("KDT_Cookie");
-  }
-
-  Future SetAuthHeader(Map<String, String>? header) async {
-    await prefs.set("auth_header", json.encode(header));
-  }
-
-  Future<Map<String, String>?> GetAuthHeaderPref() async {
-    var authHeader = await prefs.get("auth_header") ?? null;
-    if (authHeader != null) {
-      return Map.castFrom<String, dynamic, String, String>(json.decode(authHeader));
-    } else
-      return null;
-  }
-
-  Future DeleteAuthHeader() async {
-    await prefs.remove("auth_header");
   }
 
   Future SetTokenExpires(int expiresAt) async {
