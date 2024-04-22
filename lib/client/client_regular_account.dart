@@ -6,6 +6,7 @@ import 'package:pref/pref.dart';
 import 'dart:async';
 import "dart:math";
 import 'package:quacker/constants.dart';
+import 'package:quacker/database/entities.dart';
 import 'package:quacker/database/repository.dart';
 import 'package:quacker/generated/l10n.dart';
 
@@ -17,8 +18,8 @@ Future<String> addAccount(BasePrefService prefs, String username, String passwor
     final authHeader = await model.GetAuthHeader(username: username, password: password, email: email);
 
     if (authHeader != null) {
-      database.insert(
-          tableAccounts, {"id": username, "password": password, "email": email, "auth_header": jsonEncode(authHeader)});
+      database.insert(tableAccounts,
+          {"id": username, "password": password, "email": email, "auth_header": json.encode(authHeader)});
 
       return L10n.current.login_success;
     } else {
@@ -42,15 +43,12 @@ Future<List<Map<String, Object?>>> getAccounts() async {
 
 Future<Map<dynamic, dynamic>?> getAuthHeader(BasePrefService prefs) async {
   final accounts = await getAccounts();
-  final model = XRegularAccount(prefs);
 
   if (accounts.isNotEmpty) {
-    Map<String, Object?> account = accounts[Random().nextInt(accounts.length)];
+    Account account = Account.fromMap(accounts[Random().nextInt(accounts.length)]);
+    final authHeader = Map.castFrom<String, dynamic, String, String>(json.decode(account.authHeader));
 
-    return await model.GetAuthHeader(
-        username: account['id'].toString(),
-        password: account['password'].toString(),
-        email: account['email'].toString());
+    return authHeader;
   } else {
     return null;
   }
