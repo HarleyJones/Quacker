@@ -44,8 +44,8 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                         IconButton(
                           icon: Icon(Icons.refresh),
                           onPressed: () async {
-                            await addAccount(model.prefs, data[index]['id'] as String,
-                                data[index]['password'] as String, data[index]['email'].toString());
+                            await addAccount(data[index]['id'] as String, data[index]['password'] as String,
+                                data[index]['email'].toString());
                             setState(() {});
                           },
                         ),
@@ -147,7 +147,7 @@ class _addDialog extends State<addDialog> {
       actions: [
         TextButton(
             onPressed: () async {
-              final response = await addAccount(PrefService.of(context), _username.text, _password.text, _email.text);
+              final response = await addAccount(_username.text, _password.text, _email.text);
               if (context.mounted) {
                 showSnackBar(context, icon: '', message: response);
               }

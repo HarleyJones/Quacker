@@ -10,9 +10,9 @@ import 'package:quacker/database/entities.dart';
 import 'package:quacker/database/repository.dart';
 import 'package:quacker/generated/l10n.dart';
 
-Future<String> addAccount(BasePrefService prefs, String username, String password, String email) async {
+Future<String> addAccount(String username, String password, String? email) async {
   var database = await Repository.writable();
-  final model = XRegularAccount(prefs);
+  final model = XRegularAccount();
 
   try {
     final authHeader = await model.GetAuthHeader(username: username, password: password, email: email);
@@ -57,25 +57,12 @@ Future<Map<dynamic, dynamic>?> getAuthHeader(BasePrefService prefs) async {
 class XRegularAccount extends ChangeNotifier {
   static final log = Logger('XRegularAccount');
 
-  XRegularAccount(this.prefs) : super();
-  final BasePrefService prefs;
+  XRegularAccount() : super();
 
   static http.Client client = http.Client();
   static List<String> cookies = [];
 
-  static Map<String, String>? _authHeader;
-  static var _tokenLimit = -1;
-  static var _tokenRemaining = -1;
-  static var _expiresAt = -1;
-
-  static var gtToken,
-      flowToken1,
-      flowToken2,
-      flowTokenUserName,
-      flowTokenPassword,
-      flowToken2FA,
-      auth_token,
-      csrf_token;
+  static var gtToken, flowToken1, flowToken2, flowTokenUserName, flowTokenPassword, auth_token, csrf_token;
   static var kdt_Coookie;
 
   Future<http.Response?> fetch(Uri uri,
@@ -85,7 +72,7 @@ class XRegularAccount extends ChangeNotifier {
       required Map<dynamic, dynamic> authHeader}) async {
     log.info('Fetching $uri');
 
-    XRegularAccount xRegularAccount = XRegularAccount(prefs);
+    XRegularAccount xRegularAccount = XRegularAccount();
     var response = await http.get(uri, headers: {
       ...?headers,
       ...authHeader,
@@ -105,7 +92,6 @@ class XRegularAccount extends ChangeNotifier {
   }
 
   Future<void> GetGuestId(Map<String, String> userAgentHeader) async {
-    kdt_Coookie = await GetKdtCookie();
     if (kdt_Coookie != null) cookies.add(kdt_Coookie!);
 
     var request = http.Request("GET", Uri.parse('https://twitter.com/i/flow/login'))..followRedirects = false;
@@ -141,6 +127,8 @@ class XRegularAccount extends ChangeNotifier {
       if (gtToken_cookie != null) {
         cookies.add(gtToken_cookie);
         return gtToken_cookie;
+      } else {
+        return null;
       }
     } else
       throw Exception("Return Status is (${response.statusCode}), it should be 200");
@@ -398,7 +386,6 @@ class XRegularAccount extends ChangeNotifier {
         var auth_token_Coookie = matchAuthToken!.group(1).toString();
         cookies.add(auth_token_Coookie);
       }
-      GetAuthTokenLimits(responseHeader);
       final expCt0 = RegExp(r'(ct0=(.+?));');
       RegExpMatch? matchCt0 = expCt0.firstMatch(responseHeader);
       csrf_token = matchCt0?.group(2).toString();
@@ -413,9 +400,6 @@ class XRegularAccount extends ChangeNotifier {
         final expKdt = RegExp(r'(kdt=(.+?));');
         RegExpMatch? matchKdt = expKdt.firstMatch(responseHeader);
         kdt_Coookie = matchKdt?.group(1).toString();
-        if (kdt_Coookie != null) {
-          await SetKdtCookie(kdt_Coookie);
-        }
       }
       // final exptwid = RegExp(r'(twid="(.+?))"');
       // RegExpMatch? matchtwid = exptwid.firstMatch(responseHeader);
@@ -425,77 +409,17 @@ class XRegularAccount extends ChangeNotifier {
       throw Exception("Return Status is (${response.statusCode}), it should be 200");
   }
 
-  Future<void> BuildAuthHeader() async {
-    _authHeader = Map<String, String>();
-    _authHeader?.addAll({"Cookie": cookies.join(";")});
-    _authHeader?.addAll({"authorization": bearerToken});
-    _authHeader?.addAll({"x-csrf-token": csrf_token});
-    //_authHeader!.addAll(userAgentHeader);
-    //authHeader.addAll({"Host": "api.twitter.com"});
-  }
-
-  Future<bool> IsTokenExpired() async {
-    if (_authHeader != null) {
-      // If we don't have an expiry or limit, it's probably because we haven't made a request yet, so assume they're OK
-      if (_expiresAt == -1 && _tokenLimit == -1 && _tokenRemaining == -1) {
-        // TODO: Null safety with concurrent threads
-        return true;
-      }
-      // Check if the token we have hasn't expired yet
-      if (DateTime.now().millisecondsSinceEpoch < _expiresAt) {
-        // Check if the token we have still has usages remaining
-        if (_tokenRemaining < _tokenLimit) {
-          // TODO: Null safety with concurrent threads
-          return false;
-        } else
-          return false;
-      }
-      return false;
-    } else
-      return true;
-
-    //log.info('Refreshing the Twitter token');
-  }
-
-  Future<void> getAuthTokenFromPref() async {
-    if (_expiresAt == -1) _expiresAt = await GetTokenExpires();
-    if (_tokenRemaining == -1) _tokenRemaining = await GetTokenRemaining();
-    if (_tokenLimit == -1) _tokenLimit = await GetTokenLimit();
-  }
-
-  Future<void> GetAuthTokenLimits(
-    String responseHeader,
-  ) async {
-    // Update our token's rate limit counters
-    final expAuthTokenLimitReset = RegExp(r'(x-rate-limit-reset:(.+?)),');
-    RegExpMatch? matchAuthTokenLimitReset = expAuthTokenLimitReset.firstMatch(responseHeader);
-    var limitReset = matchAuthTokenLimitReset?.group(2).toString();
-
-    final expAuthTokenLimitRemaining = RegExp(r'(x-rate-limit-remaining:(.+?)),');
-    RegExpMatch? matchAuthTokenLimitRemaining = expAuthTokenLimitRemaining.firstMatch(responseHeader);
-    var limitRemaining = matchAuthTokenLimitRemaining?.group(2).toString();
-
-    final expAuthTokenLimitLimit = RegExp(r'(x-rate-limit-limit:(.+?)),');
-    RegExpMatch? matchAuthTokenLimitLimit = expAuthTokenLimitLimit.firstMatch(responseHeader);
-    var limitLimit = matchAuthTokenLimitLimit?.group(2).toString();
-
-    if (limitReset != null && limitRemaining != null && _tokenLimit != null) {
-      _expiresAt = int.parse(limitReset) * 1000;
-      _tokenRemaining = int.parse(limitRemaining);
-      _tokenLimit = int.parse(limitLimit!);
-
-      await SetTokenExpires(_expiresAt);
-      await SetTokenExpires(_tokenRemaining);
-      await SetTokenExpires(_tokenLimit);
-    }
+  Future<Map<String, String>> BuildAuthHeader() async {
+    var _authHeader = Map<String, String>();
+    _authHeader.addAll({"Cookie": cookies.join(";")});
+    _authHeader.addAll({"authorization": bearerToken});
+    _authHeader.addAll({"x-csrf-token": csrf_token});
+    return _authHeader;
   }
 
   Future<Map<dynamic, dynamic>?> GetAuthHeader(
-      {required String username, required String password, String? email, BuildContext? context}) async {
+      {required String username, required String password, String? email}) async {
     try {
-      DeleteAllCookies();
-      if (_authHeader == null) await getAuthTokenFromPref();
-      if (!await IsTokenExpired() && _authHeader != null) return _authHeader!;
       await GetGuestId(userAgentHeader);
       await GetGT(userAgentHeader);
       await GetFlowToken1(userAgentHeader);
@@ -504,74 +428,9 @@ class XRegularAccount extends ChangeNotifier {
       await PassPassword(password, userAgentHeader);
 
       await GetAuthTokenCsrf(userAgentHeader);
-      await BuildAuthHeader();
+      return await BuildAuthHeader();
     } on Exception catch (e) {
-      this.DeleteAllCookies();
       throw Exception(e);
     }
-
-    if (_authHeader != null) {
-      return _authHeader!;
-    }
   }
-
-  Future DeleteAllCookies() async {
-    this.DeleteTokenExpires();
-    this.DeleteTokenLimit();
-    this.DeleteTokenRemaining();
-    _expiresAt = -1;
-    _tokenLimit = -1;
-    _tokenRemaining = -1;
-    cookies.clear();
-  }
-
-  Future SetKdtCookie(String cookie) async {
-    await prefs.set("KDT_Cookie", cookie);
-  }
-
-  Future<String?> GetKdtCookie() async {
-    return prefs.get("KDT_Cookie");
-  }
-
-  Future DeleteKdtCookie() async {
-    return prefs.remove("KDT_Cookie");
-  }
-
-  Future SetTokenExpires(int expiresAt) async {
-    await prefs.set("auth_expiresAt", expiresAt);
-  }
-
-  Future<int> GetTokenExpires() async {
-    return prefs.get("auth_expiresAt") ?? -1;
-  }
-
-  Future DeleteTokenExpires() async {
-    return prefs.remove("auth_expiresAt");
-  }
-
-  Future SetTokenRemaining(int tokenRemaining) async {
-    await prefs.set("auth_tokenRemaining", tokenRemaining);
-  }
-
-  Future<int> GetTokenRemaining() async {
-    return prefs.get("auth_tokenRemaining") ?? -1;
-  }
-
-  Future DeleteTokenRemaining() async {
-    return prefs.remove("auth_tokenRemaining");
-  }
-
-  Future SetTokenLimit(int tokenLimit) async {
-    await prefs.set("auth_tokenLimit", tokenLimit);
-  }
-
-  Future<int> GetTokenLimit() async {
-    return prefs.get("auth_tokenLimit") ?? -1;
-  }
-
-  Future DeleteTokenLimit() async {
-    return prefs.remove("auth_tokenLimit");
-  }
-
-  // log.info('Imported data into ${}');
 }
