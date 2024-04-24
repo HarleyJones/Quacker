@@ -30,7 +30,8 @@ class _QuackerTwitterClient extends TwitterClient {
       if (response?.statusCode != null && response!.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        return Future.error(HttpException("${response?.statusCode}: ${response?.reasonPhrase}"));
+        print(response?.body);
+        return Future.error(HttpException(response?.body ?? response?.statusCode.toString() ?? ""));
       }
     });
   }

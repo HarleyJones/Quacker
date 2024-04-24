@@ -213,17 +213,17 @@ class SubscriptionGroupMember with ToMappable {
 
 class Account {
   final String id;
-  final String password;
-  final String? email;
+  final String name;
+  final String? description;
   final dynamic authHeader;
 
-  Account({required this.id, required this.password, this.email, required this.authHeader});
+  Account({required this.id, required this.name, this.description, required this.authHeader});
 
   factory Account.fromMap(Map<String, Object?> map) {
     return Account(
       id: map['id'] as String,
-      password: map['password'] as String,
-      email: map['email'] as String?,
+      name: map['name'] as String,
+      description: map['description'] as String?,
       authHeader: map['auth_header'],
     );
   }
@@ -237,6 +237,6 @@ class Account {
 
   @override
   Map<String, dynamic> toMap() {
-    return {'screen_name': id, 'password': password, 'email': email, 'auth_header': authHeader};
+    return {'id': id, 'password': name, 'email': description, 'auth_header': authHeader};
   }
 }

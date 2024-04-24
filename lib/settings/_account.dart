@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quacker/client/client_regular_account.dart';
-import 'package:quacker/generated/l10n.dart';
-import 'package:provider/provider.dart';
 import 'package:pref/pref.dart';
-import 'package:quacker/ui/errors.dart';
+import 'package:quacker/client/client_regular_account.dart';
+import 'package:quacker/client/login_webview.dart';
+import 'package:quacker/generated/l10n.dart';
 
 class SettingsAccountFragment extends StatefulWidget {
   const SettingsAccountFragment({super.key});
@@ -15,13 +14,12 @@ class SettingsAccountFragment extends StatefulWidget {
 class _SettingsAccountFragment extends State<SettingsAccountFragment> {
   @override
   Widget build(BuildContext context) {
-    var model = context.read<XRegularAccount>();
     return Scaffold(
       appBar: AppBar(
         title: Text(L10n.current.account),
         actions: [
           IconButton(
-              onPressed: () => showDialog(context: context, builder: (_) => addDialog(model)),
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TwitterLoginWebview())),
               icon: const Icon(Icons.add))
         ],
       ),
@@ -37,127 +35,19 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                   itemBuilder: (BuildContext itemContext, int index) {
                     return Card(
                         child: ListTile(
-                      title: Text(data[index]['id'].toString()),
-                      subtitle: Text(data[index]['email'].toString()),
-                      leading: Icon(Icons.account_circle),
-                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                        IconButton(
-                          icon: Icon(Icons.refresh),
-                          onPressed: () async {
-                            await addAccount(data[index]['id'] as String, data[index]['password'] as String,
-                                data[index]['email'].toString());
-                            setState(() {});
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () async {
-                            await deleteAccount(data[index]['id'].toString());
-                            setState(() {});
-                          },
-                        )
-                      ]),
-                      onTap: () => showDialog(
-                          context: context,
-                          builder: (_) => addDialog(model,
-                              username: data[index]['id'] as String,
-                              password: data[index]['password'] as String,
-                              email: data[index]['email'].toString())),
-                    ));
+                            title: Text(L10n.of(context).account),
+                            subtitle: Text(L10n.of(context).unknown),
+                            leading: Icon(Icons.account_circle),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () async {
+                                await deleteAccount(data[index]['id'].toString());
+                                setState(() {});
+                              },
+                            )));
                   });
             }
           }),
-    );
-  }
-}
-
-class addDialog extends StatefulWidget {
-  final XRegularAccount model;
-  final String username;
-  final String password;
-  final String email;
-
-  const addDialog(this.model, {super.key, this.username = "", this.password = "", this.email = ""});
-
-  @override
-  State<addDialog> createState() => _addDialog();
-}
-
-class _addDialog extends State<addDialog> {
-  bool hidePassword = true;
-
-  TextEditingController _username = TextEditingController();
-  TextEditingController _password = TextEditingController();
-  TextEditingController _email = TextEditingController();
-
-  Widget build(BuildContext context) {
-    _username.text = widget.username;
-    _password.text = widget.password;
-    _email.text = widget.email;
-
-    return AlertDialog(
-      title: Text(L10n.of(context).account),
-      content: Column(mainAxisSize: MainAxisSize.min, children: [
-        Flexible(
-          child: TextField(
-            controller: _username,
-            decoration: InputDecoration(
-                isDense: true, label: Text(L10n.of(context).loginNameTwitterAcc), border: const OutlineInputBorder()),
-          ),
-        ),
-        const SizedBox(
-          height: 8.0,
-        ),
-        Flexible(
-          child: TextField(
-            controller: _password,
-            obscureText: hidePassword,
-            decoration: InputDecoration(
-              isDense: true,
-              label: Text(L10n.of(context).passwordTwitterAcc),
-              border: const OutlineInputBorder(),
-              suffixIcon: IconButton(
-                icon: Icon(hidePassword ? Icons.visibility : Icons.visibility_off),
-                onPressed: () => setState(() => hidePassword = !hidePassword),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 8.0,
-        ),
-        Flexible(
-          child: TextField(
-            controller: _email,
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-                isDense: true, label: Text(L10n.of(context).emailTwitterAcc), border: const OutlineInputBorder()),
-          ),
-        ),
-        const SizedBox(
-          height: 8.0,
-        ),
-        const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              "⚠️ 2FA is currently not supported ⚠️",
-              textAlign: TextAlign.center,
-            )),
-      ]),
-      actions: [
-        TextButton(
-            onPressed: () async {
-              final response = await addAccount(_username.text, _password.text, _email.text);
-              if (context.mounted) {
-                showSnackBar(context, icon: '', message: response);
-              }
-              Navigator.pop(context);
-
-              setState(() {});
-            },
-            child: Text(L10n.of(context).login)),
-        TextButton(onPressed: () => Navigator.pop(context), child: Text(L10n.of(context).close)),
-      ],
     );
   }
 }
