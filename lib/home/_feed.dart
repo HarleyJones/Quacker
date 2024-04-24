@@ -77,6 +77,7 @@ class _FeedScreenState extends State<FeedScreen>
                     padding: EdgeInsets.only(left: 8),
                     underline: Container(),
                     value: _tabValue,
+                    style: Theme.of(context).appBarTheme.titleTextStyle,
                     onChanged: (value) => setState(() {
                           if (value == L10n.current.foryou) {
                             _tab = 1;
