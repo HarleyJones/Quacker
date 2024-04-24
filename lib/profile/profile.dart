@@ -326,7 +326,10 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                                               ),
                                               if (user.verified ?? false) const SizedBox(width: 6),
                                               if (user.verified ?? false)
-                                                const Icon(Icons.verified, size: 24, color: Colors.blue)
+                                                Icon(Icons.verified, size: 24, color: theme.colorScheme.primary),
+                                              if (user.protected ?? false) const SizedBox(width: 6),
+                                              if (user.protected ?? false)
+                                                Icon(Icons.lock, size: 24, color: theme.colorScheme.primary)
                                             ],
                                           ),
                                           Container(
