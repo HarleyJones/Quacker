@@ -26,7 +26,6 @@ Future<Map<dynamic, dynamic>?> getAuthHeader(BasePrefService prefs) async {
   if (accounts.isNotEmpty) {
     Account account = Account.fromMap(accounts[Random().nextInt(accounts.length)]);
     final authHeader = Map.castFrom<String, dynamic, String, String>(json.decode(account.authHeader));
-    Logger("").info(authHeader);
 
     return authHeader;
   } else {

@@ -30,7 +30,6 @@ class _QuackerTwitterClient extends TwitterClient {
       if (response?.statusCode != null && response!.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        print(response?.body);
         return Future.error(HttpException(response?.body ?? response?.statusCode.toString() ?? ""));
       }
     });
@@ -114,7 +113,7 @@ class Twitter {
   };
 
   static Map<String, bool> gqlFeatures = {
-    "blue_business_profile_image_shape_enabled": false,
+    "blue_business_profile_image_shape_enabled": true,
     "freedom_of_speech_not_reach_fetch_enabled": false,
     "graphql_is_translatable_rweb_tweet_is_translatable_enabled": false,
     "interactive_text_enabled": false,
@@ -136,7 +135,7 @@ class Twitter {
     "tweetypie_unmention_optimization_enabled": false,
     "verified_phone_label_enabled": false,
     "vibe_api_enabled": false,
-    "view_counts_everywhere_api_enabled": false
+    "view_counts_everywhere_api_enabled": true
   };
 
   static Future<Profile> getProfileById(String id) async {
@@ -150,7 +149,7 @@ class Twitter {
       'features': jsonEncode({
         'responsive_web_graphql_timeline_navigation_enabled': true,
         'responsive_web_twitter_blue_verified_badge_is_enabled': true,
-        'verified_phone_label_enabled': false,
+        'verified_phone_label_enabled': true,
       })
     });
 
@@ -158,14 +157,22 @@ class Twitter {
   }
 
   static Future<Profile> getProfileByScreenName(String screenName) async {
-    var uri = Uri.https('twitter.com', '/i/api/graphql/vG3rchZtwqiwlKgUYCrTRA/UserByScreenName', {
-      'variables': jsonEncode({
-        'screen_name': screenName,
-        'withHighlightedLabel': true,
-        'withSafetyModeUserFields': true,
-        'withSuperFollowsUserFields': true
-      }),
-      'features': jsonEncode({'responsive_web_graphql_timeline_navigation_enabled': false})
+    var uri = Uri.https('twitter.com', '/i/api/graphql/qW5u-DAuXpMEG0zA1F7UGQ/UserByScreenName', {
+      'variables': jsonEncode({'screen_name': screenName, "withSafetyModeUserFields": true}),
+      'features': jsonEncode({
+        "hidden_profile_likes_enabled": true,
+        "hidden_profile_subscriptions_enabled": true,
+        "rweb_tipjar_consumption_enabled": true,
+        "responsive_web_graphql_exclude_directive_enabled": true,
+        "verified_phone_label_enabled": false,
+        "subscriptions_verification_info_is_identity_verified_enabled": true,
+        "subscriptions_verification_info_verified_since_enabled": true,
+        "highlights_tweets_tab_ui_enabled": true,
+        "responsive_web_twitter_article_notes_tab_enabled": true,
+        "creator_subscriptions_tweet_preview_api_enabled": true,
+        "responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
+        "responsive_web_graphql_timeline_navigation_enabled": true
+      })
     });
 
     return _getProfile(uri);
@@ -208,6 +215,8 @@ class Twitter {
           break;
       }
     }
+
+    Logger.detached("").info(result);
 
     var user = UserWithExtra.fromJson(
         {...result['legacy'], 'id_str': result['rest_id'], 'ext_is_blue_verified': result['is_blue_verified']});
@@ -324,9 +333,9 @@ class Twitter {
   static Future<TweetStatus> getTweet(String id, {String? cursor}) async {
     Map<String, Object> defaultParam = {
       "variables":
-          "{\"focalTweetId\":\"1696081434153214389\",\"referrer\":\"profile\",\"controller_data\":\"DAACDAABDAABCgABAAAAAAAAAAAKAAkNObspUxawBQAAAAA=\",\"with_rux_injections\":false,\"includePromotedContent\":true,\"withCommunity\":true,\"withQuickPromoteEligibilityTweetFields\":true,\"withBirdwatchNotes\":true,\"withVoice\":true,\"withV2Timeline\":true}",
+          "{\"focalTweetId\":\"1696081434153214389\",\"referrer\":\"profile\",\"controller_data\":\"DAACDAABDAABCgABAAAAAAAAAAAKAAkNObspUxawBQAAAAA=\",\"with_rux_injections\":false,\"includePromotedContent\":false,\"withCommunity\":true,\"withQuickPromoteEligibilityTweetFields\":true,\"withBirdwatchNotes\":true,\"withVoice\":true,\"withV2Timeline\":true}",
       "features":
-          "{\"rweb_lists_timeline_redesign_enabled\":true,\"responsive_web_graphql_exclude_directive_enabled\":true,\"verified_phone_label_enabled\":false,\"creator_subscriptions_tweet_preview_api_enabled\":true,\"responsive_web_graphql_timeline_navigation_enabled\":true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\":false,\"tweetypie_unmention_optimization_enabled\":true,\"responsive_web_edit_tweet_api_enabled\":true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\":true,\"view_counts_everywhere_api_enabled\":true,\"longform_notetweets_consumption_enabled\":true,\"responsive_web_twitter_article_tweet_consumption_enabled\":false,\"tweet_awards_web_tipping_enabled\":false,\"freedom_of_speech_not_reach_fetch_enabled\":true,\"standardized_nudges_misinfo\":true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\":true,\"longform_notetweets_rich_text_read_enabled\":true,\"longform_notetweets_inline_media_enabled\":true,\"responsive_web_media_download_video_enabled\":false,\"responsive_web_enhance_cards_enabled\":false}",
+          "{\"rweb_lists_timeline_redesign_enabled\":true,\"responsive_web_graphql_exclude_directive_enabled\":true,\"verified_phone_label_enabled\":true,\"creator_subscriptions_tweet_preview_api_enabled\":true,\"responsive_web_graphql_timeline_navigation_enabled\":true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\":false,\"tweetypie_unmention_optimization_enabled\":true,\"responsive_web_edit_tweet_api_enabled\":true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\":true,\"view_counts_everywhere_api_enabled\":true,\"longform_notetweets_consumption_enabled\":true,\"responsive_web_twitter_article_tweet_consumption_enabled\":false,\"tweet_awards_web_tipping_enabled\":false,\"freedom_of_speech_not_reach_fetch_enabled\":true,\"standardized_nudges_misinfo\":true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\":true,\"longform_notetweets_rich_text_read_enabled\":true,\"longform_notetweets_inline_media_enabled\":true,\"responsive_web_media_download_video_enabled\":false,\"responsive_web_enhance_cards_enabled\":false}",
       "fieldToggles": "{\"withArticleRichContentState\":false}"
     };
 
@@ -386,7 +395,7 @@ class Twitter {
 
     var features = {
       "responsive_web_graphql_exclude_directive_enabled": true,
-      "verified_phone_label_enabled": false,
+      "verified_phone_label_enabled": true,
       "creator_subscriptions_tweet_preview_api_enabled": true,
       "responsive_web_graphql_timeline_navigation_enabled": true,
       "responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
@@ -438,7 +447,7 @@ class Twitter {
 
     var searchFeatures = {
       "responsive_web_graphql_exclude_directive_enabled": true,
-      "verified_phone_label_enabled": false,
+      "verified_phone_label_enabled": true,
       "creator_subscriptions_tweet_preview_api_enabled": true,
       "responsive_web_graphql_timeline_navigation_enabled": true,
       "responsive_web_graphql_skip_user_profile_image_extensions_enabled": false,
@@ -531,9 +540,9 @@ class Twitter {
     bool showPinnedTweet = true;
     Map<String, Object> defaultUserTweetsParam = {
       "variables":
-          "{\"userId\":\"160534877\",\"count\":$count,\"includePromotedContent\":true,\"withQuickPromoteEligibilityTweetFields\":true,\"withVoice\":true,\"withV2Timeline\":true}",
+          "{\"userId\":\"160534877\",\"count\":$count,\"includePromotedContent\":false,\"withQuickPromoteEligibilityTweetFields\":true,\"withVoice\":true,\"withV2Timeline\":true}",
       "features":
-          "{\"rweb_lists_timeline_redesign_enabled\":true,\"responsive_web_graphql_exclude_directive_enabled\":true,\"verified_phone_label_enabled\":false,\"creator_subscriptions_tweet_preview_api_enabled\":true,\"responsive_web_graphql_timeline_navigation_enabled\":true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\":false,\"tweetypie_unmention_optimization_enabled\":true,\"responsive_web_edit_tweet_api_enabled\":true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\":true,\"view_counts_everywhere_api_enabled\":true,\"longform_notetweets_consumption_enabled\":true,\"responsive_web_twitter_article_tweet_consumption_enabled\":false,\"tweet_awards_web_tipping_enabled\":false,\"freedom_of_speech_not_reach_fetch_enabled\":true,\"standardized_nudges_misinfo\":true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\":true,\"longform_notetweets_rich_text_read_enabled\":true,\"longform_notetweets_inline_media_enabled\":true,\"responsive_web_media_download_video_enabled\":false,\"responsive_web_enhance_cards_enabled\":false}",
+          "{\"rweb_lists_timeline_redesign_enabled\":true,\"responsive_web_graphql_exclude_directive_enabled\":true,\"verified_phone_label_enabled\":true,\"creator_subscriptions_tweet_preview_api_enabled\":true,\"responsive_web_graphql_timeline_navigation_enabled\":true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\":false,\"tweetypie_unmention_optimization_enabled\":true,\"responsive_web_edit_tweet_api_enabled\":true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\":true,\"view_counts_everywhere_api_enabled\":true,\"longform_notetweets_consumption_enabled\":true,\"responsive_web_twitter_article_tweet_consumption_enabled\":false,\"tweet_awards_web_tipping_enabled\":false,\"freedom_of_speech_not_reach_fetch_enabled\":true,\"standardized_nudges_misinfo\":true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\":true,\"longform_notetweets_rich_text_read_enabled\":true,\"longform_notetweets_inline_media_enabled\":true,\"responsive_web_media_download_video_enabled\":false,\"responsive_web_enhance_cards_enabled\":false}",
       "fieldToggles": "{\"withAuxiliaryUserLabels\":false,\"withArticleRichContentState\":false}"
     };
 
@@ -578,9 +587,9 @@ class Twitter {
 
     Map<String, Object> defaultUserTweetsParam = {
       "variables":
-          "{\"userId\":\"160534877\",\"count\":20,\"includePromotedContent\":true,\"withQuickPromoteEligibilityTweetFields\":true,\"withVoice\":true,\"withV2Timeline\":true}",
+          "{\"userId\":\"160534877\",\"count\":20,\"includePromotedContent\":false,\"withQuickPromoteEligibilityTweetFields\":true,\"withVoice\":true,\"withV2Timeline\":true}",
       "features":
-          "{\"rweb_lists_timeline_redesign_enabled\":true,\"responsive_web_graphql_exclude_directive_enabled\":true,\"verified_phone_label_enabled\":false,\"creator_subscriptions_tweet_preview_api_enabled\":true,\"responsive_web_graphql_timeline_navigation_enabled\":true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\":false,\"tweetypie_unmention_optimization_enabled\":true,\"responsive_web_edit_tweet_api_enabled\":true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\":true,\"view_counts_everywhere_api_enabled\":true,\"longform_notetweets_consumption_enabled\":true,\"responsive_web_twitter_article_tweet_consumption_enabled\":false,\"tweet_awards_web_tipping_enabled\":false,\"freedom_of_speech_not_reach_fetch_enabled\":true,\"standardized_nudges_misinfo\":true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\":true,\"longform_notetweets_rich_text_read_enabled\":true,\"longform_notetweets_inline_media_enabled\":true,\"responsive_web_media_download_video_enabled\":false,\"responsive_web_enhance_cards_enabled\":false}",
+          "{\"rweb_lists_timeline_redesign_enabled\":true,\"responsive_web_graphql_exclude_directive_enabled\":true,\"verified_phone_label_enabled\":true,\"creator_subscriptions_tweet_preview_api_enabled\":true,\"responsive_web_graphql_timeline_navigation_enabled\":true,\"responsive_web_graphql_skip_user_profile_image_extensions_enabled\":false,\"tweetypie_unmention_optimization_enabled\":true,\"responsive_web_edit_tweet_api_enabled\":true,\"graphql_is_translatable_rweb_tweet_is_translatable_enabled\":true,\"view_counts_everywhere_api_enabled\":true,\"longform_notetweets_consumption_enabled\":true,\"responsive_web_twitter_article_tweet_consumption_enabled\":false,\"tweet_awards_web_tipping_enabled\":false,\"freedom_of_speech_not_reach_fetch_enabled\":true,\"standardized_nudges_misinfo\":true,\"tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled\":true,\"longform_notetweets_rich_text_read_enabled\":true,\"longform_notetweets_inline_media_enabled\":true,\"responsive_web_media_download_video_enabled\":false,\"responsive_web_enhance_cards_enabled\":false}",
       "fieldToggles": "{\"withAuxiliaryUserLabels\":false,\"withArticleRichContentState\":false}"
     };
 

@@ -4,6 +4,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
+import 'package:logging/logging.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/database/entities.dart';
 import 'package:quacker/generated/l10n.dart';
@@ -211,6 +212,7 @@ class UserWithExtra extends User {
   }
 
   factory UserWithExtra.fromJson(Map<String, dynamic> json) {
+    Logger("").info(json);
     var userWithExtra = UserWithExtra()
       ..idStr = json['id_str'] as String?
       ..name = json['name'] as String?
@@ -221,7 +223,7 @@ class UserWithExtra extends User {
       ..entities = json['entities'] == null ? null : UserEntities.fromJson(json['entities'] as Map<String, dynamic>)
       ..description = json['description'] as String?
       ..protected = json['protected'] as bool?
-      ..verified = json['ext_is_blue_verified'] ?? json['verified'] as bool?
+      ..verified = json['ext_is_blue_verified'] ?? json['verified'] ?? json['is_blue_verified'] as bool?
       ..status = json['status'] == null ? null : Tweet.fromJson(json['status'] as Map<String, dynamic>)
       ..followersCount = json['followers_count'] as int?
       ..friendsCount = json['friends_count'] as int?

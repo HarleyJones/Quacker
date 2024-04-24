@@ -28,7 +28,6 @@ class _TwitterLoginWebviewState extends State<TwitterLoginWebview> {
       onUrlChange: (change) async {
         if (change.url == "https://twitter.com/home") {
           final cookies = await webviewCookieManager.getCookies("https://twitter.com/i/flow/login");
-          Logger("").info(cookies);
 
           try {
             final expCt0 = RegExp(r'(ct0=(.+?));');
