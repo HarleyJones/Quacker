@@ -52,8 +52,7 @@ class _TwitterLoginWebviewState extends State<TwitterLoginWebview> {
               print(authHeader);
 
               final database = await Repository.writable();
-              database.insert(tableAccounts,
-                  Account(id: csrfToken, name: "", description: "", authHeader: json.encode(authHeader)).toMap());
+              database.insert(tableAccounts, Account(id: csrfToken, authHeader: json.encode(authHeader)).toMap());
               database.close();
             }
             Navigator.pop(context);
