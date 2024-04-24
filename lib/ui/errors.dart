@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:async_button_builder/async_button_builder.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -177,7 +178,7 @@ class InlineErrorWidget extends FritterErrorWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(right: 8),
-            child: const Icon(Icons.error_outline, color: Colors.red),
+            child: Icon(Icons.error_outline, color: Colors.red.harmonizeWith(Theme.of(context).colorScheme.primary)),
           ),
           Text('$error', textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).hintColor)),
         ],
@@ -269,7 +270,8 @@ class FullPageErrorWidget extends FritterErrorWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(bottom: 16),
-            child: const Icon(Icons.error_outline, color: Colors.red, size: 36),
+            child: Icon(Icons.error_outline,
+                color: Colors.red.harmonizeWith(Theme.of(context).colorScheme.primary), size: 36),
           ),
           Text(
             L10n.of(context).oops_something_went_wrong,

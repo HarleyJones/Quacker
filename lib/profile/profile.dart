@@ -421,7 +421,9 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                                                                             return InkWell(
                                                                               child: Text(displayUrl,
                                                                                   style: textStyle.copyWith(
-                                                                                      color: Colors.blue)),
+                                                                                      color: Theme.of(context)
+                                                                                          .colorScheme
+                                                                                          .primary)),
                                                                               onTap: () => openUri(expandedUrl),
                                                                             );
                                                                           }),

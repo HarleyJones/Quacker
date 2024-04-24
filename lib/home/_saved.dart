@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
@@ -126,7 +127,8 @@ class SavedTweetTooLarge extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              leading: const Icon(Icons.error_outline, color: Colors.red),
+              leading:
+                  Icon(Icons.error_outline, color: Colors.red.harmonizeWith(Theme.of(context).colorScheme.primary)),
               title: Text(L10n.current.oops_something_went_wrong),
               subtitle: Text(L10n.current.saved_tweet_too_large),
             ),

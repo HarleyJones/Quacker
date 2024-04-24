@@ -85,8 +85,7 @@ class UserTile extends StatelessWidget {
         children: [
           Flexible(child: Text(user.name, maxLines: 1, overflow: TextOverflow.ellipsis)),
           if (user.verified) const SizedBox(width: 6),
-          if (user.verified)
-            Icon(Icons.verified, size: 14, color: Colors.blue.harmonizeWith(Theme.of(context).colorScheme.primary))
+          if (user.verified) Icon(Icons.verified, size: 14, color: Theme.of(context).colorScheme.primary)
         ],
       ),
       subtitle: Text('@${user.screenName}', maxLines: 1, overflow: TextOverflow.ellipsis),

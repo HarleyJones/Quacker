@@ -1,5 +1,6 @@
 import 'package:auto_direction/auto_direction.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:quacker/client/client.dart';
@@ -435,7 +436,8 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
     Widget translateButton;
     switch (_translationStatus) {
       case TranslationStatus.original:
-        translateButton = _createFooterIconButton(Icons.translate, Colors.blue, null, () async => onClickTranslate());
+        translateButton = _createFooterIconButton(Icons.translate,
+            Colors.blue.harmonizeWith(Theme.of(context).colorScheme.primary), null, () async => onClickTranslate());
         break;
       case TranslationStatus.translating:
         translateButton = const Padding(
@@ -444,11 +446,12 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
         );
         break;
       case TranslationStatus.translationFailed:
-        translateButton = _createFooterIconButton(Icons.translate, Colors.red, null, () async => onClickTranslate());
+        translateButton = _createFooterIconButton(Icons.translate,
+            Colors.red.harmonizeWith(Theme.of(context).colorScheme.primary), null, () async => onClickTranslate());
         break;
       case TranslationStatus.translated:
-        translateButton =
-            _createFooterIconButton(Icons.translate, Colors.green, null, () async => onClickShowOriginal());
+        translateButton = _createFooterIconButton(Icons.translate,
+            Colors.green.harmonizeWith(Theme.of(context).colorScheme.primary), null, () async => onClickShowOriginal());
         break;
     }
 
@@ -506,7 +509,8 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(fontWeight: FontWeight.w500))),
                                   if (tweet.user!.verified ?? false) const SizedBox(width: 4),
-                                  if (tweet.user!.verified ?? false) Icon(Icons.verified, size: 18, color: Colors.blue)
+                                  if (tweet.user!.verified ?? false)
+                                    Icon(Icons.verified, size: 18, color: Theme.of(context).colorScheme.primary)
                                 ],
                               ),
                             ),
