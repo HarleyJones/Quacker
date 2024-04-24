@@ -251,37 +251,38 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                   pinned: true,
                   snap: false,
                   forceElevated: innerBoxIsScrolled,
-                  bottom: TabBar(
-                    controller: _tabController,
-                    isScrollable: true,
-                    tabAlignment: TabAlignment.start,
-                    tabs: [
-                      Tab(
-                        child: Text(
-                          L10n.of(context).tweets,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Tab(
-                        child: Text(
-                          L10n.of(context).tweets_and_replies,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Tab(
-                        child: Text(
-                          L10n.of(context).media,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Tab(
-                        child: Text(
-                          L10n.of(context).saved,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
+                  bottom: AppBar(
+                      automaticallyImplyLeading: false,
+                      backgroundColor: theme.colorScheme.surface,
+                      flexibleSpace: TabBar(
+                        controller: _tabController,
+                        tabs: [
+                          Tab(
+                            child: Text(
+                              L10n.of(context).tweets,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              L10n.of(context).tweets_and_replies,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              L10n.of(context).media,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              L10n.of(context).saved,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      )),
                   flexibleSpace: FlexibleSpaceBar(
                       background: SafeArea(
                     top: false,
@@ -289,12 +290,16 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                       style: const TextStyle(color: Colors.white),
                       child: Stack(fit: StackFit.expand, children: <Widget>[
                         Container(alignment: Alignment.topCenter, child: bannerImage),
-                        const DecoratedBox(
+                        DecoratedBox(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
-                              colors: <Color>[Color(0xDD000000), Color(0x80000000)],
+                              colors: <Color>[
+                                theme.colorScheme.surface,
+                                Color.fromARGB(100, theme.colorScheme.surface.red, theme.colorScheme.surface.green,
+                                    theme.colorScheme.surface.blue)
+                              ],
                             ),
                           ),
                         ),
@@ -344,164 +349,167 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                                                       children: _addLinksToText(context, user.description!)))),
                                         ),
                                       MeasureSize(
-                                        onChange: (size) {
-                                          setState(() {
-                                            metadataHeight = size.height;
-                                            metadataResized = true;
-                                          });
-                                        },
-                                        child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              Scrollbar(
-                                                  child: SingleChildScrollView(
-                                                      scrollDirection: Axis.horizontal,
-                                                      child: Row(children: [
-                                                        if (user.location != null && user.location!.isNotEmpty)
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                                                            child: Row(
-                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                              children: [
-                                                                const Icon(Icons.location_on,
-                                                                    size: 12, color: Colors.white),
-                                                                const SizedBox(width: 4),
-                                                                Text(user.location!, style: metadataTextStyle),
-                                                                const SizedBox(
-                                                                  width: 8,
+                                          onChange: (size) {
+                                            setState(() {
+                                              metadataHeight = size.height;
+                                              metadataResized = true;
+                                            });
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(bottom: 8.0),
+                                            child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  Scrollbar(
+                                                      child: SingleChildScrollView(
+                                                          scrollDirection: Axis.horizontal,
+                                                          child: Row(children: [
+                                                            if (user.location != null && user.location!.isNotEmpty)
+                                                              Padding(
+                                                                padding: const EdgeInsets.symmetric(
+                                                                    vertical: 2, horizontal: 0),
+                                                                child: Row(
+                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                  children: [
+                                                                    const Icon(Icons.location_on,
+                                                                        size: 12, color: Colors.white),
+                                                                    const SizedBox(width: 4),
+                                                                    Text(user.location!, style: metadataTextStyle),
+                                                                    const SizedBox(
+                                                                      width: 8,
+                                                                    ),
+                                                                  ],
                                                                 ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        if (user.url != null && user.url!.isNotEmpty)
-                                                          Padding(
-                                                              padding: const EdgeInsets.symmetric(
-                                                                  vertical: 2, horizontal: 0),
-                                                              child: Row(
-                                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                                children: [
-                                                                  const Icon(Icons.link, size: 12, color: Colors.white),
-                                                                  const SizedBox(width: 4),
-                                                                  Builder(builder: (context) {
-                                                                    var url = user.entities?.url?.urls?.firstWhere(
-                                                                        (element) => element.url == user.url);
-
-                                                                    if (url == null) {
-                                                                      return Container();
-                                                                    }
-
-                                                                    var displayUrl = url.displayUrl ?? url.url;
-                                                                    var expandedUrl = url.expandedUrl ?? url.url;
-
-                                                                    var textStyle = metadataTextStyle;
-                                                                    if (displayUrl == null || expandedUrl == null) {
-                                                                      return Text(L10n.current.unsupported_url,
-                                                                          style: textStyle.copyWith(
-                                                                              color: theme.hintColor));
-                                                                    }
-
-                                                                    return InkWell(
-                                                                      child: Text(displayUrl,
-                                                                          style:
-                                                                              textStyle.copyWith(color: Colors.blue)),
-                                                                      onTap: () => openUri(expandedUrl),
-                                                                    );
-                                                                  }),
-                                                                  const SizedBox(
-                                                                    width: 8,
-                                                                  ),
-                                                                ],
-                                                              )),
-                                                        if (user.createdAt != null)
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                                                            child: Row(
-                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                              children: [
-                                                                const Icon(Icons.calendar_today,
-                                                                    size: 12, color: Colors.white),
-                                                                const SizedBox(width: 4),
-                                                                Text(
-                                                                    L10n.of(context).joined(DateFormat('MMMM yyyy')
-                                                                        .format(user.createdAt!)),
-                                                                    style: metadataTextStyle),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                      ]))),
-                                              Scrollbar(
-                                                  child: SingleChildScrollView(
-                                                      scrollDirection: Axis.horizontal,
-                                                      child: Row(
-                                                        children: [
-                                                          if (user.friendsCount != null)
-                                                            InkWell(
-                                                                onTap: () => Navigator.of(context).push(
-                                                                    MaterialPageRoute(
-                                                                        builder: ((context) => ProfileFollows(
-                                                                            user: user, type: 'following')))),
-                                                                child: Padding(
+                                                              ),
+                                                            if (user.url != null && user.url!.isNotEmpty)
+                                                              Padding(
                                                                   padding: const EdgeInsets.symmetric(
                                                                       vertical: 2, horizontal: 0),
                                                                   child: Row(
                                                                     crossAxisAlignment: CrossAxisAlignment.center,
                                                                     children: [
-                                                                      const Icon(Icons.person,
+                                                                      const Icon(Icons.link,
                                                                           size: 12, color: Colors.white),
                                                                       const SizedBox(width: 4),
-                                                                      Text.rich(TextSpan(children: [
-                                                                        TextSpan(
-                                                                            text: numberFormat.format(
-                                                                                widget.profile.user.friendsCount),
-                                                                            style: metadataTextStyle.copyWith(
-                                                                                fontWeight: FontWeight.w500)),
-                                                                        TextSpan(
-                                                                            text:
-                                                                                ' ${L10n.current.following.toLowerCase()}',
-                                                                            style: metadataTextStyle)
-                                                                      ])),
+                                                                      Builder(builder: (context) {
+                                                                        var url = user.entities?.url?.urls?.firstWhere(
+                                                                            (element) => element.url == user.url);
+
+                                                                        if (url == null) {
+                                                                          return Container();
+                                                                        }
+
+                                                                        var displayUrl = url.displayUrl ?? url.url;
+                                                                        var expandedUrl = url.expandedUrl ?? url.url;
+
+                                                                        var textStyle = metadataTextStyle;
+                                                                        if (displayUrl == null || expandedUrl == null) {
+                                                                          return Text(L10n.current.unsupported_url,
+                                                                              style: textStyle.copyWith(
+                                                                                  color: theme.hintColor));
+                                                                        }
+
+                                                                        return InkWell(
+                                                                          child: Text(displayUrl,
+                                                                              style: textStyle.copyWith(
+                                                                                  color: Colors.blue)),
+                                                                          onTap: () => openUri(expandedUrl),
+                                                                        );
+                                                                      }),
                                                                       const SizedBox(
                                                                         width: 8,
                                                                       ),
                                                                     ],
-                                                                  ),
-                                                                )),
-                                                          if (user.followersCount != null)
-                                                            InkWell(
-                                                                onTap: () => Navigator.of(context).push(
-                                                                    MaterialPageRoute(
-                                                                        builder: ((context) => ProfileFollows(
-                                                                            user: user, type: 'followers')))),
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.symmetric(
-                                                                      vertical: 2, horizontal: 0),
-                                                                  child: Row(
-                                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                                    children: [
-                                                                      const Icon(Icons.person,
-                                                                          size: 12, color: Colors.white),
-                                                                      const SizedBox(width: 4),
-                                                                      Text.rich(TextSpan(children: [
-                                                                        TextSpan(
-                                                                            text: numberFormat.format(
-                                                                                widget.profile.user.followersCount),
-                                                                            style: metadataTextStyle.copyWith(
-                                                                                fontWeight: FontWeight.w500)),
-                                                                        TextSpan(
-                                                                            text:
-                                                                                ' ${L10n.current.followers.toLowerCase()}',
-                                                                            style: metadataTextStyle)
-                                                                      ])),
-                                                                    ],
-                                                                  ),
-                                                                )),
-                                                        ],
-                                                      )))
-                                            ]),
-                                      ),
+                                                                  )),
+                                                            if (user.createdAt != null)
+                                                              Padding(
+                                                                padding: const EdgeInsets.symmetric(
+                                                                    vertical: 2, horizontal: 0),
+                                                                child: Row(
+                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                  children: [
+                                                                    const Icon(Icons.calendar_today,
+                                                                        size: 12, color: Colors.white),
+                                                                    const SizedBox(width: 4),
+                                                                    Text(
+                                                                        L10n.of(context).joined(DateFormat('MMMM yyyy')
+                                                                            .format(user.createdAt!)),
+                                                                        style: metadataTextStyle),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                          ]))),
+                                                  Scrollbar(
+                                                      child: SingleChildScrollView(
+                                                          scrollDirection: Axis.horizontal,
+                                                          child: Row(
+                                                            children: [
+                                                              if (user.friendsCount != null)
+                                                                InkWell(
+                                                                    onTap: () => Navigator.of(context).push(
+                                                                        MaterialPageRoute(
+                                                                            builder: ((context) => ProfileFollows(
+                                                                                user: user, type: 'following')))),
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.symmetric(
+                                                                          vertical: 2, horizontal: 0),
+                                                                      child: Row(
+                                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                                        children: [
+                                                                          const Icon(Icons.person,
+                                                                              size: 12, color: Colors.white),
+                                                                          const SizedBox(width: 4),
+                                                                          Text.rich(TextSpan(children: [
+                                                                            TextSpan(
+                                                                                text: numberFormat.format(
+                                                                                    widget.profile.user.friendsCount),
+                                                                                style: metadataTextStyle.copyWith(
+                                                                                    fontWeight: FontWeight.w500)),
+                                                                            TextSpan(
+                                                                                text:
+                                                                                    ' ${L10n.current.following.toLowerCase()}',
+                                                                                style: metadataTextStyle)
+                                                                          ])),
+                                                                          const SizedBox(
+                                                                            width: 8,
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    )),
+                                                              if (user.followersCount != null)
+                                                                InkWell(
+                                                                    onTap: () => Navigator.of(context).push(
+                                                                        MaterialPageRoute(
+                                                                            builder: ((context) => ProfileFollows(
+                                                                                user: user, type: 'followers')))),
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.symmetric(
+                                                                          vertical: 2, horizontal: 0),
+                                                                      child: Row(
+                                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                                        children: [
+                                                                          const Icon(Icons.person,
+                                                                              size: 12, color: Colors.white),
+                                                                          const SizedBox(width: 4),
+                                                                          Text.rich(TextSpan(children: [
+                                                                            TextSpan(
+                                                                                text: numberFormat.format(
+                                                                                    widget.profile.user.followersCount),
+                                                                                style: metadataTextStyle.copyWith(
+                                                                                    fontWeight: FontWeight.w500)),
+                                                                            TextSpan(
+                                                                                text:
+                                                                                    ' ${L10n.current.followers.toLowerCase()}',
+                                                                                style: metadataTextStyle)
+                                                                          ])),
+                                                                        ],
+                                                                      ),
+                                                                    )),
+                                                            ],
+                                                          )))
+                                                ]),
+                                          )),
                                     ],
                                   ),
                                 ),
