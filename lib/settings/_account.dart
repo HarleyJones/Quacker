@@ -36,7 +36,11 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                     return Card(
                         child: ListTile(
                             title: Text(L10n.of(context).account),
-                            subtitle: Text(L10n.of(context).unknown),
+                            subtitle: Text(
+                              data[index]['id'].toString(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                             leading: Icon(Icons.account_circle),
                             trailing: IconButton(
                               icon: Icon(Icons.delete),
