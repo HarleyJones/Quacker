@@ -13,12 +13,13 @@ import '../constants.dart';
 final UserWithExtra user = UserWithExtra();
 
 class ForYouTweets extends StatefulWidget {
+  final PagingController<String?, TweetChain> pagingController;
   final String type;
   final bool includeReplies;
   final List<String> pinnedTweets;
   final BasePrefService pref;
 
-  const ForYouTweets(
+  const ForYouTweets(this.pagingController,
       {Key? key, required this.type, required this.includeReplies, required this.pinnedTweets, required this.pref})
       : super(key: key);
 
@@ -27,7 +28,6 @@ class ForYouTweets extends StatefulWidget {
 }
 
 class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClientMixin<ForYouTweets> {
-  late PagingController<String?, TweetChain> _pagingController;
   static const int pageSize = 20;
   int loadTweetsCounter = 0;
   @override
@@ -39,15 +39,15 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
     user.idStr = "1";
     user.possiblySensitive = false;
     user.screenName = "ForYou";
-    _pagingController = PagingController(firstPageKey: null);
-    _pagingController.addPageRequestListener((cursor) {
+
+    widget.pagingController.addPageRequestListener((cursor) {
       _loadTweets(cursor);
     });
   }
 
   @override
   void dispose() {
-    _pagingController.dispose();
+    widget.pagingController.dispose();
     super.dispose();
   }
 
@@ -76,16 +76,20 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
         return;
       }
 
-      if (result.cursorBottom == _pagingController.nextPageKey) {
-        _pagingController.appendLastPage([]);
+      if (result.cursorBottom == widget.pagingController.nextPageKey) {
+        widget.pagingController.appendLastPage([]);
       } else {
-        _pagingController.appendPage(result.chains, result.cursorBottom);
+        widget.pagingController.appendPage(result.chains, result.cursorBottom);
       }
     } catch (e, stackTrace) {
       if (mounted) {
-        _pagingController.error = [e, stackTrace];
+        widget.pagingController.error = [e, stackTrace];
       }
     }
+  }
+
+  void refresh() async {
+    widget.pagingController.refresh();
   }
 
   @override
@@ -109,10 +113,10 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
             }
 
             return RefreshIndicator(
-              onRefresh: () async => _pagingController.refresh(),
+              onRefresh: () async => refresh(),
               child: PagedListView<String?, TweetChain>(
                 padding: const EdgeInsets.only(top: 4),
-                pagingController: _pagingController,
+                pagingController: widget.pagingController,
                 addAutomaticKeepAlives: false,
                 builderDelegate: PagedChildBuilderDelegate(
                   itemBuilder: (context, chain, index) {
@@ -120,16 +124,16 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
                         id: chain.id, tweets: chain.tweets, username: user.screenName!, isPinned: chain.isPinned);
                   },
                   firstPageErrorIndicatorBuilder: (context) => FullPageErrorWidget(
-                    error: _pagingController.error[0],
-                    stackTrace: _pagingController.error[1],
+                    error: widget.pagingController.error[0],
+                    stackTrace: widget.pagingController.error[1],
                     prefix: L10n.of(context).unable_to_load_the_tweets,
-                    onRetry: () => _loadTweets(_pagingController.firstPageKey),
+                    onRetry: () => _loadTweets(widget.pagingController.firstPageKey),
                   ),
                   newPageErrorIndicatorBuilder: (context) => FullPageErrorWidget(
-                    error: _pagingController.error[0],
-                    stackTrace: _pagingController.error[1],
+                    error: widget.pagingController.error[0],
+                    stackTrace: widget.pagingController.error[1],
                     prefix: L10n.of(context).unable_to_load_the_next_page_of_tweets,
-                    onRetry: () => _loadTweets(_pagingController.nextPageKey),
+                    onRetry: () => _loadTweets(widget.pagingController.nextPageKey),
                   ),
                   noItemsFoundIndicatorBuilder: (context) {
                     return Center(

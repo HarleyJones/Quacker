@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
+import 'package:quacker/client/client.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/home/_forYou.dart';
 import 'package:quacker/generated/l10n.dart';
@@ -28,6 +30,7 @@ class _FeedScreenState extends State<FeedScreen>
 
   UserWithExtra user = UserWithExtra();
 
+  PagingController<String?, TweetChain> _pagingController = PagingController(firstPageKey: null);
   late TabController _tabController;
   int _tab = 0;
   Duration animationDuration = Duration.zero;
@@ -87,6 +90,11 @@ class _FeedScreenState extends State<FeedScreen>
                 actions: _tab == 1
                     ? [
                         IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: () async {
+                              _pagingController.refresh();
+                            }),
+                        IconButton(
                             icon: const Icon(Icons.arrow_upward),
                             onPressed: () async {
                               if (_disableAnimations == false) {
@@ -125,7 +133,8 @@ class _FeedScreenState extends State<FeedScreen>
             SubscriptionGroupScreenContent(
               id: widget.id,
             ),
-            ForYouTweets(type: 'profile', includeReplies: false, pinnedTweets: [], pref: PrefService.of(context)),
+            ForYouTweets(_pagingController,
+                type: 'profile', includeReplies: false, pinnedTweets: [], pref: PrefService.of(context)),
           ][_tab]);
     });
   }
