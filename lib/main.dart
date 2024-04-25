@@ -393,7 +393,9 @@ class _FritterAppState extends State<FritterApp> {
         theme: ThemeData(
           colorScheme: _themeColor == 'accent'
               ? lightDynamic
-              : ColorScheme.fromSeed(seedColor: themeColors[_themeColor]!, brightness: Brightness.light),
+              : ColorScheme.fromSeed(
+                  seedColor: themeColors[_themeColor]!.harmonizeWith(lightDynamic?.primary ?? Colors.transparent),
+                  brightness: Brightness.light),
           pageTransitionsTheme: _disableAnimations == true
               ? PageTransitionsTheme(
                   builders: {
@@ -408,11 +410,16 @@ class _FritterAppState extends State<FritterApp> {
           colorScheme: (_trueBlack == true
               ? (_themeColor == 'accent'
                       ? darkDynamic
-                      : ColorScheme.fromSeed(seedColor: themeColors[_themeColor]!, brightness: Brightness.dark))
+                      : ColorScheme.fromSeed(
+                          seedColor:
+                              themeColors[_themeColor]!.harmonizeWith(lightDynamic?.primary ?? Colors.transparent),
+                          brightness: Brightness.dark))
                   ?.copyWith(background: Colors.black, surface: Colors.black)
               : (_themeColor == 'accent'
                   ? darkDynamic
-                  : ColorScheme.fromSeed(seedColor: themeColors[_themeColor]!, brightness: Brightness.dark))),
+                  : ColorScheme.fromSeed(
+                      seedColor: themeColors[_themeColor]!.harmonizeWith(lightDynamic?.primary ?? Colors.transparent),
+                      brightness: Brightness.dark))),
           pageTransitionsTheme: _disableAnimations == true
               ? PageTransitionsTheme(
                   builders: {
