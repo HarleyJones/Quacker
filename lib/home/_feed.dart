@@ -87,45 +87,30 @@ class _FeedScreenState extends State<FeedScreen>
                       DropdownMenuEntry(value: L10n.current.following, label: L10n.current.following),
                       DropdownMenuEntry(value: L10n.current.foryou, label: L10n.current.foryou)
                     ]),
-                actions: _tab == 1
-                    ? [
-                        IconButton(
-                            icon: const Icon(Icons.refresh),
-                            onPressed: () async {
-                              _pagingController.refresh();
-                            }),
-                        IconButton(
-                            icon: const Icon(Icons.arrow_upward),
-                            onPressed: () async {
-                              if (_disableAnimations == false) {
-                                await widget.scrollController
-                                    .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                              } else {
-                                widget.scrollController.jumpTo(0);
-                              }
-                            }),
-                        ...createCommonAppBarActions(context)
-                      ]
-                    : [
-                        IconButton(
-                            icon: const Icon(Icons.more_vert), onPressed: () => showFeedSettings(context, model)),
-                        IconButton(
-                            icon: const Icon(Icons.arrow_upward),
-                            onPressed: () async {
-                              if (_disableAnimations == false) {
-                                await widget.scrollController
-                                    .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                              } else {
-                                widget.scrollController.jumpTo(0);
-                              }
-                            }),
-                        IconButton(
-                            icon: const Icon(Icons.refresh),
-                            onPressed: () async {
-                              await model.loadGroup();
-                            }),
-                        ...createCommonAppBarActions(context)
-                      ],
+                actions: [
+                  if (_tab == 0)
+                    IconButton(icon: const Icon(Icons.more_vert), onPressed: () => showFeedSettings(context, model)),
+                  IconButton(
+                      icon: const Icon(Icons.arrow_upward),
+                      onPressed: () async {
+                        if (_disableAnimations == false) {
+                          await widget.scrollController
+                              .animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                        } else {
+                          widget.scrollController.jumpTo(0);
+                        }
+                      }),
+                  IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () async {
+                        if (_tab == 0) {
+                          await model.loadGroup();
+                        } else {
+                          _pagingController.refresh();
+                        }
+                      }),
+                  ...createCommonAppBarActions(context)
+                ],
               ),
             ];
           },
