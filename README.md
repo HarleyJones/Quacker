@@ -16,16 +16,13 @@
 
 <p align="center">
   <a href="https://github.com/TheHCJ/Quacker/releases" alt="GitHub release">
-    <img src="https://img.shields.io/github/v/release/TheHCJ/Quacker?style=flat&logo=github&color=2dba4e
-    " alt="GitHub release">
+    <img src="https://img.shields.io/github/v/release/TheHCJ/Quacker?style=flat&logo=github&color=2dba4e" alt="GitHub release">
   </a>
   <a href="https://f-droid.org/packages/com.thehcj.quacker/">
-    <img src="https://img.shields.io/f-droid/v/com.thehcj.quacker?logo=fdroid&color=%232278CF
-    " alt="F-Droid Version">
+    <img src="https://img.shields.io/f-droid/v/com.thehcj.quacker?logo=fdroid&color=%232278CF" alt="F-Droid Version">
   </a>
   <a href="/LICENSE" alt="License: MIT">
-    <img src="https://img.shields.io/github/license/TheHCJ/Quacker?logo=opensourceinitiative&logoColor=FFFFFF&color=750014
-    " alt="License: MIT">
+    <img src="https://img.shields.io/github/license/TheHCJ/Quacker?logo=opensourceinitiative&logoColor=FFFFFF&color=750014" alt="License: MIT">
   </a>
   <a href="https://github.com/TheHCJ/Quacker/actions" alt="Build Status">
     <img src="https://github.com/TheHCJ/Quacker/workflows/ci/badge.svg" alt="Build Status">
