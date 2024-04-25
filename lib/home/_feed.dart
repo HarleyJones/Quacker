@@ -73,25 +73,23 @@ class _FeedScreenState extends State<FeedScreen>
                 pinned: false,
                 snap: true,
                 floating: true,
-                title: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DropdownMenu(
-                        inputDecorationTheme: InputDecorationTheme(
-                            isDense: true, border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
-                        initialSelection: L10n.current.following,
-                        textStyle: Theme.of(context).appBarTheme.titleTextStyle,
-                        onSelected: (value) => setState(() {
-                              if (value == L10n.current.foryou) {
-                                _tab = 1;
-                              } else if (value == L10n.current.following) {
-                                _tab = 0;
-                              }
-                              _tabValue = value;
-                            }),
-                        dropdownMenuEntries: [
-                          DropdownMenuEntry(value: L10n.current.following, label: L10n.current.following),
-                          DropdownMenuEntry(value: L10n.current.foryou, label: L10n.current.foryou)
-                        ])),
+                title: DropdownMenu(
+                    inputDecorationTheme: InputDecorationTheme(
+                        isDense: true, border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                    initialSelection: L10n.current.following,
+                    textStyle: Theme.of(context).appBarTheme.titleTextStyle,
+                    onSelected: (value) => setState(() {
+                          if (value == L10n.current.foryou) {
+                            _tab = 1;
+                          } else if (value == L10n.current.following) {
+                            _tab = 0;
+                          }
+                          _tabValue = value;
+                        }),
+                    dropdownMenuEntries: [
+                      DropdownMenuEntry(value: L10n.current.following, label: L10n.current.following),
+                      DropdownMenuEntry(value: L10n.current.foryou, label: L10n.current.foryou)
+                    ]),
                 actions: _tab == 1
                     ? [
                         IconButton(
