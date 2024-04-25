@@ -163,6 +163,7 @@ Future<void> main() async {
     optionThemeMode: 'system',
     optionThemeColor: 'orange',
     optionThemeTrueBlack: false,
+    optionThemeTrueBlackTweetCards: false,
     optionShowNavigationLabels: true,
     optionTweetsHideSensitive: true,
     optionUserTrendsLocations: jsonEncode({

@@ -395,6 +395,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "trending": MessageLookupByLibrary.simpleMessage("Trending"),
         "trends": MessageLookupByLibrary.simpleMessage("Trends"),
         "true_black": MessageLookupByLibrary.simpleMessage("True Black?"),
+        "true_black_tweet_cards":
+            MessageLookupByLibrary.simpleMessage("True black tweet cards?"),
         "tweets": MessageLookupByLibrary.simpleMessage("Posts"),
         "tweets_and_replies":
             MessageLookupByLibrary.simpleMessage("Posts & Replies"),
@@ -467,6 +469,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "use_true_black_for_the_dark_mode_theme":
             MessageLookupByLibrary.simpleMessage(
                 "Use true black for the dark mode theme"),
+        "use_true_black_for_tweet_cards": MessageLookupByLibrary.simpleMessage(
+            "Use true black for tweet cards"),
         "user_not_found":
             MessageLookupByLibrary.simpleMessage("User not found"),
         "username": MessageLookupByLibrary.simpleMessage("Username"),

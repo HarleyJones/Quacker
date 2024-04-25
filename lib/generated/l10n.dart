@@ -772,6 +772,26 @@ class L10n {
     );
   }
 
+  /// `True black tweet cards?`
+  String get true_black_tweet_cards {
+    return Intl.message(
+      'True black tweet cards?',
+      name: 'true_black_tweet_cards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use true black for tweet cards`
+  String get use_true_black_for_tweet_cards {
+    return Intl.message(
+      'Use true black for tweet cards',
+      name: 'use_true_black_for_tweet_cards',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Data`
   String get data {
     return Intl.message(

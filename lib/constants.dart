@@ -36,6 +36,7 @@ const optionSubscriptionOrderByField = 'subscription.order_by.field';
 const optionThemeMode = 'theme.mode';
 const optionThemeColor = 'theme.color';
 const optionThemeTrueBlack = 'theme.true_black';
+const optionThemeTrueBlackTweetCards = 'theme.true_black_tweet_cards';
 const optionShowNavigationLabels = 'theme.show_navigation_labels';
 
 const themeColors = {
