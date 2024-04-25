@@ -15,7 +15,7 @@ class FeedScreen extends StatefulWidget {
   final String id;
   final String name;
 
-  const FeedScreen({Key? key, required this.scrollController, required this.id, required this.name}) : super(key: key);
+  const FeedScreen({super.key, required this.scrollController, required this.id, required this.name});
 
   @override
   State<FeedScreen> createState() => _FeedScreenState();
@@ -30,7 +30,6 @@ class _FeedScreenState extends State<FeedScreen>
 
   late TabController _tabController;
   int _tab = 0;
-  dynamic _tabValue = L10n.current.following;
   Duration animationDuration = Duration.zero;
 
   @override
@@ -52,10 +51,6 @@ class _FeedScreenState extends State<FeedScreen>
   Widget build(BuildContext context) {
     super.build(context);
     final bool _disableAnimations = PrefService.of(context).get(optionDisableAnimations) == true;
-
-    user.idStr = "1";
-    user.possiblySensitive = false;
-    user.screenName = "ForYou";
 
     return Provider<GroupModel>(create: (context) {
       var model = GroupModel(widget.id);
@@ -84,7 +79,6 @@ class _FeedScreenState extends State<FeedScreen>
                           } else if (value == L10n.current.following) {
                             _tab = 0;
                           }
-                          _tabValue = value;
                         }),
                     dropdownMenuEntries: [
                       DropdownMenuEntry(value: L10n.current.following, label: L10n.current.following),
@@ -131,8 +125,7 @@ class _FeedScreenState extends State<FeedScreen>
             SubscriptionGroupScreenContent(
               id: widget.id,
             ),
-            ForYouTweets(
-                user: user, type: 'profile', includeReplies: false, pinnedTweets: [], pref: PrefService.of(context)),
+            ForYouTweets(type: 'profile', includeReplies: false, pinnedTweets: [], pref: PrefService.of(context)),
           ][_tab]);
     });
   }

@@ -10,20 +10,16 @@ import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 import '../constants.dart';
 
+final UserWithExtra user = UserWithExtra();
+
 class ForYouTweets extends StatefulWidget {
-  final UserWithExtra user;
   final String type;
   final bool includeReplies;
   final List<String> pinnedTweets;
   final BasePrefService pref;
 
   const ForYouTweets(
-      {Key? key,
-      required this.user,
-      required this.type,
-      required this.includeReplies,
-      required this.pinnedTweets,
-      required this.pref})
+      {Key? key, required this.type, required this.includeReplies, required this.pinnedTweets, required this.pref})
       : super(key: key);
 
   @override
@@ -40,6 +36,9 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
   @override
   void initState() {
     super.initState();
+    user.idStr = "1";
+    user.possiblySensitive = false;
+    user.screenName = "ForYou";
     _pagingController = PagingController(firstPageKey: null);
     _pagingController.addPageRequestListener((cursor) {
       _loadTweets(cursor);
@@ -63,7 +62,7 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
   Future _loadTweets(String? cursor) async {
     try {
       var result = await Twitter.getTimelineTweets(
-        widget.user.idStr!,
+        user.idStr!,
         widget.type,
         widget.pinnedTweets,
         cursor: cursor,
@@ -99,7 +98,7 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
         ],
         builder: (context, child) {
           return Consumer<TweetContextState>(builder: (context, model, child) {
-            if (model.hideSensitive && (widget.user.possiblySensitive ?? false)) {
+            if (model.hideSensitive && (user.possiblySensitive ?? false)) {
               return EmojiErrorWidget(
                 emoji: '🍆🙈🍆',
                 message: L10n.current.possibly_sensitive,
@@ -118,10 +117,7 @@ class _ForYouTweetsState extends State<ForYouTweets> with AutomaticKeepAliveClie
                 builderDelegate: PagedChildBuilderDelegate(
                   itemBuilder: (context, chain, index) {
                     return TweetConversation(
-                        id: chain.id,
-                        tweets: chain.tweets,
-                        username: widget.user.screenName!,
-                        isPinned: chain.isPinned);
+                        id: chain.id, tweets: chain.tweets, username: user.screenName!, isPinned: chain.isPinned);
                   },
                   firstPageErrorIndicatorBuilder: (context) => FullPageErrorWidget(
                     error: _pagingController.error[0],
