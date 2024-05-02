@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:pref/pref.dart';
 import 'package:quacker/client/client_regular_account.dart';
@@ -34,22 +35,22 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
               return ListView.builder(
                   itemCount: data.length,
                   itemBuilder: (BuildContext itemContext, int index) {
-                    return Card(
-                        child: ListTile(
-                            title: Text(L10n.of(context).account),
-                            subtitle: Text(
-                              data[index]['id'].toString(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            leading: Icon(Icons.account_circle),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () async {
-                                await model.deleteAccount(data[index]['id'].toString());
-                                setState(() {});
-                              },
-                            )));
+                    return Dismissible(
+                        key: widget.key!,
+                        onDismissed: (DismissDirection direction) async {
+                          await model.deleteAccount(data[index]['id'].toString());
+                          setState(() {});
+                        },
+                        child: Card(
+                            child: ListTile(
+                          title: Text(L10n.of(context).account),
+                          subtitle: Text(
+                            data[index]['id'].toString(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          leading: const Icon(Icons.account_circle),
+                        )));
                   });
             }
           }),

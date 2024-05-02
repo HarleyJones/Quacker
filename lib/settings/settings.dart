@@ -38,6 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var key = widget.key ?? const Key("Settings");
     var appVersion = 'v${_packageInfo.version}+${_packageInfo.buildNumber}';
 
     return Scaffold(
@@ -70,7 +71,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SettingsAccountFragment()),
+              MaterialPageRoute(builder: (context) => SettingsAccountFragment(key: key,)),
             ),
           ),
           ListTile(
