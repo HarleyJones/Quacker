@@ -43,11 +43,12 @@ List<Widget> createCommonAppBarActions(BuildContext context) {
 }
 
 final List<NavigationPage> defaultHomePages = [
-  NavigationPage('feed', (c) => L10n.of(c).feed, Icon(Icons.rss_feed), Icon(Icons.rss_feed)),
-  NavigationPage('trending', (c) => L10n.of(c).trending, Icon(Icons.trending_up), Icon(Icons.trending_up)),
+  NavigationPage('feed', (c) => L10n.of(c).feed, const Icon(Icons.rss_feed), const Icon(Icons.rss_feed)),
+  NavigationPage('subscriptions', (c) => L10n.of(c).subscriptions, const Icon(Icons.subscriptions_outlined),
+      const Icon(Icons.subscriptions)),
+  NavigationPage('trending', (c) => L10n.of(c).trending, const Icon(Icons.trending_up), const Icon(Icons.trending_up)),
   NavigationPage(
-      'subscriptions', (c) => L10n.of(c).subscriptions, Icon(Icons.subscriptions_outlined), Icon(Icons.subscriptions)),
-  NavigationPage('saved', (c) => L10n.of(c).saved, Icon(Icons.bookmark_border_outlined), Icon(Icons.bookmark)),
+      'saved', (c) => L10n.of(c).saved, const Icon(Icons.bookmark_border_outlined), const Icon(Icons.bookmark)),
 ];
 
 class HomeScreen extends StatelessWidget {
