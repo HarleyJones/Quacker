@@ -9,6 +9,9 @@
   <a href="https://f-droid.org/en/packages/com.thehcj.quacker/">
     <img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">
   </a>
+  <a href="https://apt.izzysoft.de/fdroid/index/apk/com.thehcj.quacker">
+    <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="80">
+  </a>
   <a href="https://github.com/TheHCJ/Quacker/releases">
     <img src="assets/readme/get-it-on-github.png" alt="Get it on GitHub" height="80">
   </a>
