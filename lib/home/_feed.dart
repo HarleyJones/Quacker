@@ -71,17 +71,18 @@ class _FeedScreenState extends State<FeedScreen>
                 pinned: false,
                 snap: true,
                 floating: true,
-                title: Row(children: [
+                title: Flex(direction: Axis.horizontal, children: [
                   Text(_tab == 0 ? L10n.of(context).following : L10n.of(context).foryou),
-                  IconButton(
-                      onPressed: () => setState(() {
-                            if (_tab == 0) {
-                              _tab = 1;
-                            } else if (_tab == 1) {
-                              _tab = 0;
-                            }
-                          }),
-                      icon: Icon(_tab == 0 ? Icons.switch_right : Icons.switch_left))
+                  Flexible(
+                      child: IconButton(
+                          onPressed: () => setState(() {
+                                if (_tab == 0) {
+                                  _tab = 1;
+                                } else if (_tab == 1) {
+                                  _tab = 0;
+                                }
+                              }),
+                          icon: Icon(_tab == 0 ? Icons.switch_right : Icons.switch_left)))
                 ]),
                 actions: [
                   if (_tab == 0)

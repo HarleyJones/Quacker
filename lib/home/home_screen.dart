@@ -9,8 +9,9 @@ import 'package:quacker/home/_feed.dart';
 import 'package:quacker/home/_missing.dart';
 import 'package:quacker/home/_saved.dart';
 import 'package:quacker/home/home_model.dart';
+import 'package:quacker/search/search.dart';
 import 'package:quacker/subscriptions/subscriptions.dart';
-import 'package:quacker/search/search_screen.dart';
+import 'package:quacker/trends/trends_screen.dart';
 import 'package:quacker/ui/errors.dart';
 import 'package:quacker/ui/physics.dart';
 import 'package:quacker/utils/debounce.dart';
@@ -31,6 +32,10 @@ class NavigationPage {
 List<Widget> createCommonAppBarActions(BuildContext context) {
   return [
     IconButton(
+      icon: const Icon(Icons.search),
+      onPressed: () => Navigator.pushNamed(context, routeSearch, arguments: SearchArguments(0, focusInputOnOpen: true)),
+    ),
+    IconButton(
       icon: const Icon(Icons.settings),
       onPressed: () => Navigator.pushNamed(context, routeSettings),
     )
@@ -38,8 +43,8 @@ List<Widget> createCommonAppBarActions(BuildContext context) {
 }
 
 final List<NavigationPage> defaultHomePages = [
-  NavigationPage('feed', (c) => L10n.of(c).feed, Icon(Icons.feed), Icon(Icons.rss_feed)),
-  NavigationPage('trending', (c) => L10n.of(c).search, Icon(Icons.search_outlined), Icon(Icons.search)),
+  NavigationPage('feed', (c) => L10n.of(c).feed, Icon(Icons.rss_feed), Icon(Icons.rss_feed)),
+  NavigationPage('trending', (c) => L10n.of(c).trending, Icon(Icons.trending_up), Icon(Icons.trending_up)),
   NavigationPage(
       'subscriptions', (c) => L10n.of(c).subscriptions, Icon(Icons.subscriptions_outlined), Icon(Icons.subscriptions)),
   NavigationPage('saved', (c) => L10n.of(c).saved, Icon(Icons.bookmark_border_outlined), Icon(Icons.bookmark)),
@@ -127,7 +132,7 @@ class _HomeScreenState extends State<_HomeScreen> {
                           scrollController: scrollController,
                         );
                       case 'trending':
-                        return SearchScreen(scrollController: scrollController);
+                        return TrendsScreen(scrollController: scrollController);
                       case 'saved':
                         return SavedScreen(scrollController: scrollController);
                       default:

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
-import 'package:quacker/search/results_screen.dart';
+import 'package:quacker/search/search.dart';
 import 'package:quacker/trends/trends_model.dart';
 import 'package:quacker/ui/errors.dart';
 import 'package:quacker/ui/physics.dart';

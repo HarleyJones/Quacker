@@ -10,7 +10,7 @@ import 'package:quacker/profile/_follows.dart';
 import 'package:quacker/profile/_saved.dart';
 import 'package:quacker/profile/_tweets.dart';
 import 'package:quacker/profile/profile_model.dart';
-import 'package:quacker/search/results_screen.dart';
+import 'package:quacker/search/search.dart';
 import 'package:quacker/ui/errors.dart';
 import 'package:quacker/ui/physics.dart';
 import 'package:quacker/user.dart';
