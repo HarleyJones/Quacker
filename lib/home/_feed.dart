@@ -71,22 +71,18 @@ class _FeedScreenState extends State<FeedScreen>
                 pinned: false,
                 snap: true,
                 floating: true,
-                title: DropdownMenu(
-                    inputDecorationTheme: InputDecorationTheme(
-                        isDense: true, border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
-                    initialSelection: L10n.current.following,
-                    textStyle: Theme.of(context).appBarTheme.titleTextStyle,
-                    onSelected: (value) => setState(() {
-                          if (value == L10n.current.foryou) {
-                            _tab = 1;
-                          } else if (value == L10n.current.following) {
-                            _tab = 0;
-                          }
-                        }),
-                    dropdownMenuEntries: [
-                      DropdownMenuEntry(value: L10n.current.following, label: L10n.current.following),
-                      DropdownMenuEntry(value: L10n.current.foryou, label: L10n.current.foryou)
-                    ]),
+                title: Row(children: [
+                  Text(_tab == 0 ? L10n.of(context).following : L10n.of(context).foryou),
+                  IconButton(
+                      onPressed: () => setState(() {
+                            if (_tab == 0) {
+                              _tab = 1;
+                            } else if (_tab == 1) {
+                              _tab = 0;
+                            }
+                          }),
+                      icon: Icon(_tab == 0 ? Icons.switch_right : Icons.switch_left))
+                ]),
                 actions: [
                   if (_tab == 0)
                     IconButton(icon: const Icon(Icons.more_vert), onPressed: () => showFeedSettings(context, model)),
