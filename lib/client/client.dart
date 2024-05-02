@@ -37,11 +37,11 @@ class _QuackerTwitterClient extends TwitterClient {
 
   static Future<http.Response?> fetch(Uri uri, {Map<String, String>? headers}) async {
     var prefs = await PrefServiceShared.init(prefix: 'pref_');
-    final XRegularAccount xRegularAccount = XRegularAccount();
-    var authHeader = await getAuthHeader(prefs);
+    final XRegularAccount model = XRegularAccount();
+    var authHeader = await model.getAuthHeader(prefs);
 
     if (authHeader != null) {
-      return await xRegularAccount.fetch(uri, headers: headers, log: log, prefs: prefs, authHeader: authHeader);
+      return await model.fetch(uri, headers: headers, log: log, prefs: prefs, authHeader: authHeader);
     } else {
       return await fetchUnauthenticated(uri, headers: headers, log: log);
     }

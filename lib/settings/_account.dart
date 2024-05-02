@@ -14,6 +14,7 @@ class SettingsAccountFragment extends StatefulWidget {
 class _SettingsAccountFragment extends State<SettingsAccountFragment> {
   @override
   Widget build(BuildContext context) {
+    var model = XRegularAccount();
     return Scaffold(
       appBar: AppBar(
         title: Text(L10n.current.account),
@@ -24,7 +25,7 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
         ],
       ),
       body: FutureBuilder(
-          future: getAccounts(),
+          future: model.getAccounts(),
           builder: (BuildContext listContext, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const LinearProgressIndicator();
@@ -45,7 +46,7 @@ class _SettingsAccountFragment extends State<SettingsAccountFragment> {
                             trailing: IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () async {
-                                await deleteAccount(data[index]['id'].toString());
+                                await model.deleteAccount(data[index]['id'].toString());
                                 setState(() {});
                               },
                             )));
