@@ -38,7 +38,7 @@ List<Widget> createCommonAppBarActions(BuildContext context) {
 }
 
 final List<NavigationPage> defaultHomePages = [
-  NavigationPage('feed', (c) => L10n.of(c).home, Icon(Icons.home_outlined), Icon(Icons.home)),
+  NavigationPage('feed', (c) => L10n.of(c).feed, Icon(Icons.feed), Icon(Icons.rss_feed)),
   NavigationPage('trending', (c) => L10n.of(c).search, Icon(Icons.search_outlined), Icon(Icons.search)),
   NavigationPage(
       'subscriptions', (c) => L10n.of(c).subscriptions, Icon(Icons.subscriptions_outlined), Icon(Icons.subscriptions)),
