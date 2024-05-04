@@ -4,12 +4,15 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_triple/flutter_triple.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:quacker/catcher/errors.dart';
 
 import 'package:quacker/constants.dart';
 import 'package:quacker/database/repository.dart';
@@ -23,6 +26,7 @@ import 'package:quacker/profile/profile.dart';
 import 'package:quacker/saved/saved_tweet_model.dart';
 import 'package:quacker/search/search.dart';
 import 'package:quacker/search/search_model.dart';
+import 'package:quacker/settings/_general.dart';
 import 'package:quacker/settings/_home.dart';
 import 'package:quacker/settings/settings.dart';
 import 'package:quacker/settings/settings_export_screen.dart';
@@ -175,51 +179,88 @@ Future<void> main() async {
     }),
   });
 
-  FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();
-
-  const InitializationSettings settings =
-      InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_notification'));
-
-  await notifications.initialize(settings, onDidReceiveNotificationResponse: (response) async {
-    var payload = response.payload;
-    if (payload != null && payload.startsWith('https://')) {
-      await openUri(payload);
+  TripleObserver.addListener((triple) {
+    if (triple.error != null) {
+      Catcher.reportException(triple.error);
     }
   });
 
-  var shouldCheckForUpdates = prefService.get(optionShouldCheckForUpdates);
-  if (shouldCheckForUpdates) {
-    // Don't check for updates if user disabled it.
-    checkForUpdates();
-  }
-
-  // Run the migrations early, so models work. We also do this later on so we can display errors to the user
   try {
-    await Repository().migrate();
-  } catch (_) {
-    // Ignore, as we'll catch it later instead
-  }
+    await SentryFlutter.init((options) async {
+      // The native SDK tries to contact Sentry on startup, which we can't do as Sentry is opt-in, so check first
+      options.autoInitializeNativeSdk = prefService.get(optionGlitchTipErrorsEnabled) ?? false;
+      options.attachStacktrace = true;
+      options.dsn = 'https://8a722cbafe35450b8fcdccd8f0152355@app.glitchtip.com/6595';
+      options.sendDefaultPii = false;
+      options.enableAppLifecycleBreadcrumbs = true;
+      options.enableAutoNativeBreadcrumbs = true;
 
-  var importDataModel = ImportDataModel();
+      options.beforeSend = (event, {hint}) {
+        var enabled = prefService.get(optionGlitchTipErrorsEnabled);
+        if (enabled == null || enabled == false) {
+          return null;
+        }
 
-  var groupsModel = GroupsModel(prefService);
-  await groupsModel.reloadGroups();
+        // We don't want to report SocketExceptions as there's so many of them, and they're not super useful
+        if (event.throwable is SocketException) {
+          return null;
+        }
 
-  var homeModel = HomeModel(prefService, groupsModel);
-  await homeModel.loadPages();
+        return event;
+      };
+    }, appRunner: () async {
+      var deviceInfo = DeviceInfoPlugin();
 
-  var subscriptionsModel = SubscriptionsModel(prefService, groupsModel);
-  await subscriptionsModel.reloadSubscriptions();
+      Sentry.configureScope((scope) async {
+        scope.setTag('flavor', getFlavor());
 
-  var trendLocationModel = UserTrendLocationModel(prefService);
+        if (Platform.isAndroid) {
+          var androidDeviceInfo = await deviceInfo.androidInfo;
+          scope.setTag('versionSdk', androidDeviceInfo.version.sdkInt.toString());
+        }
+      });
 
-  await SentryFlutter.init((options) {
-    options.dsn = 'https://8a722cbafe35450b8fcdccd8f0152355@app.glitchtip.com/6595';
-    options.sendClientReports = prefService.get(optionGlitchTipErrorsEnabled);
-    options.tracesSampleRate = 0.01;
-    options.enableAutoSessionTracking = false;
-  },
-      appRunner: () => runApp(PrefService(
+      if (Platform.isAndroid) {
+        FlutterLocalNotificationsPlugin notifications = FlutterLocalNotificationsPlugin();
+
+        const InitializationSettings settings =
+            InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_notification'));
+
+        await notifications.initialize(settings, onDidReceiveNotificationResponse: (response) async {
+          var payload = response.payload;
+          if (payload != null && payload.startsWith('https://')) {
+            await openUri(payload);
+          }
+        });
+
+        var shouldCheckForUpdates = prefService.get(optionShouldCheckForUpdates);
+        if (shouldCheckForUpdates) {
+          // Don't check for updates if user disabled it.
+          checkForUpdates();
+        }
+      }
+
+      // Run the migrations early, so models work. We also do this later on so we can display errors to the user
+      try {
+        await Repository().migrate();
+      } catch (_) {
+        // Ignore, as we'll catch it later instead
+      }
+
+      var importDataModel = ImportDataModel();
+
+      var groupsModel = GroupsModel(prefService);
+      await groupsModel.reloadGroups();
+
+      var homeModel = HomeModel(prefService, groupsModel);
+      await homeModel.loadPages();
+
+      var subscriptionsModel = SubscriptionsModel(prefService, groupsModel);
+      await subscriptionsModel.reloadSubscriptions();
+
+      var trendLocationModel = UserTrendLocationModel(prefService);
+
+      runApp(PrefService(
           service: prefService,
           child: MultiProvider(
             providers: [
@@ -234,11 +275,14 @@ Future<void> main() async {
               Provider(create: (context) => TrendLocationsModel()),
               Provider(create: (context) => TrendsModel(trendLocationModel)),
               ChangeNotifierProvider(create: (_) => VideoContextState(prefService.get(optionMediaDefaultMute))),
-              ChangeNotifierProvider(create: (_) => XRegularAccount()),
             ],
-            child: const FritterApp(),
-            builder: (BuildContext _, Widget? w) => w ?? Container(),
-          ))));
+            child: FritterApp(),
+          )));
+    });
+  } catch (e, stackTrace) {
+    Catcher.reportException(e, stackTrace);
+    log('Unable to start Fritter', error: e, stackTrace: stackTrace);
+  }
 }
 
 class FritterApp extends StatefulWidget {

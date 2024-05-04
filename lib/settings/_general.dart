@@ -9,6 +9,16 @@ import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pref/pref.dart';
 
+String getFlavor() {
+  const flavor = String.fromEnvironment('app.flavor');
+
+  if (flavor == '') {
+    return 'fdroid';
+  }
+
+  return flavor;
+}
+
 class SettingLocale {
   final String code;
   final String name;
