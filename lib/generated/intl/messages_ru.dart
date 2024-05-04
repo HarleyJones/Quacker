@@ -153,7 +153,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Путь для загрузки"),
         "downloading_media":
             MessageLookupByLibrary.simpleMessage("Загрузка медиа..."),
-        "enable_": MessageLookupByLibrary.simpleMessage("Активировать ?"),
+        "enable_glitchtip":
+            MessageLookupByLibrary.simpleMessage("Активировать GlitchTip?"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username": MessageLookupByLibrary.simpleMessage(
@@ -431,7 +432,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "when_a_new_app_update_is_available":
             MessageLookupByLibrary.simpleMessage(
                 "Когда новое обновление доступно"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage("Сообщать об ошибках в "),
         "whether_to_hide_tweets_marked_as_sensitive":
             MessageLookupByLibrary.simpleMessage(
@@ -439,7 +440,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage(
                 "Какая вкладка отображается при открытии приложения"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "Вы хотите включить автоматическое информирование об ошибках?"),
         "yes": MessageLookupByLibrary.simpleMessage("Да"),
@@ -453,7 +454,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage(
                 "Ваш профиль должен быть открытым, иначе импортирование не будет работать"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "Ваш отчет будет отправлен в  Quacker, а информацию о конфиденциальности можно найти здесь:")
       };

@@ -6,6 +6,8 @@ import 'package:dynamic_color/dynamic_color.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:quacker/catcher/errors.dart';
+import 'package:quacker/catcher/exceptions.dart';
 
 import 'package:quacker/client/client.dart';
 import 'package:quacker/constants.dart';
@@ -31,7 +33,7 @@ abstract class FritterErrorWidget extends StatelessWidget {
   const FritterErrorWidget({Key? key}) : super(key: key);
 }
 
-class UnknownTwitterErrorCode implements Exception {
+class UnknownTwitterErrorCode with SyntheticException implements Exception {
   final int code;
   final String message;
   final String uri;
@@ -74,6 +76,7 @@ EmojiErrorWidget createEmojiError(TwitterError error) {
       message = L10n.current.bad_guest_token;
       break;
     default:
+      Catcher.reportSyntheticException(UnknownTwitterErrorCode(error.code, error.message, error.uri));
       emoji = '💥';
       message = L10n.current.catastrophic_failure;
       break;
@@ -286,6 +289,13 @@ class FullPageErrorWidget extends FritterErrorWidget {
             alignment: Alignment.center,
             margin: const EdgeInsets.only(top: 12),
             child: Text('$error', textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).hintColor)),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 12),
+            child: ElevatedButton(
+              child: Text(L10n.of(context).report),
+              onPressed: () => Catcher.reportException(ManuallyReportedException(error), stackTrace),
+            ),
           ),
           if (onRetry != null)
             Container(

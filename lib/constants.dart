@@ -6,7 +6,7 @@ const optionWizardCompleted = 'option.wizard_completed';
 
 const optionDisableScreenshots = 'disable_screenshots';
 
-const optionErrorsEnabled = 'errors._enabled';
+const optionGlitchTipErrorsEnabled = 'errors.glitchtip_enabled';
 
 const optionHelloLastBuild = 'hello.last_build';
 

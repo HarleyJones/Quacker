@@ -150,7 +150,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Deskargatzeko bidea"),
         "downloading_media":
             MessageLookupByLibrary.simpleMessage("Multimedia deskargatzen..."),
-        "enable_": MessageLookupByLibrary.simpleMessage(" gaitu?"),
+        "enable_glitchtip":
+            MessageLookupByLibrary.simpleMessage("GlitchTip gaitu?"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username": MessageLookupByLibrary.simpleMessage(
@@ -430,7 +431,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "when_a_new_app_update_is_available":
             MessageLookupByLibrary.simpleMessage(
                 "Aplikazioaren eguneratze berri bat eskuragarri dagoenean"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage(
                 "Akatsak ri bidali behar litzaizkioke"),
         "whether_to_hide_tweets_marked_as_sensitive":
@@ -439,7 +440,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage(
                 "Aplikazioa irekitzean erakutsiko den fitxa"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "Akats txostenen berri emate automatikoa gaitu nahi duzu?"),
         "yes": MessageLookupByLibrary.simpleMessage("Bai"),
@@ -453,7 +454,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage(
                 "Zure profilak publikoa izan behar du, bestela inportazioak ez du funtzionatuko"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "Zure txostena Quacker-en  proiektura bidaliko da, eta pribatutasun xehetasunak helbide honetan aurki ditzakezu:")
       };

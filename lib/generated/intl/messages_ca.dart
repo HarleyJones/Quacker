@@ -150,7 +150,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Ruta de descàrrega"),
         "downloading_media":
             MessageLookupByLibrary.simpleMessage("Descarregant suports..."),
-        "enable_": MessageLookupByLibrary.simpleMessage("Habilitar ?"),
+        "enable_glitchtip":
+            MessageLookupByLibrary.simpleMessage("Habilitar GlitchTip?"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username": MessageLookupByLibrary.simpleMessage(
@@ -429,7 +430,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "when_a_new_app_update_is_available":
             MessageLookupByLibrary.simpleMessage(
                 "Quan hi ha disponible una nova actualització d\'una aplicació"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage(
                 "Si s\'han d\'informar els errors a "),
         "whether_to_hide_tweets_marked_as_sensitive":
@@ -438,9 +439,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage(
                 "Quina pestanya es mostra quan s\'obre l\'aplicació"),
-        "would_you_like_to_enable_automatic_error_reporting":
-            MessageLookupByLibrary.simpleMessage(
-                "Voleu habilitar l\'informe automàtic d\'errors?"),
         "yes": MessageLookupByLibrary.simpleMessage("Sí"),
         "yes_please": MessageLookupByLibrary.simpleMessage("Sí, si us plau"),
         "you_have_not_saved_any_tweets_yet":
@@ -452,8 +450,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage(
                 "El teu perfil ha de ser públic, en cas contrari la importació no funcionarà"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
-                "L\'informe s\'enviarà al projecte  de Quacker, els detalls de privadesa es poden trobar a:")
+                "L\'informe s\'enviarà al projecte GlitchTip de Quacker, els detalls de privadesa es poden trobar a:")
       };
 }

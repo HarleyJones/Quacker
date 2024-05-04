@@ -152,6 +152,11 @@ class SettingsGeneralFragment extends StatelessWidget {
             pref: optionNonConfirmationBiasMode,
             subtitle: Text(L10n.of(context).activate_non_confirmation_bias_mode_description),
           ),
+          PrefCheckbox(
+            title: Text(L10n.of(context).enable_glitchtip),
+            pref: optionGlitchTipErrorsEnabled,
+            subtitle: Text(L10n.of(context).whether_errors_should_be_reported_to_glitchtip),
+          ),
         ]),
       ),
     );

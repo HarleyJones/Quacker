@@ -71,7 +71,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SettingsAccountFragment(key: key,)),
+              MaterialPageRoute(
+                  builder: (context) => SettingsAccountFragment(
+                        key: key,
+                      )),
             ),
           ),
           ListTile(
@@ -126,11 +129,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               initiallyExpanded: true,
               enabled: false,
               backgroundColor: Theme.of(context).colorScheme.onPrimary,
-              children: [
-                SettingsDataFragment(
-                  legacyExportPath: _legacyExportPath,
-                )
-              ]),
+              children: const [SettingsDataFragment()]),
           SizedBox(
             height: 8.0,
           ),

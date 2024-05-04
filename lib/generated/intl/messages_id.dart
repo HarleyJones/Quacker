@@ -151,7 +151,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "download_path": MessageLookupByLibrary.simpleMessage("Jalur unduhan"),
         "downloading_media":
             MessageLookupByLibrary.simpleMessage("Mengunduh media..."),
-        "enable_": MessageLookupByLibrary.simpleMessage("Aktifkan ?"),
+        "enable_glitchtip":
+            MessageLookupByLibrary.simpleMessage("Aktifkan GlitchTip?"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username": MessageLookupByLibrary.simpleMessage(
@@ -438,7 +439,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "when_a_new_app_update_is_available":
             MessageLookupByLibrary.simpleMessage(
                 "Ketika pembaruan aplikasi baru tersedia"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage(
                 "Apakah galat harus dilaporkan ke "),
         "whether_to_hide_tweets_marked_as_sensitive":
@@ -447,7 +448,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage(
                 "Bilah mana yang ditampilkan ketika aplikasi dibuka"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "Apakah Anda ingin mengaktifkan pelaporan galat otomatis?"),
         "yes": MessageLookupByLibrary.simpleMessage("Ya"),
@@ -461,7 +462,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage(
                 "Profil Anda harus publik, jika tidak impor tidak akan bekerja"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "Laporan Anda akan dikirim ke proyek  Quacker, dan detail privasi bisa ditemukan pada:")
       };

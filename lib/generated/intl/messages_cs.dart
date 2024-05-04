@@ -151,7 +151,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Cesta pro stažené"),
         "downloading_media":
             MessageLookupByLibrary.simpleMessage("Stahování médií..."),
-        "enable_": MessageLookupByLibrary.simpleMessage("Povolit ?"),
+        "enable_glitchtip":
+            MessageLookupByLibrary.simpleMessage("Povolit GlitchTip?"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username": MessageLookupByLibrary.simpleMessage(
@@ -452,7 +453,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "when_a_new_app_update_is_available":
             MessageLookupByLibrary.simpleMessage(
                 "Když je dostupná aktualizace aplikace"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage(
                 "Nastavit, zda mají být chyby nahlašovány do "),
         "whether_to_hide_tweets_marked_as_sensitive":
@@ -461,7 +462,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage(
                 "Karta, která bude zobrazena při otevření aplikace"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "Chcete povolit automatické nahlašování?"),
         "yes": MessageLookupByLibrary.simpleMessage("Ano"),
@@ -475,8 +476,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage(
                 "Váš profil musí být veřejný, jinak nebude import fungovat"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
-                "Vaše nahlášení bylo odesláno do  projektu Quackeru. Podrobnosti o soukromí lze nalézt na:")
+                "Vaše nahlášení bylo odesláno do GlitchTip projektu Quackeru. Podrobnosti o soukromí lze nalézt na:")
       };
 }

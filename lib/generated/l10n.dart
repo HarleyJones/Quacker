@@ -163,20 +163,20 @@ class L10n {
   }
 
   /// `Would you like to enable automatic error reporting?`
-  String get would_you_like_to_enable_automatic_error_reporting {
+  String get would_you_like_to_enable_glitchtipautomatic_error_reporting {
     return Intl.message(
       'Would you like to enable automatic error reporting?',
-      name: 'would_you_like_to_enable_automatic_error_reporting',
+      name: 'would_you_like_to_enable_glitchtipautomatic_error_reporting',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your report will be sent to Quacker's  project, and privacy details can be found at:`
-  String get your_report_will_be_sent_to_fritter__project {
+  /// `Your report will be sent to Quacker's GlitchTip project, and privacy details can be found at:`
+  String get your_report_will_be_sent_to_quacker_glitchtip_project {
     return Intl.message(
-      'Your report will be sent to Quacker\'s  project, and privacy details can be found at:',
-      name: 'your_report_will_be_sent_to_fritter__project',
+      'Your report will be sent to Quacker\'s GlitchTip project, and privacy details can be found at:',
+      name: 'your_report_will_be_sent_to_quacker_glitchtip_project',
       desc: '',
       args: [],
     );
@@ -885,11 +885,11 @@ class L10n {
     );
   }
 
-  /// `Enable ?`
-  String get enable_ {
+  /// `Enable GlitchTip?`
+  String get enable_glitchtip {
     return Intl.message(
-      'Enable ?',
-      name: 'enable_',
+      'Enable GlitchTip?',
+      name: 'enable_glitchtip',
       desc: '',
       args: [],
     );
@@ -915,11 +915,11 @@ class L10n {
     );
   }
 
-  /// `Whether errors should be reported to `
-  String get whether_errors_should_be_reported_to_ {
+  /// `Whether errors should be reported to GlitchTip`
+  String get whether_errors_should_be_reported_to_glitchtip {
     return Intl.message(
-      'Whether errors should be reported to ',
-      name: 'whether_errors_should_be_reported_to_',
+      'Whether errors should be reported to GlitchTip',
+      name: 'whether_errors_should_be_reported_to_glitchtip',
       desc: '',
       args: [],
     );

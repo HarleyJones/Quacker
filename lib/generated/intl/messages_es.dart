@@ -83,13 +83,13 @@ class MessageLookup extends MessageLookupByLibrary {
                 "No se pueden cargar los tweets para el feed"),
         "unsubscribe":
             MessageLookupByLibrary.simpleMessage("Cancelar la suscripción"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "¿Desea activar la notificación automática de errores?"),
         "you_have_not_saved_any_tweets_yet":
             MessageLookupByLibrary.simpleMessage(
                 "Todavía no se has guardado ningún tuit."),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "Su informe se enviará al proyecto Quacker\'s , y los detalles de privacidad se pueden encontrar en:")
       };

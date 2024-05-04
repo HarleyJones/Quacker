@@ -130,7 +130,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "download_path": MessageLookupByLibrary.simpleMessage("ダウンロード先"),
         "downloading_media":
             MessageLookupByLibrary.simpleMessage("メディアをダウンロード中..."),
-        "enable_": MessageLookupByLibrary.simpleMessage("を有効化？"),
+        "enable_glitchtip": MessageLookupByLibrary.simpleMessage("を有効化？"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username":
@@ -361,13 +361,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "version": MessageLookupByLibrary.simpleMessage("バージョン"),
         "when_a_new_app_update_is_available":
             MessageLookupByLibrary.simpleMessage("新しいアプリの更新が利用可能なとき"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage("エラーをに送信する"),
         "whether_to_hide_tweets_marked_as_sensitive":
             MessageLookupByLibrary.simpleMessage("センシティブとされたツイートを隠すかどうか"),
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage("アプリの起動時に表示するタブ"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage("自動エラー報告を有効にしますか？"),
         "yes": MessageLookupByLibrary.simpleMessage("はい"),
         "yes_please": MessageLookupByLibrary.simpleMessage("はいどうぞ"),
@@ -375,7 +375,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("まだツイートを保存していません！"),
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage("公開アカウントである必要があります"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "レポートはQuackerのプロジェクトに送信されます。プライバシーの詳細は以下の通りです：")
       };

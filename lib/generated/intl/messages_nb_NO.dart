@@ -139,7 +139,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "download_path": MessageLookupByLibrary.simpleMessage("Nedlastingssti"),
         "downloading_media":
             MessageLookupByLibrary.simpleMessage("Laster ned media …"),
-        "enable_": MessageLookupByLibrary.simpleMessage("Vil du aktivere ?"),
+        "enable_glitchtip":
+            MessageLookupByLibrary.simpleMessage("Vil du aktivere GlitchTip?"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username": MessageLookupByLibrary.simpleMessage(
@@ -385,13 +386,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "when_a_new_app_update_is_available":
             MessageLookupByLibrary.simpleMessage(
                 "Når en ny appoppdatering er tilgjengelig"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage(
                 "Om feil skal rapporteres til "),
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage(
                 "Hvilken fane som vises når programmet åpnes"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "Vil du aktivere automatisk feilrapportering?"),
         "yes": MessageLookupByLibrary.simpleMessage("Ja"),
@@ -402,7 +403,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage(
                 "Profilen din må være offentlig, ellers vil ikke importen fungere"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "Rapporten din vil bli sendt til Quacker\'s -prosjekt, og personverndetaljer kan finnes på:")
       };

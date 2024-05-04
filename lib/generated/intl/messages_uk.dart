@@ -83,7 +83,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete": MessageLookupByLibrary.simpleMessage("Видалити"),
         "disabled": MessageLookupByLibrary.simpleMessage("Вимкнено"),
         "donate": MessageLookupByLibrary.simpleMessage("Пожертвувати"),
-        "enable_": MessageLookupByLibrary.simpleMessage("Увімкнути ?"),
+        "enable_glitchtip":
+            MessageLookupByLibrary.simpleMessage("УвімкнутиGlitchTip?"),
         "enter_your_twitter_username": MessageLookupByLibrary.simpleMessage(
             "Введіть своє ім\'я користувача у Twitter"),
         "export": MessageLookupByLibrary.simpleMessage("Експорт"),
@@ -261,13 +262,13 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Використовуйте справжній чорний колір для темної теми"),
         "username": MessageLookupByLibrary.simpleMessage("Ім\'я користувача"),
         "version": MessageLookupByLibrary.simpleMessage("Версія"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage(
                 "Чи потрібно повідомляти про помилки в "),
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage(
                 "Яка вкладка відображатиметься під час відкриття додатка"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "Бажаєте увімкнути автоматичне повідомлення про помилки?"),
         "yes": MessageLookupByLibrary.simpleMessage("Так"),
@@ -278,7 +279,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage(
                 "Ваш профіль має бути публічним, інакше імпорт не спрацює"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "Ваш звіт буде надіслано до проекту Quacker\'s , а деталі конфіденційності можна знайти за посиланням:")
       };

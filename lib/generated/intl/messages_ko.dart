@@ -88,7 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "unable_to_load_the_tweets_for_the_feed":
             MessageLookupByLibrary.simpleMessage("트윗 피드를 불러올 수 없습니다"),
         "unsubscribe": MessageLookupByLibrary.simpleMessage("구독 해제"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage("자동 오류 보고를 켜시겠습니까?"),
         "you_have_not_saved_any_tweets_yet":
             MessageLookupByLibrary.simpleMessage("아무 트윗도 저장하지 않았습니다!")

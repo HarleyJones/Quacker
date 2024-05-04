@@ -155,7 +155,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Percorso di download"),
         "downloading_media": MessageLookupByLibrary.simpleMessage(
             "Download del contenuto in corso..."),
-        "enable_": MessageLookupByLibrary.simpleMessage("Abilitare ?"),
+        "enable_glitchtip":
+            MessageLookupByLibrary.simpleMessage("Abilitare GlitchTip?"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username": MessageLookupByLibrary.simpleMessage(
@@ -456,16 +457,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "when_a_new_app_update_is_available":
             MessageLookupByLibrary.simpleMessage(
                 "Quando è disponibile un nuovo aggiornamento dell\'app"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage(
-                "Se gli errori dovrebbero essere segnalati a "),
+                "Se gli errori dovrebbero essere segnalati a GlitchTip"),
         "whether_to_hide_tweets_marked_as_sensitive":
             MessageLookupByLibrary.simpleMessage(
                 "Se nascondere i tweet segnalati come sensibili"),
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage(
                 "Quale scheda viene visualizzata quando si apre l\'app"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "Vorresti abilitare la segnalazione automatica degli errori?"),
         "yes": MessageLookupByLibrary.simpleMessage("Sì"),
@@ -479,7 +480,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage(
                 "Il tuo profilo deve essere pubblico, altrimenti l\'importazione non funzionerà"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "Il tuo rapporto verrà inviato al progetto Quacker di , i dettagli sulla privacy possono essere trovati a:")
       };

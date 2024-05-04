@@ -131,7 +131,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "无法下载。 此媒体可能仅作为在线流提供，Quacker 尚无法下载。"),
         "download_path": MessageLookupByLibrary.simpleMessage("下载路径"),
         "downloading_media": MessageLookupByLibrary.simpleMessage("正在下载媒体..."),
-        "enable_": MessageLookupByLibrary.simpleMessage("启用 ？"),
+        "enable_glitchtip":
+            MessageLookupByLibrary.simpleMessage("启用 GlitchTip？"),
         "ended_timeago_format_endsAt_allowFromNow_true": m3,
         "ends_timeago_format_endsAt_allowFromNow_true": m4,
         "enter_your_twitter_username":
@@ -370,13 +371,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "version": MessageLookupByLibrary.simpleMessage("版本"),
         "when_a_new_app_update_is_available":
             MessageLookupByLibrary.simpleMessage("当有更新可用时"),
-        "whether_errors_should_be_reported_to_":
+        "whether_errors_should_be_reported_to_glitchtip":
             MessageLookupByLibrary.simpleMessage("是否向  发送错误？👀"),
         "whether_to_hide_tweets_marked_as_sensitive":
             MessageLookupByLibrary.simpleMessage("是否隐藏被标记为敏感的推文"),
         "which_tab_is_shown_when_the_app_opens":
             MessageLookupByLibrary.simpleMessage("打开应用时显示哪个页面"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage("您希望自动发送错误报告吗？"),
         "yes": MessageLookupByLibrary.simpleMessage("好"),
         "yes_please": MessageLookupByLibrary.simpleMessage("是，请让我看"),
@@ -386,7 +387,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("必须至少有 2 个主屏幕页面"),
         "your_profile_must_be_public_otherwise_the_import_will_not_work":
             MessageLookupByLibrary.simpleMessage("你的个人资料必须是公开的，否则无法导入"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "您的报告将被发送至 Quacker 的  项目，隐私详情可在下述位置找到：")
       };

@@ -114,10 +114,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Abonnement stoppen"),
         "user_not_found":
             MessageLookupByLibrary.simpleMessage("Gebruiker niet gevonden"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "Automatische foutrapportage inschakelen?"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "Het rapport wordt naar het  project van Quacker gestuurd, details over privacy kunnen worden gevonden op:")
       };

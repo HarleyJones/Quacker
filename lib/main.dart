@@ -36,6 +36,7 @@ import 'package:logging/logging.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
 import 'package:quacker/utils/urls.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:uni_links2/uni_links.dart';
@@ -212,26 +213,32 @@ Future<void> main() async {
 
   var trendLocationModel = UserTrendLocationModel(prefService);
 
-  runApp(PrefService(
-      service: prefService,
-      child: MultiProvider(
-        providers: [
-          Provider(create: (context) => groupsModel),
-          Provider(create: (context) => homeModel),
-          ChangeNotifierProvider(create: (context) => importDataModel),
-          Provider(create: (context) => subscriptionsModel),
-          Provider(create: (context) => SavedTweetModel()),
-          Provider(create: (context) => SearchTweetsModel()),
-          Provider(create: (context) => SearchUsersModel()),
-          Provider(create: (context) => trendLocationModel),
-          Provider(create: (context) => TrendLocationsModel()),
-          Provider(create: (context) => TrendsModel(trendLocationModel)),
-          ChangeNotifierProvider(create: (_) => VideoContextState(prefService.get(optionMediaDefaultMute))),
-          ChangeNotifierProvider(create: (_) => XRegularAccount()),
-        ],
-        child: FritterApp(),
-        builder: (BuildContext _, Widget? w) => w ?? Container(),
-      )));
+  await SentryFlutter.init((options) {
+    options.dsn = 'https://8a722cbafe35450b8fcdccd8f0152355@app.glitchtip.com/6595';
+    options.sendClientReports = prefService.get(optionGlitchTipErrorsEnabled);
+    options.tracesSampleRate = 0.01;
+    options.enableAutoSessionTracking = false;
+  },
+      appRunner: () => runApp(PrefService(
+          service: prefService,
+          child: MultiProvider(
+            providers: [
+              Provider(create: (context) => groupsModel),
+              Provider(create: (context) => homeModel),
+              ChangeNotifierProvider(create: (context) => importDataModel),
+              Provider(create: (context) => subscriptionsModel),
+              Provider(create: (context) => SavedTweetModel()),
+              Provider(create: (context) => SearchTweetsModel()),
+              Provider(create: (context) => SearchUsersModel()),
+              Provider(create: (context) => trendLocationModel),
+              Provider(create: (context) => TrendLocationsModel()),
+              Provider(create: (context) => TrendsModel(trendLocationModel)),
+              ChangeNotifierProvider(create: (_) => VideoContextState(prefService.get(optionMediaDefaultMute))),
+              ChangeNotifierProvider(create: (_) => XRegularAccount()),
+            ],
+            child: const FritterApp(),
+            builder: (BuildContext _, Widget? w) => w ?? Container(),
+          ))));
 }
 
 class FritterApp extends StatefulWidget {

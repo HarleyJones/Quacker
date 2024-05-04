@@ -63,9 +63,7 @@ class SettingsData {
 class SettingsDataFragment extends StatelessWidget {
   static final log = Logger('SettingsDataFragment');
 
-  final String legacyExportPath;
-
-  const SettingsDataFragment({Key? key, required this.legacyExportPath}) : super(key: key);
+  const SettingsDataFragment({super.key});
 
   Future<void> _importFromFile(BuildContext context, File file) async {
     var content = jsonDecode(file.readAsStringSync());

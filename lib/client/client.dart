@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dart_twitter_api/src/utils/date_utils.dart';
 import 'package:dart_twitter_api/twitter_api.dart';
 import 'package:ffcache/ffcache.dart';
+import 'package:quacker/catcher/errors.dart';
+import 'package:quacker/catcher/exceptions.dart';
 import 'package:quacker/client/client_regular_account.dart';
 import 'package:quacker/client/client_unauthenticated.dart';
 import 'package:quacker/generated/l10n.dart';
@@ -30,7 +31,7 @@ class _QuackerTwitterClient extends TwitterClient {
       if (response?.statusCode != null && response!.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        return Future.error(HttpException(response?.body ?? response?.statusCode.toString() ?? ""));
+        return Future.error(HttpException(response!));
       }
     });
   }
@@ -48,7 +49,7 @@ class _QuackerTwitterClient extends TwitterClient {
   }
 }
 
-class UnknownProfileResultType implements Exception {
+class UnknownProfileResultType with SyntheticException implements Exception {
   final String type;
   final String message;
   final String uri;
@@ -61,7 +62,7 @@ class UnknownProfileResultType implements Exception {
   }
 }
 
-class UnknownProfileUnavailableReason implements Exception {
+class UnknownProfileUnavailableReason with SyntheticException implements Exception {
   final String reason;
   final String uri;
 
@@ -205,13 +206,14 @@ class Twitter {
           if (code == 'Suspended') {
             throw TwitterError(code: 63, message: result['reason'], uri: uri.toString());
           } else {
+            Catcher.reportSyntheticException(UnknownProfileUnavailableReason(code, uri.toString()));
             throw TwitterError(code: -1, message: result['reason'], uri: uri.toString());
           }
         case 'User':
           // This means everything's fine
           break;
         default:
-          // an error happened
+          Catcher.reportSyntheticException(UnknownProfileResultType(resultType, result['reason'], uri.toString()));
           break;
       }
     }
@@ -272,9 +274,9 @@ class Twitter {
           if (itemType == 'TimelineTweet') {
             if (item['item']['itemContent']['tweet_results']?['result'] != null) {
               tweets.add(TweetWithCard.fromGraphqlJson(item['item']['itemContent']['tweet_results']['result']));
-            } else {
-              tweets.add(TweetWithCard.tombstone({}));
             }
+          } else {
+            Catcher.reportSyntheticException(UnknownTimelineItemType(itemType, entryId));
           }
         }
 
@@ -1205,7 +1207,7 @@ class SearchHasNoTimelineException {
   }
 }
 
-class UnknownTimelineItemType implements Exception {
+class UnknownTimelineItemType with SyntheticException implements Exception {
   final String type;
   final String entryId;
 

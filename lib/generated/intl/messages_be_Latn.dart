@@ -126,13 +126,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "Niemahčyma zahruzić tvity dla stužki"),
         "unsubscribe": MessageLookupByLibrary.simpleMessage("Adpisacca"),
-        "would_you_like_to_enable_automatic_error_reporting":
+        "would_you_like_to_enable_glitchtipautomatic_error_reporting":
             MessageLookupByLibrary.simpleMessage(
                 "Ci žadajecie vy ŭklučyć aŭtamatyčnaje infarmavańnie ab pamyłkach?"),
         "you_have_not_saved_any_tweets_yet":
             MessageLookupByLibrary.simpleMessage(
                 "Vy jašče nie zachavali nivodnaha tvitu!"),
-        "your_report_will_be_sent_to_fritter__project":
+        "your_report_will_be_sent_to_quacker_glitchtip_project":
             MessageLookupByLibrary.simpleMessage(
                 "Vaša spravazdača budzie dasłana ŭ  Quacker, a infarmacyju pra kanfidencyjnaść možna znajści tut:")
       };
