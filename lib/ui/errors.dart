@@ -285,11 +285,14 @@ class FullPageErrorWidget extends FritterErrorWidget {
             margin: const EdgeInsets.only(top: 12),
             child: Text(prefix, textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).hintColor)),
           ),
-          Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(top: 12),
-            child: Text('$error', textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).hintColor)),
-          ),
+          Flexible(
+              child: SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(top: 12),
+              child: Text('$error', textAlign: TextAlign.left, style: TextStyle(color: Theme.of(context).hintColor)),
+            ),
+          )),
           Container(
             margin: const EdgeInsets.only(top: 12),
             child: ElevatedButton(
