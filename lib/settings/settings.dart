@@ -94,7 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             title: Text(L10n.of(context).theme),
             subtitle: Text(
-              "${L10n.of(context).theme_mode}, ${L10n.of(context).theme}, ${L10n.of(context).true_black}, ${L10n.of(context).show_navigation_labels}",
+              "${L10n.of(context).theme_mode}, ${L10n.of(context).theme}, ${L10n.of(context).true_black}, ${L10n.of(context).true_black_tweet_cards} ${L10n.of(context).show_navigation_labels}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontStyle: FontStyle.italic),
