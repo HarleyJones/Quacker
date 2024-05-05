@@ -38,12 +38,6 @@ class _SavedScreenState extends State<SavedScreen> with AutomaticKeepAliveClient
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    widget.scrollController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     var model = context.read<SavedTweetModel>();

@@ -42,12 +42,6 @@ class _FeedScreenState extends State<FeedScreen>
     _tabController.animation!.addListener(_tabListener);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    widget.scrollController.dispose();
-  }
-
   void _tabListener() {
     if (_tab != _tabController.animation!.value.round()) {
       setState(() {

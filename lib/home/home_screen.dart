@@ -175,6 +175,7 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
   late PageController _pageController;
   late Map<int, ScrollController> _scrollControllers;
   int _currentPage = 0;
+  Key _hideableWidgetKey = UniqueKey(); // Add this line
 
   @override
   void initState() {
@@ -195,7 +196,6 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
     super.dispose();
   }
 
-  var hideableWidgetScrollController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -203,14 +203,15 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
         controller: _pageController,
         onPageChanged: (page) {
           setState(() {
-            hideableWidgetScrollController = _scrollControllers[page]!;
             _currentPage = page;
+            _hideableWidgetKey = UniqueKey(); // Update the key here
           });
         },
         children: widget.builder(_scrollControllers),
       ),
       bottomNavigationBar: HideableWidget(
-        scrollController: hideableWidgetScrollController ?? _scrollControllers[_currentPage]!,
+        key: _hideableWidgetKey, // Add this line
+        scrollController: _scrollControllers[_currentPage]!,
         child: NavigationBar(
           selectedIndex: _currentPage,
           destinations: widget.pages
