@@ -469,7 +469,15 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
                   : ThemeData(
                       colorScheme:
                           ColorScheme.fromSeed(seedColor: theme.colorScheme.primary, brightness: theme.brightness),
-                    ).cardColor,
+                    ).cardTheme.color,
+              surfaceTintColor: theme.brightness == Brightness.dark &&
+                      prefs.get(optionThemeTrueBlack) &&
+                      prefs.get(optionThemeTrueBlackTweetCards)
+                  ? Colors.black
+                  : ThemeData(
+                      colorScheme:
+                          ColorScheme.fromSeed(seedColor: theme.colorScheme.primary, brightness: theme.brightness),
+                    ).cardTheme.surfaceTintColor,
               child: Row(
                 children: [
                   retweetSidebar,
