@@ -21,6 +21,12 @@ class TrendsList extends StatefulWidget {
 
 class _TrendsListState extends State<TrendsList> {
   @override
+  void dispose() {
+    super.dispose();
+    widget.scrollController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var model = context.read<TrendsModel>();
 
@@ -56,7 +62,6 @@ class _TrendsListState extends State<TrendsList> {
 
         return ListView.builder(
           controller: widget.scrollController,
-          shrinkWrap: true,
           physics: const LessSensitiveScrollPhysics(),
           itemCount: trends.length,
           itemBuilder: (context, index) {
