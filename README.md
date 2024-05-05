@@ -35,11 +35,6 @@
   </a>
 </p>
 
-## Poll
-_Should I end work in #Quacker to work on #Squawker :thinking:_
-
-**VOTE:** https://fosstodon.org/@hcj/112384631031697378
-
 ## Features:
 - **Feed:** View your `Following` and `For You` feeds
 - **Material You:** Looks and feels modern
