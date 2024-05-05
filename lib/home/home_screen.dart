@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
+import 'package:hideable_widget/hideable_widget.dart';
 import 'package:quacker/constants.dart';
 import 'package:quacker/generated/l10n.dart';
 import 'package:quacker/group/group_screen.dart';
@@ -217,37 +218,39 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
     final _disableAnimations = PrefService.of(context).get(optionDisableAnimations);
 
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        physics: const LessSensitiveScrollPhysics(),
-        onPageChanged: (page) => Debouncer.debounce('page-change', const Duration(milliseconds: 200), () {
-          setState(() {
-            currentPage = page;
-          });
-        }),
-        children: _children,
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentPage,
-        surfaceTintColor: Theme.of(context).brightness == Brightness.dark && trueDark == true ? Colors.black : null,
-        height: !showNavigationLabels ? 40 : 80,
-        labelBehavior: showNavigationLabels
-            ? NavigationDestinationLabelBehavior.alwaysShow
-            : NavigationDestinationLabelBehavior.alwaysHide,
-        animationDuration: _disableAnimations == true ? Duration.zero : null,
-        destinations: [
-          ..._pages.map(
-              (e) => NavigationDestination(icon: e.icon, selectedIcon: e.selectedIcon, label: e.titleBuilder(context)))
-        ],
-        onDestinationSelected: (int value) {
-          setState(() {
-            currentPage = value;
-            _disableAnimations == true
-                ? _pageController?.jumpToPage(value)
-                : _pageController?.animateToPage(value, duration: Durations.medium1, curve: Curves.ease);
-          });
-        },
-      ),
-    );
+        body: PageView(
+          controller: _pageController,
+          physics: const LessSensitiveScrollPhysics(),
+          onPageChanged: (page) => Debouncer.debounce('page-change', const Duration(milliseconds: 200), () {
+            setState(() {
+              currentPage = page;
+            });
+          }),
+          children: _children,
+        ),
+        bottomNavigationBar: HideableWidget(
+          scrollController: scrollController,
+          child: NavigationBar(
+            selectedIndex: currentPage,
+            surfaceTintColor: Theme.of(context).brightness == Brightness.dark && trueDark == true ? Colors.black : null,
+            height: !showNavigationLabels ? 40 : 80,
+            labelBehavior: showNavigationLabels
+                ? NavigationDestinationLabelBehavior.alwaysShow
+                : NavigationDestinationLabelBehavior.alwaysHide,
+            animationDuration: _disableAnimations == true ? Duration.zero : null,
+            destinations: [
+              ..._pages.map((e) =>
+                  NavigationDestination(icon: e.icon, selectedIcon: e.selectedIcon, label: e.titleBuilder(context)))
+            ],
+            onDestinationSelected: (int value) {
+              setState(() {
+                currentPage = value;
+                _disableAnimations == true
+                    ? _pageController?.jumpToPage(value)
+                    : _pageController?.animateToPage(value, duration: Durations.medium1, curve: Curves.ease);
+              });
+            },
+          ),
+        ));
   }
 }

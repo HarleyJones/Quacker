@@ -462,6 +462,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  hideable_widget:
+    dependency: "direct main"
+    description:
+      name: hideable_widget
+      sha256: "470c09d903c8af01c5fa5ef1f626cd1361db6b1e7b703617b2562703ec11b9df"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   html:
     dependency: transitive
     description:
