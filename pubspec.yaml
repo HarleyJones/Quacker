@@ -1,5 +1,5 @@
 name: quacker
-description: A private and clean way to browse X
+description: A private and clean way to browse Twitter/X
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 3.4.3+300200128
+version: 3.4.4+300200132
 
 environment:
   sdk: ">=2.18.0 <3.0.0"

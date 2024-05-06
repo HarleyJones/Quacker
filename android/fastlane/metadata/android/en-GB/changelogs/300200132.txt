@@ -1,0 +1,9 @@
+## v3.4.4
+- Ability to report bugs within the app (automatic reports are opt-in)
+- True black tweet cards are fixed (#27)
+- Navigation bar hides on scroll (#16)
+- Added storage permissions (#22)
+- Feed switcher is now an icon
+- Revert search page
+- Revert home page
+- + many more small changes
