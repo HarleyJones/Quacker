@@ -43,6 +43,9 @@ class SettingsThemeFragment extends StatelessWidget {
             subtitle: Text(
               L10n.of(context).use_true_black_for_the_dark_mode_theme,
             ),
+            onChange: (bool changeValue) {
+              prefs.set(optionThemeTrueBlackTweetCards, changeValue);
+            },
           ),
           PrefSwitch(
             title: Text(L10n.of(context).true_black_tweet_cards),
