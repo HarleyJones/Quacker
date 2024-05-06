@@ -173,8 +173,7 @@ class ScaffoldWithBottomNavigation extends StatefulWidget {
 
 class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigation> {
   late PageController _pageController;
-  late Map<int, ScrollController> _scrollControllers;
-  int _currentPage = 0;
+  late int _currentPage;
   Key _hideableWidgetKey = UniqueKey(); // Add this line
 
   @override
@@ -182,22 +181,16 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
     super.initState();
     _currentPage = widget.initialPage;
     _pageController = PageController(initialPage: widget.initialPage);
-    _scrollControllers = Map<int, ScrollController>.fromIterable(
-      Iterable<int>.generate(widget.pages.length),
-      key: (pageIndex) => pageIndex,
-      value: (_) => ScrollController(),
-    );
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    _scrollControllers.values.forEach((controller) => controller.dispose());
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    Map<int, ScrollController> _scrollControllers = Map<int, ScrollController>.fromIterable(
+      Iterable<int>.generate(widget.pages.length),
+      key: (pageIndex) => pageIndex,
+      value: (_) => ScrollController(),
+    );
+
     return Scaffold(
       body: PageView(
         controller: _pageController,
@@ -233,5 +226,11 @@ class _ScaffoldWithBottomNavigationState extends State<ScaffoldWithBottomNavigat
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 }
