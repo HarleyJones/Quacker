@@ -42,7 +42,7 @@ dependencies:
   ffcache: ^1.1.0
   flutter_cache: ^0.1.0
   file_picker: ^8.0.0+1
-  flutter_colorpicker: ^1.0.3
+  flutter_material_color_picker: ^1.2.0
   flutter_file_dialog: ^3.0.1
   flutter_iconpicker_plus: ^3.2.3
   flutter_localized_locales: ^2.0.3

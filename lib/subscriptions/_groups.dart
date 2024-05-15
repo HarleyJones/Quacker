@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_iconpicker_plus/IconPicker/Packs/Material.dart';
 import 'package:flutter_iconpicker_plus/flutter_iconpicker.dart';
 import 'package:flutter_triple/flutter_triple.dart';
@@ -282,13 +282,11 @@ class _SubscriptionGroupEditDialogState extends State<SubscriptionGroupEditDialo
                             return AlertDialog(
                               title: Text(L10n.of(context).pick_a_color),
                               content: SingleChildScrollView(
-                                child: MaterialPicker(
-                                  pickerColor:
-                                      color?.harmonizeWith(Theme.of(context).colorScheme.primary) ?? Colors.grey,
-                                  onColorChanged: (value) => setState(() {
+                                child: MaterialColorPicker(
+                                  selectedColor: color ?? Colors.grey,
+                                  onColorChange: (value) => setState(() {
                                     selectedColor = value;
                                   }),
-                                  enableLabel: true,
                                 ),
                               ),
                               actions: <Widget>[
