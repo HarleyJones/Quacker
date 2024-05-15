@@ -21,6 +21,9 @@ version: 3.4.4+300200132
 environment:
   sdk: ">=2.18.0 <3.0.0"
 
+dependency_overrides:
+  intl: ^0.17.0
+
 dependencies:
   flutter:
     sdk: flutter
