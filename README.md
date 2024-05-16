@@ -35,6 +35,9 @@
   </a>
 </p>
 
+> [!IMPORTANT]
+> This repo has been archived since May 16th 2024
+
 ## Features:
 - **Feed:** View your `Following` and `For You` feeds
 - **Material You:** Looks and feels modern
