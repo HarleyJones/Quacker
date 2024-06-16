@@ -3,7 +3,7 @@
   <img src="assets/icon.png" alt="Quacker Logo" width="144">
 </p>
 
-<p align="center">A private and clean way to browse Twitter/X</p>
+<p align="center">The continuation of <a href="https://fritter.cc">fritter</a> with feeds</p>
 
 <p align="center">
   <a href="https://f-droid.org/en/packages/com.thehcj.quacker/">
