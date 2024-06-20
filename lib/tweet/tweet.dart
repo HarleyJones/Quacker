@@ -436,8 +436,8 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
     Widget translateButton;
     switch (_translationStatus) {
       case TranslationStatus.original:
-        translateButton = _createFooterIconButton(Icons.translate,
-            Colors.blue.harmonizeWith(Theme.of(context).colorScheme.primary), null, () async => onClickTranslate());
+        translateButton = _createFooterIconButton(
+            Icons.translate, Theme.of(context).colorScheme.primary, null, () async => onClickTranslate());
         break;
       case TranslationStatus.translating:
         translateButton = const Padding(
@@ -641,7 +641,7 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
                       quotedTweet,
                       TweetCard(tweet: tweet, card: tweet.card),
                       Container(
-                        alignment: Alignment.center,
+                        alignment: Alignment.topCenter,
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         child: Scrollbar(
                           child: SingleChildScrollView(
@@ -659,9 +659,7 @@ class TweetTileState extends State<TweetTile> with SingleTickerProviderStateMixi
                                 if (tweet.favoriteCount != null)
                                   _createFooterTextButton(
                                       Icons.favorite_border, numberFormat.format(tweet.favoriteCount)),
-                                const SizedBox(
-                                  width: 8.0,
-                                ),
+                                const Divider(),
                                 Consumer<SavedTweetModel>(builder: (context, model, child) {
                                   var isSaved = model.isSaved(tweet.idStr!);
                                   if (isSaved) {
