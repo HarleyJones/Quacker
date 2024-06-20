@@ -19,6 +19,7 @@ import 'package:intl/intl.dart';
 import 'package:measure_size/measure_size.dart';
 import 'package:pref/pref.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProfileScreenArguments {
   final String? id;
@@ -237,6 +238,10 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
 
     var metadataTextStyle = const TextStyle(fontSize: 12.5);
     var prefs = PrefService.of(context, listen: false);
+
+    var shareBaseUrlOption = prefs.get(optionShareBaseUrl);
+    var shareBaseUrl =
+        shareBaseUrlOption != null && shareBaseUrlOption.isNotEmpty ? shareBaseUrlOption : 'https://x.com';
 
     return Scaffold(
       body: Stack(children: [
@@ -533,7 +538,13 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                             Container(
                               alignment: Alignment.topRight,
                               margin: EdgeInsets.fromLTRB(128, profileImageTop + 64, 16, 16),
-                              child: FollowButton(user: UserSubscription.fromUser(user), color: Colors.white),
+                              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                                FollowButton(user: UserSubscription.fromUser(user), color: Colors.white),
+                                IconButton(
+                                  icon: Icon(Icons.share),
+                                  onPressed: () => Share.share("$shareBaseUrl/@${user.screenName}"),
+                                ),
+                              ]),
                             ),
                             Container(
                               alignment: Alignment.topLeft,
