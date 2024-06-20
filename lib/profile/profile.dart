@@ -541,6 +541,13 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> with TickerProvid
                               child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                                 FollowButton(user: UserSubscription.fromUser(user), color: Colors.white),
                                 IconButton(
+                                  icon: const Icon(Icons.search),
+                                  color: Colors.white,
+                                  onPressed: () => Navigator.pushNamed(context, routeSearch,
+                                      arguments: SearchArguments(1,
+                                          focusInputOnOpen: true, query: 'from:@${(user.screenName!)} ')),
+                                ),
+                                IconButton(
                                   icon: Icon(Icons.share),
                                   onPressed: () => Share.share("$shareBaseUrl/@${user.screenName}"),
                                 ),
