@@ -21,7 +21,7 @@ class _TwitterLoginWebviewState extends State<TwitterLoginWebview> {
     final webviewCookieManager = WebviewCookieManager();
     final webviewController = WebViewController();
     webviewController.setJavaScriptMode(JavaScriptMode.unrestricted);
-    webviewController.loadRequest(Uri.https("twitter.com", "i/flow/login"));
+    webviewController.loadRequest(Uri.https("x.com", "i/flow/login"));
     webviewController.setUserAgent(userAgentHeader.toString());
     webviewController.setNavigationDelegate(NavigationDelegate(
       onUrlChange: (change) async {
